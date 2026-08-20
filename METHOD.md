@@ -33,5 +33,20 @@ deliberately minimal.
    or explicitly rebutted in its thread. (Reports 001–003 predate this
    rule and were merged directly.)
 
+7. **Merged reports are immutable.** Once a report is merged, the report
+   itself (its README and result files) is never edited again — the merge
+   timestamp is part of the evidence and stays frozen. Corrections live in
+   dedicated companion files inside the report directory, which — unlike the
+   report — may be updated over time:
+   - `ERRATA.md` — typos and obvious arithmetic slips that do not change any
+     conclusion;
+   - `APPENDIX-<topic>.md` — new material extending the report (new runs,
+     external replications, added context);
+   - `RECALLED.md` — retraction: when a report turns out to be wrong, a
+     recall note states what failed and why, and the root README marks the
+     report as recalled. The original files remain untouched.
+   A materially revised result is not a correction: it becomes a new,
+   independent report.
+
 AI assistance (Claude) is used for derivation drafts, code, and text; a human
 owns and can defend every published sentence.
