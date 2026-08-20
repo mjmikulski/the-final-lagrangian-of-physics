@@ -27,7 +27,7 @@ differ in the last digits across machines/BLAS; the asserted structure may not.
 
 ## Method
 
-Five rules, borrowed from the best of
+A few rules, borrowed from the best of
 [OpenWave](https://github.com/openwave-labs/openwave) and
 [substrate-framework](https://github.com/vantasnerdan/substrate-framework)
 and nothing else — see [METHOD.md](METHOD.md).
