@@ -133,6 +133,28 @@ Measured properties (all in `results/clock_results.json`):
 
 ![Fig A](figs/figA_clock_family.png)
 
+## 5b. Relation to the $\varepsilon$-family (report 001's scope limit)
+
+A natural question: is the rot channel the Levi-Civita contraction of $F$?
+Half yes, in a precise sense — verified identities (`dual_identity.py`,
+both to $3\cdot10^{-16}$):
+
+```math
+\mathrm{boost}^2 = 2\,\lVert E\rVert^2,\quad E_{\mu\nu|\beta}=u^\alpha F_{\mu\nu\alpha\beta};
+\qquad
+\mathrm{rot}^2 = 2\,\lVert B\rVert^2,\quad B^{\mu\nu|\gamma}=\tfrac12\,\varepsilon^{\gamma\alpha\beta\delta}u_\delta F_{\mu\nu\alpha\beta}.
+```
+
+The split is exactly the electric/magnetic decomposition of the matrix-pair
+2-form w.r.t. the field-selected observer $u$, and the dual (magnetic) part
+does carry an $\varepsilon$ — but squared, and two $\varepsilon$'s collapse
+to metrics, so both channels are parity-even. None of the four genuine
+one-$\varepsilon$ pseudoscalars is used ($E\!\cdot\!B$-type witness printed
+nonzero and unused). Where this report sits relative to report 001's three
+exclusions: it deliberately occupies two of them — field-dependent
+contractions ($G=G(M)$) and quartic order in $F$ (the condensate term) —
+as forced by the no-go; the parity-odd family remains untouched territory.
+
 ## 6. What this report does not show
 
 - Everything is **pointwise algebra**: no lattice soliton has been relaxed

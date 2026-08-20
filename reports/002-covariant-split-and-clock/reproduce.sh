@@ -9,6 +9,7 @@ PY="${PYTHON:-python3}"
 $PY proto.py
 $PY clock_tests.py
 $PY make_figures.py
+$PY dual_identity.py
 
 $PY - <<'PYEOF'
 import json
