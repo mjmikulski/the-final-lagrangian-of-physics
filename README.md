@@ -11,7 +11,7 @@ behind every number, and a reproduction script.
 | # | report | headline result |
 |---|--------|-----------------|
 | 001 | [Quadratic contractions of the M5 field strength](reports/001-quadratic-contractions/) | Exactly 6 independent quadratic invariants; the constant-coefficient extension cannot fix the clock sign while preserving the 3×3 sector (no-go verified) |
-| 002 | [Covariant rot/boost split and a finite clock](reports/002-covariant-split-and-clock/) | A field-selected covariant split of F (3 gated constructions); a one-line covariant boundedness fix; linear clock terms drop out of H (honest negative); a boost condensate gives a finite ω\* = 1.60 vs 1.58 analytic |
+| 002 | [Covariant rot/boost split and a finite-frequency clock candidate](reports/002-covariant-split-and-clock/) | Field-selected covariant split (3 gated constructions); one-line covariant sign fix with K⪰0; linear clock terms cancel in H; a quartic boost term keeps a finite ω\* in both Legendre readings, sitting on the Shapere–Wilczek caustic |
 
 ## How to reproduce
 

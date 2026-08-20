@@ -34,5 +34,9 @@ assert b3["E_min"] < b3["E_0"]
 d = c["B3_dive_scan"]
 assert d["min_density"] >= d["floor"] - 1e-9
 assert c["B3_spatial_guard"] == 0.0
+lg = c["legendre"]
+assert lg["caustic_at_minimum"] is True
+assert abs(lg["omega_star_H"] - (1.0 / (6 * 0.05 * 4.0)) ** 0.5) < 1e-6
+assert c["kinetic_matrix_allG"]["min_eig"] > 0
 print("REPRODUCED: all structural checks pass.")
 PYEOF

@@ -136,6 +136,73 @@ print(f"B3 3x3 guard: |boost2|/rot2 on on-potential spatial fields "
       f"<= {worst_b2:.1e}")
 results["B3_spatial_guard"] = worst_b2
 
+# --- Legendre check (review point 6): both readings of the condensate ---
+# If L_C is fundamental: p = dL/dw = -2ak2 w + 4bk2^2 w^3, H = pw - L
+#   => H(w) = -a k2 w^2 + 3b k2^2 w^4, finite minimum at w*^2 = a/(6bk2):
+#   the finite clock SURVIVES the Legendre transform, shifted by sqrt(3).
+# If the energy functional is fundamental (the relaxation-stack reading),
+# the section above is already the Hamiltonian and L follows with b/3.
+k2v = k2.item()
+omH = (a_ / (6 * b_ * k2v)) ** 0.5
+EH = [(-a_ * k2v * o ** 2 + 3 * b_ * k2v ** 2 * o ** 4) for o in om.tolist()]
+kH = min(range(len(EH)), key=lambda i: EH[i])
+print(f"Legendre (L-fundamental): H-minimum at omega = {om[kH].item():.3f} "
+      f"(analytic {omH:.3f}), depth {min(EH):.4f} (analytic {-a_**2/(12*b_):.4f})")
+# universal identity dH/dw = w * dp/dw: the nonzero-velocity energy minimum
+# sits exactly at the Legendre caustic (Shapere-Wilczek branched-Hamiltonian
+# structure) -- verified on the toy:
+import numpy as np
+w = np.linspace(0.01, 3, 2000)
+p = -2 * a_ * k2v * w + 4 * b_ * k2v ** 2 * w ** 3
+H = -a_ * k2v * w ** 2 + 3 * b_ * k2v ** 2 * w ** 4
+dH = np.gradient(H, w)
+dp = np.gradient(p, w)
+caustic = w[np.argmin(np.abs(dp))]
+hmin = w[np.argmin(H)]
+print(f"caustic dp/dw=0 at w = {caustic:.3f}, H-minimum at w = {hmin:.3f} "
+      f"(coincide: {abs(caustic-hmin) < 0.01})")
+results["legendre"] = {"omega_star_H": omH, "depth_H": -a_**2/(12*b_),
+                       "caustic_at_minimum": bool(abs(caustic-hmin) < 0.01)}
+
+# --- full 6x6 kinetic matrix (review point 17): mixed terms included ----
+# for the all-G quadratic sector K_ij = sum_i <C_i, C_j>_G is a Gram
+# matrix in a positive product => positive semidefinite analytically;
+# numerical eigenvalues confirm (and quantify the gap).
+GEN = []
+for (i, j), boost in ((( 1, 2), False), ((1, 3), False), ((2, 3), False),
+                      ((0, 1), True), ((0, 2), True), ((0, 3), True)):
+    W = torch.zeros(4, 4, dtype=torch.float64)
+    if boost:
+        W[i, j] = W[j, i] = 1.0
+    else:
+        W[i, j], W[j, i] = -1.0, 1.0
+    GEN.append(W)
+Ms = M_VAC.clone()
+Sp = torch.randn(3, 3, dtype=torch.float64)
+Ms[1:, 1:] = M_VAC[1:, 1:] + 0.5 * (Sp + Sp.T) / 2
+As = torch.zeros(4, 4, 4, dtype=torch.float64)
+r = torch.randn(3, 3, 3, dtype=torch.float64)
+As[1:, 1:, 1:] = r + r.transpose(-1, -2)
+Gm = G_lagrange(Ms)
+tangents = []
+for W in GEN:
+    a0 = W @ Ms + Ms @ W.T
+    tangents.append(a0 / a0.norm())
+K = torch.zeros(6, 6, dtype=torch.float64)
+for i in range(6):
+    for j in range(6):
+        acc = 0.0
+        for k in (1, 2, 3):
+            Ci = tangents[i] @ ETA @ As[k] - As[k] @ ETA @ tangents[i]
+            Cj = tangents[j] @ ETA @ As[k] - As[k] @ ETA @ tangents[j]
+            acc = acc + torch.einsum("ab,ac,bd,cd->", Ci, Gm, Gm, Cj)
+        K[i, j] = acc
+ev = torch.linalg.eigvalsh(K)
+print(f"kinetic matrix (all-G, 6x6 incl. mixed): eigenvalues "
+      f"{[f'{e:.2f}' for e in ev.tolist()]} -> min {ev.min().item():.3f}")
+results["kinetic_matrix_allG"] = {"eigenvalues": ev.tolist(),
+                                  "min_eig": ev.min().item()}
+
 with open(os.path.join(HERE, "results", "clock_results.json"), "w") as f:
     json.dump(results, f, indent=1)
 print("written: clock_results.json")

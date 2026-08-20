@@ -752,5 +752,21 @@
   "min_density": 0.0,
   "floor": -5.0
  },
- "B3_spatial_guard": 0.0
+ "B3_spatial_guard": 0.0,
+ "legendre": {
+  "omega_star_H": 0.9128709291752768,
+  "depth_H": -1.6666666666666665,
+  "caustic_at_minimum": true
+ },
+ "kinetic_matrix_allG": {
+  "eigenvalues": [
+   8.434906406780957,
+   8.925958654604766,
+   33.50835127760146,
+   37.29483841133176,
+   48.11196307140274,
+   65.64530987677517
+  ],
+  "min_eig": 8.434906406780957
+ }
 }

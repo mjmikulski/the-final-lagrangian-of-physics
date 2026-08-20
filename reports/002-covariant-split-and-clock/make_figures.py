@@ -43,15 +43,16 @@ ax.text(1.55, -12.25, "$\\downarrow$ unbounded", color=C1, fontsize=8,
         ha="right", va="center")
 ax.text(1.15, 9.8, "all-$G$: clock dies ($\\omega^*=0$)", color=C2,
         fontsize=9, ha="right", va="center")
-ax.text(2.42, 6.5, "boost condensate:\nfinite clock", color=C3,
+ax.text(2.42, 6.5, "quartic boost ansatz:\nfinite-$\\omega$ minimum", color=C3,
         fontsize=9, ha="right", va="center")
-ax.text(1.70, -5.8, "$\\omega^*=1.60$ (theory 1.58)\n$E(\\omega^*)<E(0)$",
-        fontsize=9, ha="left", va="top", color=INK)
+ax.text(1.70, -5.8, "$\\omega^*=1.60$ (theory 1.58)\n$E(\\omega^*)<E(0)$\n"
+        "L-fundamental reading:\n$\\omega^*\\to0.91$, still finite",
+        fontsize=8.5, ha="left", va="top", color=INK)
 ax.axhline(0, color=INK2, lw=0.8)
 ax.set_xlim(0, 2.8)
 ax.set_ylim(-13, 13)
 ax.set_xlabel("$\\omega$  (clock speed)")
-ax.set_ylabel("energy density  [model units]")
+ax.set_ylabel("energy, H-reading  [model units]")
 ax.set_title("One clock texture, three kinetic terms", fontsize=11)
 fig.tight_layout()
 fig.savefig(os.path.join(HERE, "figs", "figA_clock_family.png"))
@@ -94,7 +95,7 @@ ax.text(4.35, -68, "boosts: sign flipped, magnitude kept\n"
 ax.set_xticks(x, labels, fontsize=9)
 ax.set_ylim(-84, 62)
 ax.set_ylabel("kin($M$; $a_0$)  [$\\omega^2$ coefficient]")
-ax.set_title("Clock-channel table: the one-line covariant boundedness fix",
+ax.set_title("Clock-channel coefficients under $\\eta$ and field-selected $G$",
              fontsize=11, pad=30)
 ax.legend(frameon=False, loc="lower left", bbox_to_anchor=(0.0, 1.005),
           ncol=2, fontsize=9)
