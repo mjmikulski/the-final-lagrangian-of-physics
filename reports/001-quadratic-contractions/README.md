@@ -40,14 +40,14 @@ The M5 field is a symmetric matrix field $M_{\alpha\beta}(x)$ ($4\times4$),
 with gradients $A_\mu\equiv\partial_\mu M$ and $\eta=\mathrm{diag}(-1,1,1,1)$
 used for all raising/lowering. The field strength is the $\eta$-commutator
 
-$$
+```math
 F_{\mu\nu}=A_\mu\,\eta\,A_\nu-A_\nu\,\eta\,A_\mu,
 \qquad
 F_{\mu\nu\alpha\beta}
 =A_{\mu\alpha\gamma}\,\eta^{\gamma\delta}A_{\nu\delta\beta}
 -A_{\nu\alpha\gamma}\,\eta^{\gamma\delta}A_{\mu\delta\beta}.
-\tag{1}
-$$
+\qquad (1)
+```
 
 **Assumption (diagonal Lorentz action).** Derivative and matrix indices are
 assumed to transform under the *same* Lorentz representation: under
@@ -87,10 +87,10 @@ $F\otimes F$: $(8-1)!!=105$ pairings. Any pairing contracting the two slots
 of one antisymmetric pair vanishes; by inclusion–exclusion over the four
 pairs:
 
-$$
+```math
 4\cdot15-\binom{4}{2}\cdot3+\binom{4}{3}\cdot1-\binom{4}{4}\cdot1
-=60-18+4-1=45 \text{ vanish identically.}
-$$
+=60-18+4-1=45 \quad\text{vanish identically.}
+```
 
 The surviving 60 organize by self-trace structure (no self-traces:
 $4+4+16$ bijections; one self-trace each: $2\times16$ via $\Phi$; two each:
