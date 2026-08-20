@@ -26,5 +26,12 @@ deliberately minimal.
 5. **Provenance is pinned.** Upstream definitions are cited to exact files and
    commits, so "the current Lagrangian" always means one checkable object.
 
+6. **Reports merge through review.** New reports land on a branch and open a
+   pull request; an independent LLM critic reviews the PR (its review is
+   posted as a PR comment), collaborators comment on GitHub, and only then
+   is the report merged to `main`. Review findings are addressed in the PR
+   or explicitly rebutted in its thread. (Reports 001–003 predate this
+   rule and were merged directly.)
+
 AI assistance (Claude) is used for derivation drafts, code, and text; a human
 owns and can defend every published sentence.
