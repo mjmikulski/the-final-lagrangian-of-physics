@@ -84,6 +84,22 @@ covariance, $d^2H/d\omega^2>0$ and PSD Hessian of $H$ at $\omega^*$,
 PSD quadratic sector, and the reality of the indefinite zone at
 $\omega^*$.
 
+## Addendum: the P240 two-clock algebra, independently verified
+
+The substrate-framework P240 candidate (issue #146, 2026-08-20) uses the
+same action object as report 002 (their $h^{ab}=\eta^{ab}-2P_t{}^a{}_c\eta^{cb}$
+is the Euclideanizer $G$) inside the fixed-$J$ route, and states the
+two-clock interaction $\Delta E_J=-j^2C/[2I_0(I_0+C)]$ with the opposite
+leading sign at fixed $\omega$. Both identities are exact
+(`two_clock_algebra.py`, symbolic): attraction at fixed $J$ iff the mutual
+inertia $C>0$, repulsion-like $+2C\omega^2$ at fixed $\omega$ — the
+standard Legendre-dual pair. The load-bearing physics — $C(r)=A/r$ with
+$A>0$ — remains unmeasured (their open question), and their one-body root
+is a saddle ($\lambda_{\min}=-2.87$, their own honest report), so the
+candidate action is validated at the level our reports 002/003 already
+establish, while the stable electron and the Newton tail remain open on
+both sides.
+
 ## Provenance
 
 Constructions and conventions: [report 002](../002-covariant-split-and-clock/)

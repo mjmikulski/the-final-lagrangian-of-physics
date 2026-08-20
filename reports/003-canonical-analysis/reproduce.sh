@@ -3,6 +3,7 @@ set -e
 cd "$(dirname "$0")"
 PY="${PYTHON:-python3}"
 $PY hamiltonian_tests.py
+$PY two_clock_algebra.py
 $PY - <<'PYEOF'
 import json
 r = json.load(open("results/hamiltonian_results.json"))
