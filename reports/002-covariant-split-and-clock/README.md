@@ -197,6 +197,7 @@ both figures.
 | Legendre drop-out | `clock_tests.py` B1 block |
 | channel densities (H-reading) | `clock_tests.py::channels` |
 | $E(\omega)$, dive scan, spatial guard | `clock_tests.py` B3 blocks |
+| E/B dual identities (§5b) | `dual_identity.py` |
 | figures | `make_figures.py` |
 
 ## Provenance
