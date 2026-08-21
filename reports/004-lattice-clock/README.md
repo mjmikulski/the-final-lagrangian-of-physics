@@ -26,26 +26,39 @@ deeper at comparable budget). On this instrument:
 2. **The one-line sign fix holds on the real profile.** All six generator
    kin channels are positive on the relaxed hedgehog (rot: 0.296, 0.732,
    0.075; boost: 0.179, 0.074, 0.082).
-3. **Q1 of the P240 validation request: no saddle on our representation
-   — now at a gradient-gated point with a certified eigenvalue.** The
-   first relaxation endpoint was *not* stationary (free-bulk
+3. **Q1 of the P240 validation request: no negative mode found on our
+   representation — reported as evidence, not a certificate.** The first
+   relaxation endpoint was *not* stationary (free-bulk
    $\lVert g\rVert_\infty=1.87$; caught in review), so it was polished
    (annealed Adam + LBFGS) to $E=4.8347$,
    $\lVert g\rVert_\infty=1.13\cdot10^{-4}$,
-   $\lVert g\rVert=1.0\cdot10^{-3}$, off-block exactly 0. At that point a
-   500-step fully reorthogonalized Lanczos on the autograd HVP gives
-   $\lambda_{\min}=+1.11\cdot10^{-3}$ with residual bound
-   $9.7\cdot10^{-6}$ (87× below the value — **sign certified**), next
-   Ritz values $+3.7\cdot10^{-3}$, $+7.9\cdot10^{-3}$, no negative Ritz
-   value in the 500-dim Krylov space, $\lambda_{\max}=2.07\cdot10^4$.
-   The earlier uncertified estimate ($+0.24$ by shifted power iteration at
-   the unpolished point) is retracted as method noise. Caveat stated
-   plainly: the bottom of the spectrum is soft — $\lambda_{\min}$ is of
-   the same order as the residual gradient norm, so the claim is
-   "no negative mode at the achieved stationarity", strengthened by the
-   absence of any negative Ritz value; a deeper polish tightens it further.
-   Still in contrast with the $-2.87$ tangential-split mode of P240's
-   spherical-chart root.
+   $\lVert g\rVert=1.0\cdot10^{-3}$, off-block exactly 0. At that point,
+   fully reorthogonalized Lanczos on the autograd HVP ($m=500$, plus five
+   independent random-start $m=300$ runs; ~2000 HVP evaluations) finds
+   **no negative curvature direction anywhere**: bottom Ritz value
+   $\theta_1=+1.11\cdot10^{-3}$ (next $+3.7\cdot10^{-3}$,
+   $+7.9\cdot10^{-3}$), restart Krylov minima
+   $+2.66\cdot10^{-3}\ldots+2.78\cdot10^{-3}$, all positive;
+   $\lambda_{\max}=2.07\cdot10^4$. Two review-driven corrections are
+   recorded plainly: (i) the original residual bound used the wrong
+   off-diagonal ($\beta_{m-2}$ for $\beta_{m-1}$); with the correct
+   $\beta$ — confirmed by the direct evaluation
+   $\lVert Hv-\theta_1v\rVert$ — the residual is $1.26\cdot10^{-2}$,
+   *larger* than $\theta_1$, so the bottom pair is **not converged** and
+   the earlier "sign certified" statement (and the pre-polish $+0.24$) are
+   both retracted. (ii) Rayleigh–Ritz values are *upper* bounds:
+   $\lambda_{\min}\le\theta_1$, and no Krylov statement can lower-bound
+   the spectrum; a matrix-free inertia count (LDL$^\top$) is infeasible at
+   $n=5.2\cdot10^5$, so positivity remains an empirical finding.
+   Independent code analysis with synthetic counterexamples
+   (a second AI session) confirmed both mechanisms, including a
+   constructed case where every diagnostic passes while
+   $\lambda_{\min}=-2.87$. Standing caveat: $\theta_1$ is of the order
+   of the residual gradient norm, so "is $\lambda_{\min}$ positive" is
+   only meaningful to that accuracy. What survives: repeated independent
+   Krylov searches produce no negative-curvature witness on the Cartesian
+   representation, in contrast to the explicit $-2.87$ mode P240 report
+   in their spherical chart.
 4. **The honest negative: the local-density quartic clock delocalizes.**
    With the C3 condensate implemented as a *local* density
    $\sum_x[-aB_k(x)+3bB_k(x)^2]$ and $b$ calibrated for
@@ -110,7 +123,7 @@ openwave M5.21.2b recipe; provenance in report 001/002 chain).
 | C3 ladder (local quartic) | `lattice.py::stage_ladder`, `ladder_ext.py` |
 | participation-ratio diagnostic | `ladder_ext.py` |
 | gradient-gated polish (review P1a) | `polish_hess.py` |
-| certified $\lambda_{\min}$, Lanczos + residual bound (review P1b) | `lanczos_min.py` |
+| Lanczos bottom pair, direct residual, restarts (review P1b) | `lanczos_min.py` |
 | Q1 Hessian, superseded first estimate | `lattice.py::stage_hessq1` |
 
 ## Provenance

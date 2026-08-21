@@ -248,14 +248,23 @@
   "point": "M_G_polished (grad_inf 1.13e-4)",
   "method": "Lanczos m=500 full reorth on autograd HVP",
   "lam_min": 0.0011068176144341942,
-  "residual_bound": 9.684825997226572e-06,
+  "residual_bound": 0.012591729681497662,
+  "residual_direct": 0.012591729681485728,
   "lam_max_ritz": 20683.742751196518,
   "smallest_3": [
    0.0011068176144341942,
    0.003685748858696296,
    0.007862522102669986
   ],
-  "sign_certified": true
+  "sign_certified": false,
+  "restart_krylov_minima": [
+   0.0027311999540459353,
+   0.0027384506288973868,
+   0.00277820050101314,
+   0.0026558777823396727,
+   0.002763458892215069
+  ],
+  "restarts_all_positive": true
  },
  "polish": {
   "E_before": 4.882281,

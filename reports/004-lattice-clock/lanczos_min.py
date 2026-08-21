@@ -48,24 +48,67 @@ for j in range(m):
 
 from scipy.linalg import eigh_tridiagonal
 T_vals, T_vecs = eigh_tridiagonal(alphas, betas[:len(alphas) - 1])
-lam0 = T_vals[0]
+lam0 = float(T_vals[0])
+# residual two ways: the textbook bound with the CORRECT outside beta
+# (beta_m = betas[m-1], review catch: was betas[m-2]), and the direct
+# ||H v - lam v|| on the assembled Ritz vector (index-error-proof).
 s_last = abs(T_vecs[-1, 0])
-resid = betas[len(alphas) - 2] * s_last if len(betas) >= len(alphas) - 1 \
-    else 0.0
+# invariant-subspace early exit => exact zero residual (review find #2)
+resid_bound = betas[-1] * s_last if len(betas) == len(alphas) else 0.0
+v_ritz = (Vm[:len(alphas)].T @ torch.tensor(T_vecs[:, 0], dtype=DT,
+                                            device=DEV))
+v_ritz = v_ritz / v_ritz.norm()
+Hv = hvp(v_ritz.reshape(Mp.shape)).reshape(-1)
+resid_direct = (Hv - lam0 * v_ritz).norm().item()
 print(f"Lanczos m={len(alphas)}: lam_min = {lam0:.6f}, "
-      f"residual bound {resid:.3e}, lam_max = {T_vals[-1]:.1f}")
+      f"residual bound {resid_bound:.3e}, direct {resid_direct:.3e}, "
+      f"lam_max = {T_vals[-1]:.1f}")
 print(f"three smallest Ritz: {T_vals[:3].tolist()}")
-sign_certified = resid < abs(lam0)
-print(f"sign certified: {sign_certified}")
+sign_certified = resid_direct < abs(lam0)
+print(f"Ritz-pair sign certified (direct residual): {sign_certified}")
+json.dump({"alphas": alphas, "betas": betas},
+          open(os.path.join(HERE, os.path.join("results", "tridiag_m500.json")), "w"))
+
+# missed-mode mitigation (review): independent random-restart Krylov
+# spaces; each T_vals[0] is the exact minimum of the Rayleigh quotient
+# over its 300-dim Krylov subspace.
+restart_mins = []
+for seed in (11, 12, 13, 14, 15):
+    torch.manual_seed(seed)
+    v = (sym4(torch.randn_like(Mp)) * mask).reshape(-1)
+    v = v / v.norm()
+    Vr = torch.zeros(301, n, dtype=DT, device=DEV)
+    Vr[0] = v
+    al, be = [], []
+    for j in range(300):
+        w = hvp(Vr[j].reshape(Mp.shape)).reshape(-1)
+        al.append((Vr[j] @ w).item())
+        coef = Vr[:j + 1] @ w
+        w = w - Vr[:j + 1].T @ coef
+        coef = Vr[:j + 1] @ w
+        w = w - Vr[:j + 1].T @ coef
+        b = w.norm().item()
+        if b < 1e-12:
+            break
+        be.append(b)
+        Vr[j + 1] = w / b
+    tv = eigh_tridiagonal(al, be[:len(al) - 1])[0]
+    restart_mins.append(float(tv[0]))
+    print(f"restart seed {seed}: Krylov-min {tv[0]:.6f}", flush=True)
+print(f"restart minima: {restart_mins} (all positive: "
+      f"{all(x > 0 for x in restart_mins)})")
 
 res = json.load(open(os.path.join(HERE, "results", "lattice_results.json")))
 res["hessian_q1_v2"] = {
     "point": "M_G_polished (grad_inf 1.13e-4)",
     "method": "Lanczos m=%d full reorth on autograd HVP" % len(alphas),
-    "lam_min": float(lam0), "residual_bound": float(resid),
+    "lam_min": lam0, "residual_bound": float(resid_bound),
+    "residual_direct": float(resid_direct),
     "lam_max_ritz": float(T_vals[-1]),
     "smallest_3": [float(x) for x in T_vals[:3]],
-    "sign_certified": bool(sign_certified)}
+    "sign_certified": bool(sign_certified),
+    "restart_krylov_minima": restart_mins,
+    "restarts_all_positive": bool(all(x > 0 for x in restart_mins))}
 res["polish"] = {"E_before": 4.882281, "E_after": 4.834718,
                  "grad_inf_before": 1.8664, "grad_inf_after": 1.13e-4,
                  "grad_norm_after": 1.0e-3, "offblock": 0.0}

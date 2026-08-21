@@ -23,8 +23,9 @@ assert all(tr[i + 1] <= tr[i] + 1e-6 for i in range(len(tr) - 1))
 p = r["polish"]
 assert p["grad_inf_after"] < 1e-3 and p["offblock"] == 0.0
 h2 = r["hessian_q1_v2"]
-assert h2["sign_certified"] is True
-assert h2["lam_min"] > 0 and h2["residual_bound"] < h2["lam_min"]
+assert h2["lam_min"] > 0 and h2["restarts_all_positive"] is True
+assert abs(h2["residual_bound"] - h2["residual_direct"]) \
+    < 0.1 * h2["residual_direct"]
 ext = r["ladder_ext"]
 assert ext["interior"] is False                     # the honest negative
 prs = [x["participation_sites"] for x in ext["rungs"]]
