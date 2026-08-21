@@ -13,6 +13,7 @@ behind every number, and a reproduction script.
 | 001 | [Quadratic contractions of the M5 field strength](reports/001-quadratic-contractions/) | Exactly 6 independent quadratic invariants; the constant-coefficient extension cannot fix the clock sign while preserving the 3×3 sector (no-go verified) |
 | 002 | [Covariant rot/boost split and a finite-frequency clock candidate](reports/002-covariant-split-and-clock/) | Field-selected covariant split (3 gated constructions); one-line covariant sign fix with K⪰0; linear clock terms cancel in H; a quartic boost term keeps a finite ω\* in both Legendre readings, sitting on the Shapere–Wilczek caustic |
 | 003 | [Canonical analysis of the boost-condensate clock](reports/003-canonical-analysis/) | The naive Lorentzian completion is killed by its own Legendre transform (−bB_s² in statics); the u-selected completion is healthy: H = −aB_k + 3bB_k², finite ω\*, energy PSD at the clock, branched dynamics required |
+| 004 | [Lattice hedgehog under the covariant G action](reports/004-lattice-clock/) | Statics survive on the lattice (gap 6.98, kin all-positive); Q1 of P240: no saddle on our representation (λ_min = +0.24); honest negative: the local-quartic clock delocalizes (PR ×22) instead of ticking |
 
 ## How to reproduce
 
