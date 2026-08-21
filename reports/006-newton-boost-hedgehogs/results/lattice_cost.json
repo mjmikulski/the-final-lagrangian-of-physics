@@ -1,0 +1,8 @@
+{
+ "fwd_all": {"I1": 2.07352, "I4": 1.46410, "ratio": 0.7061},
+ "fwd_free": {"I1": 1.61648, "I4": 1.23562, "ratio": 0.7644},
+ "bwd_all": {"I1": 2.07977, "I4": 1.46490, "ratio": 0.7044},
+ "bwd_free": {"I1": 1.61847, "I4": 1.23321, "ratio": 0.7620},
+ "free_bulk_mean_ratio": 0.7632,
+ "provenance": "Computed with lattice_cost.py against the gradient-polished field M_G_polished.npz of the report-004 line (working repo duda-particle-model, covariant_split @ 0bcea47; regenerable via reports/004-lattice-clock/reproduce.sh, which reruns the polish of report 004 P1a)."
+}

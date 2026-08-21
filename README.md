@@ -15,6 +15,7 @@ behind every number, and a reproduction script.
 | 003 | [Canonical analysis of the boost-condensate clock](reports/003-canonical-analysis/) | The naive Lorentzian completion is killed by its own Legendre transform (−bB_s² in statics); the u-selected completion is healthy: H = −aB_k + 3bB_k², finite ω\*, energy PSD at the clock, branched dynamics required |
 | 004 | [Lattice hedgehog under the covariant G action](reports/004-lattice-clock/) | Statics survive on the lattice (gap 6.98, kin all-positive); Q1 of P240: no negative-curvature witness at the gradient-gated point (λ_min ≤ +1.1e-3, evidence not certificate); honest negative: the local-quartic clock delocalizes (PR ×22) instead of ticking |
 | 005 | [Parity-odd (Levi-Civita) quadratic contractions](reports/005-epsilon-contractions/) | The ε sector closes: 3 (not 4) independent pseudoscalars on model fields — P239's J4 ≡ 0 by a cyclic-trace identity; the 3×3 no-go survives the entire ε sector; χ² = 16N₁ exactly; φ and χ are null Lagrangians |
+| 006 | [Newton sign on boost hedgehogs](reports/006-newton-boost-hedgehogs/) | On the canonical ansatz F is purely spatial: the 3×3-preserving repair space acts as identical zero, all quadratics collapse to two channels with 3S₁ = 4S₄ (virial) and ρ = e₁/e₄ ∈ [1,4]; measured repulsive tails with X > 0 close every sign branch — no constant-coefficient quadratic attracts and stays stable |
 
 ## How to reproduce
 
