@@ -9,7 +9,10 @@ first report through the PR-review workflow*
 A torch/autograd lattice instrument ($32^3$, $h=1.5$, pinned vacuum shell,
 symmetrized stencils, float64, GPU) was gated against the independent
 FIRE-based reference stack: the single-evaluation energy of the shared
-3×3-electron seed matches the reference record, and the $\eta$ baseline
+3×3-electron seed matches the reference record (persisted as
+`gate.oracle_seed_E` with relative error asserted $<10^{-6}$ against
+9.263660060; the baseline energy trajectory is likewise persisted and
+asserted monotone), and the $\eta$ baseline
 relaxes monotonically $9.26\to4.90$ with block-diagonality exact
 (the reference endpoints were "contained-not-converged"; Adam descends
 deeper at comparable budget). On this instrument:
@@ -23,13 +26,26 @@ deeper at comparable budget). On this instrument:
 2. **The one-line sign fix holds on the real profile.** All six generator
    kin channels are positive on the relaxed hedgehog (rot: 0.296, 0.732,
    0.075; boost: 0.179, 0.074, 0.082).
-3. **Q1 of the P240 validation request: no saddle on our representation.**
-   The lowest Hessian eigenvalue of the $G$-statics at the relaxed state is
-   **$+0.24$** (HVP power iteration on the free bulk; $\lambda_{\max}
-   =2.1\cdot10^4$): positive-definite, in contrast to the $-2.87$
-   tangential-split mode of P240's spherical-chart root. On a Cartesian
-   lattice — the "materially different representation" they asked for —
-   the stable static one-body branch exists.
+3. **Q1 of the P240 validation request: no saddle on our representation
+   — now at a gradient-gated point with a certified eigenvalue.** The
+   first relaxation endpoint was *not* stationary (free-bulk
+   $\lVert g\rVert_\infty=1.87$; caught in review), so it was polished
+   (annealed Adam + LBFGS) to $E=4.8347$,
+   $\lVert g\rVert_\infty=1.13\cdot10^{-4}$,
+   $\lVert g\rVert=1.0\cdot10^{-3}$, off-block exactly 0. At that point a
+   500-step fully reorthogonalized Lanczos on the autograd HVP gives
+   $\lambda_{\min}=+1.11\cdot10^{-3}$ with residual bound
+   $9.7\cdot10^{-6}$ (87× below the value — **sign certified**), next
+   Ritz values $+3.7\cdot10^{-3}$, $+7.9\cdot10^{-3}$, no negative Ritz
+   value in the 500-dim Krylov space, $\lambda_{\max}=2.07\cdot10^4$.
+   The earlier uncertified estimate ($+0.24$ by shifted power iteration at
+   the unpolished point) is retracted as method noise. Caveat stated
+   plainly: the bottom of the spectrum is soft — $\lambda_{\min}$ is of
+   the same order as the residual gradient norm, so the claim is
+   "no negative mode at the achieved stationarity", strengthened by the
+   absence of any negative Ritz value; a deeper polish tightens it further.
+   Still in contrast with the $-2.87$ tangential-split mode of P240's
+   spherical-chart root.
 4. **The honest negative: the local-density quartic clock delocalizes.**
    With the C3 condensate implemented as a *local* density
    $\sum_x[-aB_k(x)+3bB_k(x)^2]$ and $b$ calibrated for
@@ -65,6 +81,8 @@ numerics, and is author-gated.
   the measured $E_G$-vs-$E_\eta$ equivalence.
 - One clock generator (largest-$K_1$ boost), 500 Adam steps per rung,
   frozen $a_0$ (the reference protocol); no global-quartic ablation yet.
+  The ladder started from the pre-polish endpoint; each rung re-relaxes,
+  and the delocalization mechanism is insensitive to the starting polish.
 - Single branch $s=+1$, single grid size.
 
 ## Reproduction
@@ -91,7 +109,9 @@ openwave M5.21.2b recipe; provenance in report 001/002 chain).
 | kin table on the profile | `lattice.py::stage_kin` |
 | C3 ladder (local quartic) | `lattice.py::stage_ladder`, `ladder_ext.py` |
 | participation-ratio diagnostic | `ladder_ext.py` |
-| Q1 Hessian (HVP power iteration) | `lattice.py::stage_hessq1` |
+| gradient-gated polish (review P1a) | `polish_hess.py` |
+| certified $\lambda_{\min}$, Lanczos + residual bound (review P1b) | `lanczos_min.py` |
+| Q1 Hessian, superseded first estimate | `lattice.py::stage_hessq1` |
 
 ## Provenance
 

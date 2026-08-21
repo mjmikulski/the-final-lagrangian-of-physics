@@ -5,6 +5,8 @@ cd "$(dirname "$0")"
 PY="${PYTHON:-python3}"
 $PY lattice.py gate statG kin ladder hessq1
 $PY ladder_ext.py
+$PY polish_hess.py
+$PY lanczos_min.py
 $PY - <<'PYEOF'
 import json
 r = json.load(open("results/lattice_results.json"))
@@ -14,7 +16,15 @@ sg = r["statG"]
 assert sg["offblock"] == 0.0 and sg["spectral_gap_min"] > 1.0
 assert abs(sg["E"] - sg["E_eta_of_same"]) / sg["E"] < 1e-2
 assert all(v > 0 for v in r["kin_table_G"].values())
-assert r["hessian_q1"]["lam_min_est"] > 0
+g = r["gate"]
+assert g["oracle_rel"] < 1e-6
+tr = g["baseline_trajectory"]
+assert all(tr[i + 1] <= tr[i] + 1e-6 for i in range(len(tr) - 1))
+p = r["polish"]
+assert p["grad_inf_after"] < 1e-3 and p["offblock"] == 0.0
+h2 = r["hessian_q1_v2"]
+assert h2["sign_certified"] is True
+assert h2["lam_min"] > 0 and h2["residual_bound"] < h2["lam_min"]
 ext = r["ladder_ext"]
 assert ext["interior"] is False                     # the honest negative
 prs = [x["participation_sites"] for x in ext["rungs"]]

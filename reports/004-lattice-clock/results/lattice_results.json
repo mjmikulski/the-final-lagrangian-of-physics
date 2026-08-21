@@ -243,5 +243,26 @@
   "E0": 4.882280773226911,
   "min_omega": 2.8,
   "interior": false
+ },
+ "hessian_q1_v2": {
+  "point": "M_G_polished (grad_inf 1.13e-4)",
+  "method": "Lanczos m=500 full reorth on autograd HVP",
+  "lam_min": 0.0011068176144341942,
+  "residual_bound": 9.684825997226572e-06,
+  "lam_max_ritz": 20683.742751196518,
+  "smallest_3": [
+   0.0011068176144341942,
+   0.003685748858696296,
+   0.007862522102669986
+  ],
+  "sign_certified": true
+ },
+ "polish": {
+  "E_before": 4.882281,
+  "E_after": 4.834718,
+  "grad_inf_before": 1.8664,
+  "grad_inf_after": 0.000113,
+  "grad_norm_after": 0.001,
+  "offblock": 0.0
  }
 }

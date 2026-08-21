@@ -132,15 +132,17 @@ def relax(M_raw, metric, steps, lr=5e-4, tag="", log_every=500):
     M_raw = M_raw.clone().requires_grad_(True)
     opt = torch.optim.Adam([M_raw], lr=lr)
     t0 = time.time()
+    traj = []
     for it in range(steps):
         opt.zero_grad()
         E = e_static(field(M_raw), metric)
         E.backward()
         opt.step()
         if (it + 1) % log_every == 0:
+            traj.append(E.item())
             print(f"  {tag} it {it+1:5d}  E {E.item():.6f} "
                   f"[{time.time()-t0:.0f}s]", flush=True)
-    return M_raw.detach()
+    return M_raw.detach(), traj
 
 
 def load_results():
@@ -220,8 +222,14 @@ def stage_gate(res):
     res["vacuum_energy"] = {m: e_static(Mv, m).item() for m in ("eta", "G")}
     print("vacuum energies:", res["vacuum_energy"])
     M0 = seed_embedded()
-    print(f"seed E_eta = {e_static(field(M0), 'eta').item():.4f}")
-    Mr = relax(M0, "eta", 3000, tag="eta")
+    oracle = e_static(field(M0), "eta").item()
+    print(f"seed E_eta = {oracle:.4f}")
+    # oracle: the FIRE reference value of the same embedded seed
+    ORACLE_REF = 9.263660060
+    res["gate"] = {"oracle_seed_E": oracle, "oracle_ref": ORACLE_REF,
+                   "oracle_rel": abs(oracle - ORACLE_REF) / ORACLE_REF}
+    Mr, traj = relax(M0, "eta", 3000, tag="eta")
+    res["gate"]["baseline_trajectory"] = [oracle] + traj
     Me = field(Mr)
     res["baseline_eta"] = {"E": e_static(Me, "eta").item(),
                            "offblock": offblock(Me)}
@@ -262,7 +270,7 @@ def stage_statG(res):
     import numpy as np
     M0 = torch.tensor(np.load(os.path.join(HERE, os.path.join("results", "M_eta.npz")))["M"],
                       dtype=DT, device=DEV)
-    Mr = relax(M0, "G", 3000, tag="G  ")
+    Mr, _ = relax(M0, "G", 3000, tag="G  ")
     Mg = field(Mr)
     lam = torch.linalg.eigvals(torch.einsum(
         "ab,...bc->...ac", ETA, Mg)).real
