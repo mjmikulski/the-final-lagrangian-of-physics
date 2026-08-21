@@ -1,0 +1,149 @@
+# Report 004 — The lattice hedgehog under the covariant $G$ action: statics survive, the local-quartic clock delocalizes
+
+*2026-08-21 · Maciej J. Mikulski (AI-assisted, see [METHOD](../../METHOD.md)) ·
+lattice stage of the program of [report 002](../002-covariant-split-and-clock/) §9;
+first report through the PR-review workflow*
+
+## Results
+
+A torch/autograd lattice instrument ($32^3$, $h=1.5$, pinned vacuum shell,
+symmetrized stencils, float64, GPU) was gated against the independent
+FIRE-based reference stack: the single-evaluation energy of the shared
+3×3-electron seed matches the reference record (persisted as
+`gate.oracle_seed_E` with relative error asserted $<10^{-6}$ against
+9.263660060; the baseline energy trajectory is likewise persisted and
+asserted monotone), and the $\eta$ baseline
+relaxes monotonically $9.26\to4.90$ with block-diagonality exact
+(the reference endpoints were "contained-not-converged"; Adam descends
+deeper at comparable budget). On this instrument:
+
+1. **The hedgehog survives the covariant $G$ statics.** Relaxed energy
+   4.882 with $|E_G-E_\eta|/E=1.4\cdot10^{-4}$ on the same field (the
+   statics-equivalence guard), block-diagonality exact, and the spectral
+   gap of $\eta M$ on the whole relaxed profile is **6.98** — far from the
+   projector's smoothness boundary (report 002's domain assumption holds
+   on real particle profiles).
+2. **The one-line sign fix holds on the real profile.** All six generator
+   kin channels are positive on the relaxed hedgehog (rot: 0.296, 0.732,
+   0.075; boost: 0.179, 0.074, 0.082).
+3. **Q1 of the P240 validation request: no negative mode found on our
+   representation — reported as evidence, not a certificate.** The first
+   relaxation endpoint was *not* stationary (free-bulk
+   $\lVert g\rVert_\infty=1.87$; caught in review), so it was polished
+   (annealed Adam + LBFGS) to $E=4.8347$,
+   $\lVert g\rVert_\infty=1.13\cdot10^{-4}$,
+   $\lVert g\rVert=1.0\cdot10^{-3}$, off-block exactly 0. At that point,
+   fully reorthogonalized Lanczos on the autograd HVP ($m=500$, plus five
+   independent random-start $m=300$ runs; ~2000 HVP evaluations) finds
+   **no negative curvature direction anywhere**: bottom Ritz value
+   $\theta_1=+1.11\cdot10^{-3}$ (next $+3.7\cdot10^{-3}$,
+   $+7.9\cdot10^{-3}$), restart Krylov minima
+   $+2.66\cdot10^{-3}\ldots+2.78\cdot10^{-3}$, all positive;
+   $\lambda_{\max}=2.07\cdot10^4$. Two review-driven corrections are
+   recorded plainly: (i) the original residual bound used the wrong
+   off-diagonal ($\beta_{m-2}$ for $\beta_{m-1}$); with the correct
+   $\beta$ — confirmed by the direct evaluation
+   $\lVert Hv-\theta_1v\rVert$ — the residual is $1.26\cdot10^{-2}$,
+   *larger* than $\theta_1$, so the bottom pair is **not converged** and
+   the earlier "sign certified" statement (and the pre-polish $+0.24$) are
+   both retracted. (ii) Rayleigh–Ritz values are *upper* bounds:
+   $\lambda_{\min}\le\theta_1$, and no Krylov statement can lower-bound
+   the spectrum; a matrix-free inertia count (LDL$^\top$) is infeasible at
+   $n=5.2\cdot10^5$, so positivity remains an empirical finding.
+   Independent code analysis with synthetic counterexamples
+   (a second AI session) confirmed both mechanisms, including a
+   constructed case where every diagnostic passes while
+   $\lambda_{\min}=-2.87$; an **independent recomputation of the
+   persisted $m=500$ tridiagonal** (`results/tridiag_m500.json`) then
+   confirmed every digit above, and explained why the bug looked strong:
+   $\beta_{498}=7.17$ is an anomalous near-breakdown value ($\sim$1300×
+   below the typical $\beta\sim9\cdot10^3$ for
+   $\lVert H\rVert\sim2\cdot10^4$) — the wrong index happened to pick
+   the one tiny off-diagonal. The guaranteed statement is only
+   $\exists\,\lambda\in[\theta_1-r,\ \theta_1+r]
+   =[-1.15\cdot10^{-2},\ +1.37\cdot10^{-2}]$: consistent with a small
+   negative eigenvalue and **undetermined** either way (Kato–Temple does
+   not apply: $r$ is $\sim$5× the Ritz gap). The restart minima sit above
+   $\theta_1$, as Cauchy interlacing requires — a passing internal check.
+   Standing caveat: $\theta_1$ is of the order of the residual gradient
+   norm, so "is $\lambda_{\min}$ positive" is only meaningful to that
+   accuracy; resolving it needs a deeper polish plus a preconditioned
+   block solver (LOBPCG) or shift-invert, not more bare Lanczos steps
+   (condition number $\sim2\cdot10^7$). What survives: repeated
+   independent Krylov searches produce no negative-curvature witness on
+   the Cartesian representation, in contrast to the explicit $-2.87$ mode
+   P240 report in their spherical chart.
+4. **The honest negative: the local-density quartic clock delocalizes.**
+   With the C3 condensate implemented as a *local* density
+   $\sum_x[-aB_k(x)+3bB_k(x)^2]$ and $b$ calibrated for
+   $\omega^*_{\rm frozen}=0.8$, the profile-re-relaxed ladder is monotone
+   decreasing through $\omega=2.8$ — no interior minimum. The mechanism is
+   visible in the participation ratio of $B_k$: **88 → 1962 sites**
+   ($\times22$) — the boost density spreads over the box instead of
+   staying on the particle. A local Mexican hat has an *extensive* floor
+   ($N_{\rm sites}\cdot(-a^2/12b)$), and the field evades confinement by
+   dilution: the pointwise/reduced finite $\omega^*$ of reports 002–003
+   does **not** survive this implementation of backreaction.
+
+![Fig 004](fig004_delocalization.png)
+
+## Interpretation and outlook
+
+The delocalization result sharpens, in kinetic form, the static-condensate
+flag of report 003 (C1): a clock term built from a *local* quartic density
+rewards spreading. Candidate repairs, in order of appeal — none run here:
+an *intensive/global* quartic $\big(\sum_xB_k\big)^2$-type (which is what
+the reduced analysis of reports 002–003 effectively described), a
+normalized form, or tying the condensate to the topological density
+(spin–charge, the B2 idea) so only the particle core can carry the clock.
+Fixed-$J$ remains the constrained alternative. The choice is physics, not
+numerics, and is author-gated.
+
+## What this report does not show
+
+- Q2 of P240 (two-defect mutual inertia $C(r)$) was not run.
+- The Coulomb-tail fit at $n=32$ is boundary-dominated (flat density in
+  the fit window under the frozen textured shell) and is reported as
+  inconclusive; the statics guard here is the algebraic 3×3 reduction plus
+  the measured $E_G$-vs-$E_\eta$ equivalence.
+- One clock generator (largest-$K_1$ boost), 500 Adam steps per rung,
+  frozen $a_0$ (the reference protocol); no global-quartic ablation yet.
+  The ladder started from the pre-polish endpoint; each rung re-relaxes,
+  and the delocalization mechanism is insensitive to the starting polish.
+- Single branch $s=+1$, single grid size.
+
+## Reproduction
+
+```bash
+pip install torch numpy
+./reproduce.sh    # ~45 min on a CUDA GPU (float64); CPU much slower
+```
+
+Asserts: vacuum zeros, baseline monotone character and exact
+block-diagonality, statics equivalence and spectral gap, all-positive kin
+table, $\lambda_{\min}>0$ (Q1), and the honest negative itself (no interior
+minimum + participation growth). The 3×3 seed is included
+(`results/seed_3x3_electron.npz`, regenerated deterministically from the
+openwave M5.21.2b recipe; provenance in report 001/002 chain).
+
+## Equation-to-code map
+
+| object | code |
+|---|---|
+| lattice energies $\eta$/$G$, stencils, potential | `lattice.py::e_static` (+ helpers) |
+| oracle gate vs FIRE reference | `lattice.py::stage_gate` |
+| $G$ statics, spectral gap, tails | `lattice.py::stage_statG` |
+| kin table on the profile | `lattice.py::stage_kin` |
+| C3 ladder (local quartic) | `lattice.py::stage_ladder`, `ladder_ext.py` |
+| participation-ratio diagnostic | `ladder_ext.py` |
+| gradient-gated polish (review P1a) | `polish_hess.py` |
+| Lanczos bottom pair, direct residual, restarts (review P1b) | `lanczos_min.py` |
+| Q1 Hessian, superseded first estimate | `lattice.py::stage_hessq1` |
+
+## Provenance
+
+Program and constructions: reports [002](../002-covariant-split-and-clock/)
+and [003](../003-canonical-analysis/). P240 validation request:
+substrate-framework issue #146, comment of 2026-08-20 (17:57 UTC).
+Reference stack for the oracle: the FIRE reproduction of openwave M5.21.3
+(report 002 provenance chain).
