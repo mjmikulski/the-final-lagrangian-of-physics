@@ -53,12 +53,26 @@ deeper at comparable budget). On this instrument:
    Independent code analysis with synthetic counterexamples
    (a second AI session) confirmed both mechanisms, including a
    constructed case where every diagnostic passes while
-   $\lambda_{\min}=-2.87$. Standing caveat: $\theta_1$ is of the order
-   of the residual gradient norm, so "is $\lambda_{\min}$ positive" is
-   only meaningful to that accuracy. What survives: repeated independent
-   Krylov searches produce no negative-curvature witness on the Cartesian
-   representation, in contrast to the explicit $-2.87$ mode P240 report
-   in their spherical chart.
+   $\lambda_{\min}=-2.87$; an **independent recomputation of the
+   persisted $m=500$ tridiagonal** (`results/tridiag_m500.json`) then
+   confirmed every digit above, and explained why the bug looked strong:
+   $\beta_{498}=7.17$ is an anomalous near-breakdown value ($\sim$1300×
+   below the typical $\beta\sim9\cdot10^3$ for
+   $\lVert H\rVert\sim2\cdot10^4$) — the wrong index happened to pick
+   the one tiny off-diagonal. The guaranteed statement is only
+   $\exists\,\lambda\in[\theta_1-r,\ \theta_1+r]
+   =[-1.15\cdot10^{-2},\ +1.37\cdot10^{-2}]$: consistent with a small
+   negative eigenvalue and **undetermined** either way (Kato–Temple does
+   not apply: $r$ is $\sim$5× the Ritz gap). The restart minima sit above
+   $\theta_1$, as Cauchy interlacing requires — a passing internal check.
+   Standing caveat: $\theta_1$ is of the order of the residual gradient
+   norm, so "is $\lambda_{\min}$ positive" is only meaningful to that
+   accuracy; resolving it needs a deeper polish plus a preconditioned
+   block solver (LOBPCG) or shift-invert, not more bare Lanczos steps
+   (condition number $\sim2\cdot10^7$). What survives: repeated
+   independent Krylov searches produce no negative-curvature witness on
+   the Cartesian representation, in contrast to the explicit $-2.87$ mode
+   P240 report in their spherical chart.
 4. **The honest negative: the local-density quartic clock delocalizes.**
    With the C3 condensate implemented as a *local* density
    $\sum_x[-aB_k(x)+3bB_k(x)^2]$ and $b$ calibrated for
