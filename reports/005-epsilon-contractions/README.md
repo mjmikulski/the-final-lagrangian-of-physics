@@ -41,10 +41,11 @@ the realizable pseudoscalar space is **3-dimensional**. Further:
    Lagrangians** (total derivatives); the three realizable pseudoscalars
    are dynamical (§7).
 
-Every claim runs on two independent routes: float64 torch einsum
-(`check_torch.py`) and exact integer arithmetic in pure Python with ranks
-over $\mathbb{Q}$ (`verify_exact.py`); the three headline claims
-additionally have short analytic proofs given below.
+Every claim runs on two independent routes: float64 torch einsum with
+autograd Hessians (`check_torch.py`) and exact integer arithmetic in pure
+Python (`verify_exact.py`) — ranks over $\mathbb{Q}$, and Euler–Lagrange
+expressions via exact bilinear-coefficient extraction instead of autograd;
+the headline claims additionally have short analytic proofs given below.
 
 ## 1. Objects and conventions
 
@@ -209,15 +210,23 @@ Euler–Lagrange expression $-\partial_\mu[\partial L/\partial A_\mu]$ is
 evaluated exactly (polynomial Hessian contracted with a random symmetric
 second jet):
 
-- $\varphi$ and $\chi$ are **null**: EL $<2\cdot10^{-15}$ at scale
-  $10^1$. For $\chi$ this is one line:
-  $\chi=\partial_\mu\!\left[2\varepsilon^{\mu\nu\alpha\beta}
-  M_{\alpha\gamma}\eta^{\gamma\delta}\partial_\nu M_{\delta\beta}\right]$,
-  since the $\partial_\mu\partial_\nu M$ remainder dies on
-  $\varepsilon$'s antisymmetry. The two linear-in-$F$ terms one could add
-  to the action are therefore boundary terms.
-- $P_{mm}$, $P_{dm}$, $P_{cp}$ are **dynamical** (EL $\sim10^3$ at scale
-  $10^3$, same order as the control $I_1$).
+- $\varphi$ and $\chi$ are **null** (float route: EL $<2\cdot10^{-15}$ at
+  scale $10^1$; exact route: EL exactly 0). The analytic reason covers
+  both at once: for any *constant* coefficient tensor $c^{\mu\nu\alpha\beta}$,
+  ```math
+  c^{\mu\nu\alpha\beta}F_{\mu\nu\alpha\beta}
+  =\partial_\mu\!\left[2\,c^{[\mu\nu]\alpha\beta}
+  M_{\alpha\gamma}\eta^{\gamma\delta}\partial_\nu M_{\delta\beta}\right],
+  ```
+  because the $\partial_\mu\partial_\nu M$ remainder of the product rule
+  dies on the antisymmetry of $F$ (hence of $c^{[\mu\nu]}$) in the
+  derivative pair. **Every linear invariant of $F$ is a null Lagrangian**;
+  $\varphi$ and $\chi$ are the cases $c=\eta\otimes\eta$ and
+  $c=\varepsilon$. The two linear terms one could add to the action are
+  therefore boundary terms.
+- $P_{mm}$, $P_{dm}$, $P_{cp}$ are **dynamical** (float route: EL
+  $\sim10^3$ at scale $10^3$, same order as the control $I_1$; exact
+  route: EL a nonzero integer matrix on every sample).
 - $P_{dd}$ is the Pontryagin-like null density on generic tensors; on
   model fields it is simply zero (§3).
 
@@ -269,7 +278,7 @@ asserted; the integer route asserts equalities exactly.
 | two-$\varepsilon$ reduction | `check_torch.py` §7, `verify_exact.py` §7 |
 | identities $\chi^2,\ \varphi^2,\ \chi\varphi$ | `check_torch.py` §8, `verify_exact.py` §4 |
 | Jacobian ranks | `check_torch.py` §9 |
-| EL / null-Lagrangian tests | `check_torch.py` §10 |
+| EL / null-Lagrangian tests (autograd / exact bilinear coefficients) | `check_torch.py` §10, `verify_exact.py` §8 |
 
 ## Provenance
 
