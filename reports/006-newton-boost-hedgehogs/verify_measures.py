@@ -144,27 +144,42 @@ for tag, f_np, eps in [("gauss", gauss_np, 1e-8),
     assert abs(S1 / S4 - 4 / 3) < 1e-3
 results["virial"] = vir
 
-# --- 2. clean-profile assembly points --------------------------------------
-print("2. screened-power pairs (tensor route, radial-S + QMC-E):")
+# --- 2. every clean row (all separations of all clean profiles) ------------
+# Covers the assembly extrema by construction: the row set is read from the
+# route-1 results, so the ceiling-setting row and the minimal-X rows are
+# all re-derived here. The route-2 ceiling is persisted and asserted below
+# against the route-2 chain witness.
+print("2. screened-power pairs, ALL clean rows (tensor route, "
+      "radial-S + QMC-E):")
 pairs = {}
-for (p, mu, d) in [(0.5, 0.1, 2.0), (0.5, 0.2, 1.5), (0.3, 0.2, 2.0)]:
+t1_route2 = []
+clean_keys = [k for k, v in route1["tails"].items() if not v["uv_flagged"]]
+for key in clean_keys:
+    p = float(key.split("_")[0][1:])
+    mu = float(key.split("mu")[1])
     R = min(45.0, 14.0 / mu)
     f_np = power_np(p, mu)
     S1, S4 = self_radial(f_np, 0.05, R)
-    E = qmc_pair([-d, d], f_np, R, 0.05)
-    i1, i4 = E[0] - 2 * S1, E[1] - 2 * S4
-    X = 3 * i1 - 4 * i4
-    key = f"p{p}_mu{mu}"
-    r1rows = {r["d"]: r for r in route1["tails"][key]["rows"]}
-    rel1 = abs(i1 - r1rows[d]["E1int"]) / abs(r1rows[d]["E1int"])
-    rel4 = abs(i4 - r1rows[d]["E4int"]) / abs(r1rows[d]["E4int"])
-    pairs[f"{key}_d{d}"] = {"E1int": i1, "E4int": i4, "t1": i1 / i4,
-                            "X": X, "rel_vs_route1": [rel1, rel4]}
-    print(f"   p={p} mu={mu} d={d}: E1int={i1:+.2f} E4int={i4:+.2f} "
-          f"t1={i1 / i4:.4f} X={X:+.2f}  (vs route1: {rel1:.1%}/{rel4:.1%})")
-    assert i1 > 0 and i4 > 0 and X > 0 and i1 / i4 > 4 / 3
-    assert rel1 < 0.05 and rel4 < 0.05
+    for r1 in route1["tails"][key]["rows"]:
+        d = r1["d"]
+        E = qmc_pair([-d, d], f_np, R, 0.05)
+        i1, i4 = E[0] - 2 * S1, E[1] - 2 * S4
+        X = 3 * i1 - 4 * i4
+        rel1 = abs(i1 - r1["E1int"]) / abs(r1["E1int"])
+        rel4 = abs(i4 - r1["E4int"]) / abs(r1["E4int"])
+        pairs[f"{key}_d{d}"] = {"E1int": i1, "E4int": i4, "t1": i1 / i4,
+                                "X": X, "rel_vs_route1": [rel1, rel4]}
+        t1_route2.append(i1 / i4)
+        print(f"   p={p} mu={mu} d={d}: E1int={i1:+.2f} E4int={i4:+.2f} "
+              f"t1={i1 / i4:.4f} X={X:+.2f}  "
+              f"(vs route1: {rel1:.1%}/{rel4:.1%})")
+        assert i1 > 0 and i4 > 0 and X > 0 and i1 / i4 > 4 / 3
+        assert rel1 < 0.05 and rel4 < 0.05
 results["pairs"] = pairs
+results["t1_ceiling_route2"] = max(t1_route2)
+print(f"   route-2 clean ceiling: {max(t1_route2):.4f} "
+      f"(route 1: {route1['t1_ceiling_clean']:.4f})")
+assert abs(max(t1_route2) - route1["t1_ceiling_clean"]) < 0.02
 
 # --- 3. cutoff-free gaussian pair ------------------------------------------
 print("3. gaussian pair, no cutoff:")
@@ -191,6 +206,10 @@ ref = route1["clusters"]["chain7"]
 print(f"   S1/S4 = {ratio:.4f}   (route1 {ref:.4f})")
 assert ratio > 1.5 and abs(ratio - ref) / ref < 0.01
 results["chain7_ratio"] = ratio
+# the alpha<0 no-go branch, entirely within route 2:
+assert results["t1_ceiling_route2"] < ratio
+print(f"   route-2 no-go margin: ceiling {results['t1_ceiling_route2']:.4f}"
+      f" < witness {ratio:.4f}")
 
 with open(os.path.join(HERE, "results", "verify_results.json"), "w") as f:
     json.dump(results, f, indent=1)

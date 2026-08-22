@@ -45,10 +45,15 @@ assert ng["alpha_neg_needs_beta_ratio_at_least"] > \
 
 v = json.load(open("results/verify_results.json"))   # route 2 (measured)
 assert all(abs(x - 4/3) < 1e-3 for x in v["virial"].values())
+n_clean_rows = sum(len(t["rows"]) for t in r["tails"].values()
+                   if not t["uv_flagged"])
+assert len(v["pairs"]) == n_clean_rows    # every clean row re-derived
 for row in v["pairs"].values():
     assert row["E1int"] > 0 and row["E4int"] > 0
     assert row["X"] > 0 and row["t1"] > 4/3
     assert max(row["rel_vs_route1"]) < 0.05
+assert abs(v["t1_ceiling_route2"] - clean_ceiling) < 0.02
+assert v["t1_ceiling_route2"] < v["chain7_ratio"]   # alpha<0 branch, route 2
 assert all(row["X"] > 0 for row in v["gauss_pair"].values())
 assert v["chain7_ratio"] > 1.5
 

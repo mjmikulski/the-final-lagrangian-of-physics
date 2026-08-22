@@ -29,6 +29,10 @@ MPATH = os.path.join(R004, "results", "M_G_polished.npz")
 EXTERNAL = json.load(open(os.path.join(HERE, "results",
                                        "lattice_cost_external.json")))
 if not os.path.exists(MPATH):
+    stale = os.path.join(HERE, "results", "lattice_cost.json")
+    if os.path.exists(stale):
+        os.remove(stale)            # a leftover from an earlier run must
+        print("lattice_cost: removed stale results/lattice_cost.json")
     print("lattice_cost: NOT REPRODUCED HERE -- report 004's regenerated "
           "artifact results/M_G_polished.npz is absent (run "
           "../004-lattice-clock/reproduce.sh first). The I4/I1 = "
