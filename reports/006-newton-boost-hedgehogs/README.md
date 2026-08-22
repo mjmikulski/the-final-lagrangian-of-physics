@@ -149,12 +149,21 @@ $\beta/|\alpha|\ge4$ (for $\alpha<0$), both incompatible with attraction
 
 ## 4. Measurements
 
-Instrument: closed-form $V$ on cylindrical (axisymmetric) or full-3D
-grids, float64, GPU; interaction energies
+Instrument, route 1: closed-form $V$ on cylindrical (axisymmetric) or
+full-3D grids, float64, GPU; interaction energies
 $E^{\rm int}_k(d)=E_k(d)-2S_k$ with self-energies from the same scheme;
-independent radial-quadrature route for $S_k$; convergence scans in grid
-step, domain and core cutoff ($10^{-3}$–$10^{-2}$ relative;
-`results/energy_results.json`).
+convergence scans in grid step, domain and core cutoff
+($10^{-3}$–$10^{-2}$ relative; `results/energy_results.json`).
+**Route 2 for every load-bearing measured inequality**
+(`verify_measures.py`, numpy/scipy, no shared code): densities via the
+tensor route (finite-difference $A_i$ from the ansatz $\delta M$,
+$\eta$-commutator $F$, full report-001 contractions instead of the
+closed forms), single-hedgehog energies by 1D radial quadrature, pair and
+cluster integrals by Sobol quasi-Monte Carlo. Route 2 independently
+confirms the virial ratio, $E^{\rm int}_k>0$, $t_1>4/3$ and $X>0$ at the
+assembly-binding points (within 5% of route 1), the cutoff-free gaussian
+$X>0$, and the chain-7 witness ratio (within 1%);
+`results/verify_results.json`.
 
 1. **Repulsive tails, both channels.** For screened power profiles
    $f=e^{-\mu r}r^{-p}$ in the Newton window $\mu d\le0.6$:
@@ -165,15 +174,17 @@ step, domain and core cutoff ($10^{-3}$–$10^{-2}$ relative;
    | $p=0.3,\ \mu=0.2$ | $[1.335,\,1.357]$ |
    | $p=0.5,\ \mu=0.1$ | $[1.336,\,1.347]$ |
    | $p=0.5,\ \mu=0.2$ | $[1.340,\,1.380]$ |
-   | $p=0.75,\ \mu=0.2$ | $[1.370,\,1.427]$ |
+   | $p=0.75,\ \mu=0.2$ (UV-cutoff-flagged) | $[1.370,\,1.427]$ |
    | $p=1.0,\ \mu=0.2$ (UV-cutoff-flagged) | $[1.51,\,1.55]$ |
 
    always **above 4/3**; equivalently the marginal-direction excess
    $X=3E^{\rm int}_1-4E^{\rm int}_4>0$ (stable under grid/cutoff variants,
    e.g. $+11.6\pm0.4$ at $p=0.5,\mu=0.1,d=2$; positive also on cutoff-free
-   gaussian pairs at every separation, $+2.05$ at $d=0.5$). $p\ge3/4$
-   profiles have UV-cutoff-dependent self-energies and are excluded from
-   the assembly (flagged row shown for context).
+   gaussian pairs at every separation, $+2.05$ at $d=0.5$). UV convergence
+   of the self-energy is *strict* $p<3/4$ ($r^{2-4p}dr$; at $p=3/4$ it
+   diverges logarithmically and the virial boundary term survives), so
+   both $p\ge3/4$ rows are cutoff-flagged context, excluded from the
+   assembly; the clean set is $p\in\{0.3,0.5\}$.
 2. **Cluster witnesses.** Multi-center gaussian configurations reach
    $S_1/S_4=1.52$ (trio), $1.58$ (five), $1.61$ (ring), **$1.80$
    (chain of 7)** — all cutoff-free.
@@ -207,7 +218,8 @@ on at least one tailed two-body profile of §4.
   $E^{\rm int}_4>0$ — no attraction.
 - $\boldsymbol{\alpha<0}$: (i) on the chain-7 witness $\Rightarrow
   \beta\ge1.80\,|\alpha|$; attraction on any clean tailed profile needs
-  $\beta<t_1|\alpha|\le1.43\,|\alpha|$ — contradiction.
+  $\beta<t_1|\alpha|\le1.38\,|\alpha|$ — contradiction (margin holds even
+  against the flagged rows' $1.55$).
 
 Hence **no constant-coefficient quadratic Lagrangian produces an
 attractive long-range tail between boost hedgehogs while keeping the
@@ -223,11 +235,18 @@ Any quadratic modification that *does* move the Newton sector must carry a
 nonzero $e_4$-channel component on spatial fields, i.e. it changes the
 working 3×3 physics. Measured on the relaxed, gradient-polished 3×3
 electron hedgehog of report 004: $\int I_4/\int I_1=0.763$ (free bulk,
-stencil-averaged; `lattice_cost.py`). An $I_4$-type addition with
-coefficient $\beta$ perturbs working 3×3 energies at relative order
-$0.76\,\beta$: **no small-coupling loophole** — retuning of the
-established 3×3 sector would be required, which the program's constraints
-(Coulomb, three leptons) so far forbid.
+stencil-averaged; `lattice_cost.py`). The supported reading: **there is no
+invariant-channel suppression** — an $I_4$-type addition with coefficient
+$\beta$ perturbs working 3×3 energies at relative order $0.76\,\beta$,
+i.e. at the *same* order as its effect anywhere else, so any repair that
+needs an order-one $I_4$ admixture reshapes 3×3 physics at order one and
+forces a retuning the program's constraints (Coulomb, three leptons) so
+far forbid. No lower bound on the couplings of the beyond-quadratic
+alternatives of §7 is claimed. *Reproducibility status:* this figure is an
+**external result** for this report — its input field is regenerated only
+by report 004's `reproduce.sh`; `lattice_cost.py` re-certifies it when
+that artifact is present and reports NOT-REPRODUCED-HERE otherwise
+(recorded values: `results/lattice_cost_external.json`).
 
 ## 7. What this report does not show
 
@@ -246,10 +265,12 @@ established 3×3 sector would be required, which the program's constraints
   configurations/profiles is measured, not characterized; the no-go needs
   only the measured witnesses.
 - The tail measurements cover $p\in[0.3,1]$, $\mu\in[0.1,0.4]$ with the
-  UV-convergent subset ($p<3/4$) carrying the assembly; the author's
-  $p=1/2$ is inside. The observed pinch of all ratios near $4/3$ suggests
-  a deeper asymptotic statement (tail ratios $\to4/3^+$) that we did not
-  prove.
+  strictly UV-convergent subset ($p<3/4$, i.e. $p\in\{0.3,0.5\}$)
+  carrying the assembly; the author's $p=1/2$ is inside. The observed
+  pinch of all ratios near $4/3$ suggests a deeper asymptotic statement
+  (tail ratios $\to4/3^+$) that we did not prove.
+- The $I_4/I_1$ cost figure (§6) is external to this report's
+  reproduction (input field owned by report 004's reproduce path).
 - The two-body ansatz superposes dressings at $O(m)$; no relative boost
   phases/orientations beyond the radial-axis choice were scanned.
 - No claim about the physical profile particles actually take; the no-go
@@ -259,16 +280,19 @@ established 3×3 sector would be required, which the program's constraints
 
 ```bash
 pip install sympy torch numpy scipy   # Python >= 3.12; GPU optional
-./reproduce.sh                        # ~15 min GPU (CPU slower)
+./reproduce.sh                        # ~15 min GPU + ~15 min CPU route 2
 ```
 
 Asserts: the structure theorem and collapse identities (both routes), the
 virial and eigenvalue identities (symbolic + numeric), repulsive tails
 with $t_1>4/3$ and $X>0$ per profile, cluster witness above the clean
 ceiling, the IR-divergence slope, the pocket signs, X-sign stability
-under grid variants, and the three no-go branch inequalities.
-`lattice_cost.py` soft-skips unless report 004's regenerated polished
-field is present (committed values in `results/lattice_cost.json`).
+under grid variants, the three no-go branch inequalities — and route 2
+(`verify_measures.py`) independently re-derives every load-bearing
+measured inequality with agreement bounds. The $I_4/I_1$ cost is
+certified only when report 004's regenerated artifact is present;
+otherwise the run states NOT-REPRODUCED-HERE explicitly and checks only
+the external record's self-consistency with the README quote.
 
 ## Equation-to-code map
 
@@ -280,9 +304,9 @@ field is present (committed values in `results/lattice_cost.json`).
 | collapse $I_2..I_6$, closed forms $e_1,e_4$ | `check_structure.py` §4, `verify_symbolic.py` §2 |
 | notebook $H_s=-e_1/4$ | `check_structure.py` §6 |
 | eigenvalue identities, $\rho\in[1,4]$ | `check_structure.py` §7, `verify_symbolic.py` §3 |
-| virial identity | `verify_symbolic.py` §4, `measure_energies.py` §1 |
-| tails, $t_1$, $X$ | `measure_energies.py` §2, §6b |
-| cluster witnesses | `measure_energies.py` §3 |
+| virial identity | `verify_symbolic.py` §4, `measure_energies.py` §1, `verify_measures.py` §1 |
+| tails, $t_1$, $X$ | `measure_energies.py` §2, §6b; route 2: `verify_measures.py` §§2–3 |
+| cluster witnesses | `measure_energies.py` §3; route 2: `verify_measures.py` §4 |
 | IR divergence of the notebook protocol | `measure_energies.py` §4 |
 | gaussian pocket | `measure_energies.py` §5 |
 | $I_4/I_1$ on the 3×3 hedgehog | `lattice_cost.py` |

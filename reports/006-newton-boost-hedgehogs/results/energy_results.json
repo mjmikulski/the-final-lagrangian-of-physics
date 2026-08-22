@@ -156,7 +156,7 @@
    "t1_min": 1.3699685066755916,
    "t1_max": 1.4270445720975617,
    "all_repulsive": true,
-   "uv_flagged": false
+   "uv_flagged": true
   },
   "p1.0_mu0.2": {
    "rows": [
@@ -195,7 +195,7 @@
    "uv_flagged": true
   }
  },
- "t1_ceiling_clean": 1.4270445720975617,
+ "t1_ceiling_clean": 1.3799467464327304,
  "clusters": {
   "trio": 1.5165824339100498,
   "five": 1.5802327923181716,
@@ -253,6 +253,6 @@
   "stability_singles_boundary_t": 1.3333333333333333,
   "attraction_needs_t_above": 1.3351540913677085,
   "alpha_neg_needs_beta_ratio_at_least": 1.8036772792988425,
-  "alpha_neg_attraction_allows_at_most": 1.4270445720975617
+  "alpha_neg_attraction_allows_at_most": 1.3799467464327304
  }
 }

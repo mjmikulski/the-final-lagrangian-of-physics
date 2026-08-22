@@ -3,14 +3,18 @@
 The no-go forces any quadratic Newton-sign modification outside the
 exact-3x3-preserving family, i.e. to carry a nonzero I4-channel component
 on spatial fields. This measures integral(I4)/integral(I1) on the relaxed,
-gradient-polished 3x3 electron hedgehog of report 004: an order-1 ratio
-means such an addition reshapes working 3x3 physics at order one (no
-small-coupling loophole at fixed profile).
+gradient-polished 3x3 electron hedgehog of report 004.
 
-Needs report 004's regenerated artifact results/M_G_polished.npz (run
-../004-lattice-clock/reproduce.sh first). Without it this script exits
-gracefully; the committed results/lattice_cost.json records the values
-measured on the 004-line polished field (see README provenance).
+REPRODUCIBILITY STATUS (explicit, per review): the input field
+results/M_G_polished.npz of report 004 is regenerated only by
+../004-lattice-clock/reproduce.sh (a GPU-hour run), so this measurement is
+an EXTERNAL RESULT relative to this report's own reproduce.sh. The
+recorded values live in results/lattice_cost_external.json and are marked
+as such; when the 004 artifact IS present, this script recomputes the
+ratio and ASSERTS agreement with the external record, writing
+results/lattice_cost.json. Without the artifact it exits with a loud
+NOT-REPRODUCED-HERE notice (and reproduce.sh reports the cost claim as
+external, never as independently certified).
 """
 import json
 import os
@@ -22,10 +26,14 @@ import torch
 HERE = os.path.dirname(os.path.abspath(__file__))
 R004 = os.path.join(HERE, "..", "004-lattice-clock")
 MPATH = os.path.join(R004, "results", "M_G_polished.npz")
+EXTERNAL = json.load(open(os.path.join(HERE, "results",
+                                       "lattice_cost_external.json")))
 if not os.path.exists(MPATH):
-    print("lattice_cost: 004 artifact results/M_G_polished.npz not found -- "
-          "run ../004-lattice-clock/reproduce.sh first. Recorded values: "
-          "see results/lattice_cost.json (I4/I1 = 0.763 on the free bulk).")
+    print("lattice_cost: NOT REPRODUCED HERE -- report 004's regenerated "
+          "artifact results/M_G_polished.npz is absent (run "
+          "../004-lattice-clock/reproduce.sh first). The I4/I1 = "
+          f"{EXTERNAL['free_bulk_mean_ratio']} figure is an external "
+          "result recorded in results/lattice_cost_external.json.")
     sys.exit(0)
 
 sys.path.insert(0, R004)
@@ -58,7 +66,11 @@ ratio = float(np.mean([v["ratio"] for k, v in out.items()
                        if k.endswith("free")]))
 out["free_bulk_mean_ratio"] = ratio
 print(f"I4/I1 on the relaxed 3x3 hedgehog (free bulk): {ratio:.4f}")
-assert 0.3 < ratio < 3.0
+# the regenerated 004 polish is stochastic-free but not bit-identical
+# across machines; agree with the external record to a loose tolerance
+drift = abs(ratio - EXTERNAL["free_bulk_mean_ratio"])
+print(f"drift vs external record: {drift:.4f}")
+assert drift < 0.1, "regenerated cost disagrees with the external record"
 with open(os.path.join(HERE, "results", "lattice_cost.json"), "w") as f:
     json.dump(out, f, indent=1)
-print("written: results/lattice_cost.json")
+print("written: results/lattice_cost.json (external record confirmed)")

@@ -129,8 +129,11 @@ results["virial"] = vir
 # the radial-quadrature route cross-checks S for the UV-convergent profiles
 # (p < 3/4, where the eps-scheme dependence vanishes).
 print("2. tailed profiles, Newton window (mu*d <= 0.6):")
-CLEAN = [(0.3, 0.2), (0.5, 0.1), (0.5, 0.2), (0.75, 0.2)]
-FLAGGED = [(1.0, 0.2)]          # UV-cutoff-dependent: excluded from assembly
+# UV convergence of the self-energy integral r^(2-4p) dr is STRICT p < 3/4:
+# p = 3/4 diverges logarithmically (and the virial boundary term r^3 f^4
+# does not vanish), so p = 0.75 is cutoff-flagged along with p = 1.
+CLEAN = [(0.3, 0.2), (0.5, 0.1), (0.5, 0.2)]
+FLAGGED = [(0.75, 0.2), (1.0, 0.2)]   # UV-cutoff-dependent: not in assembly
 tails = {}
 for (p, mu) in CLEAN + FLAGGED:
     R = min(45.0, 14.0 / mu)
