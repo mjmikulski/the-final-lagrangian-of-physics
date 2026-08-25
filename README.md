@@ -16,6 +16,7 @@ behind every number, and a reproduction script.
 | 004 | [Lattice hedgehog under the covariant G action](reports/004-lattice-clock/) | Statics survive on the lattice (gap 6.98, kin all-positive); Q1 of P240: no negative-curvature witness at the gradient-gated point (λ_min ≤ +1.1e-3, evidence not certificate); honest negative: the local-quartic clock delocalizes (PR ×22) instead of ticking |
 | 005 | [Parity-odd (Levi-Civita) quadratic contractions](reports/005-epsilon-contractions/) | The ε sector closes: 3 (not 4) independent pseudoscalars on model fields — P239's J4 ≡ 0 by a cyclic-trace identity; the 3×3 no-go survives the entire ε sector; χ² = 16N₁ exactly; φ and χ are null Lagrangians |
 | 006 | [Newton sign on boost hedgehogs](reports/006-newton-boost-hedgehogs/) | On the canonical ansatz F is purely spatial: the 3×3-preserving repair space acts as identical zero, all quadratics collapse to two channels with 3S₁ = 4S₄ (virial) and ρ = e₁/e₄ ∈ [1,4]; measured repulsive tails with X > 0 close every sign branch — no constant-coefficient quadratic attracts and stays stable |
+| 007 | [Core-weighted coefficients and the localized clock](reports/007-core-weighted-clock/) | c(M) and smooth topological coefficients are provably blind to boost dressings (clock-only mechanism); kinetic clock window opens at c ≈ −0.6 on the core; the local quartic delocalizes even under frozen masks, but the intensive quartic × core weight yields an interior ω\* = 0.8 with the boost density on ~100 core sites |
 
 ## How to reproduce
 

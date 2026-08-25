@@ -1,0 +1,54 @@
+{
+ "cells": [
+  {
+   "offset": [
+    0,
+    0,
+    0
+   ],
+   "negs_c0": 0,
+   "c_clock": -0.535
+  },
+  {
+   "offset": [
+    2,
+    0,
+    0
+   ],
+   "negs_c0": 0,
+   "c_clock": -0.595
+  },
+  {
+   "offset": [
+    0,
+    3,
+    0
+   ],
+   "negs_c0": 0,
+   "c_clock": -0.615
+  },
+  {
+   "offset": [
+    4,
+    4,
+    4
+   ],
+   "negs_c0": 0,
+   "c_clock": -0.58
+  },
+  {
+   "offset": [
+    8,
+    0,
+    0
+   ],
+   "negs_c0": 0,
+   "c_clock": -0.645
+  }
+ ],
+ "vacuum_max": 0.0,
+ "fd_route_rel": 4.911597861369468e-16,
+ "provenance": {
+  "fields_dir": "/mnt/c/Users/Maciej/SRC/duda-particle-model/covariant_split"
+ }
+}
