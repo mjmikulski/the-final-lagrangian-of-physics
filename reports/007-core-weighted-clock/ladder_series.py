@@ -14,7 +14,15 @@ Adam steps per rung, participation ratio PR = (sum B_k)^2 / sum B_k^2):
   L4 intensive-fresh: same, every rung restarted from the polished field
                      (no hysteresis). Rung fields at omega = 0.5/0.8/1.1
                      are persisted for the independent energy route
-                     (verify_energies.py).
+                     (verify_energies.py);
+  L5 intensive-DYNAMIC: the review-requested decisive variant -- the
+                     intensive quartic with the weight recomputed from
+                     the CURRENT field at every optimization step
+                     (a genuine functional of M, no external mask),
+                     fresh-start protocol. Note the intensive form
+                     removes the self-widening incentive of L1: B is
+                     driven to B* = a/(6b), so growing the weight's
+                     support past that point is penalized, not paid.
 
 Field inputs: report 004's regenerated artifacts results/M_G.npz and
 results/M_G_polished.npz (run ../004-lattice-clock/reproduce.sh first),
@@ -38,6 +46,9 @@ R004 = os.path.join(HERE, "..", "004-lattice-clock")
 FIELDS = os.environ.get("M5_FIELDS_DIR", os.path.join(R004, "results"))
 if not (os.path.exists(os.path.join(FIELDS, "M_G.npz"))
         and os.path.exists(os.path.join(FIELDS, "M_G_polished.npz"))):
+    flag = os.path.join(HERE, "results", "ladder_ran.flag")
+    if os.path.exists(flag):
+        os.remove(flag)
     print("ladder_series: NOT REPRODUCED HERE -- needs report 004's "
           "regenerated fields (M_G.npz, M_G_polished.npz) in "
           f"{FIELDS} (or set M5_FIELDS_DIR). Committed results carry the "
@@ -188,9 +199,24 @@ results["L4_intensive_fresh"] = run_ladder("L4", M_pol, e_cond_int,
 results["L4_intensive_fresh"]["setup"] = results[
     "L3_intensive_transfer"]["setup"]
 
+
+def e_cond_dyn(Mf, om):
+    """Intensive quartic with the weight as a genuine functional of the
+    CURRENT field (review round 1, P1): no frozen mask anywhere."""
+    bk, _ = boost_channels(Mf, a0_glob, om)
+    cw = sigmoid_w(Mf, v0_3)
+    B = H ** 3 * (cw * bk).sum()
+    return -A_C * B + 3 * b3 * B ** 2
+
+
+results["L5_intensive_dynamic"] = run_ladder("L5", M_pol, e_cond_dyn,
+                                             fresh=True)
+results["L5_intensive_dynamic"]["setup"] = results[
+    "L3_intensive_transfer"]["setup"]
+
 print("\nverdicts:")
 for k in ("L1_dynamic_local", "L2_frozen_local", "L3_intensive_transfer",
-          "L4_intensive_fresh"):
+          "L4_intensive_fresh", "L5_intensive_dynamic"):
     v = results[k]
     print(f"  {k}: min at omega {v['min_omega']}, interior {v['interior']}")
 assert not results["L1_dynamic_local"]["interior"]
@@ -200,4 +226,5 @@ assert results["L4_intensive_fresh"]["min_omega"] == OM_T
 
 with open(os.path.join(HERE, "results", "ladder_series.json"), "w") as f:
     json.dump(results, f, indent=1)
+open(os.path.join(HERE, "results", "ladder_ran.flag"), "w").write("ran\n")
 print("written: results/ladder_series.json")
