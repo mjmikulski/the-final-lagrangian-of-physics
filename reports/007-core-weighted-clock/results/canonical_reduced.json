@@ -1,0 +1,6 @@
+{
+ "H": "omega**2*(3*B*omega**2 + 2*K)/4",
+ "pi_c": "2*sqrt(3)*K*sqrt(-K/B)/9",
+ "E_star": "-K**2/(12*B)",
+ "d2E_at_star": "-2*K"
+}
