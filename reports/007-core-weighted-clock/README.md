@@ -191,10 +191,12 @@ substrate-framework's P243 found on the clock branch.
 **Route 2 for the lattice numbers** (`verify_energies.py`): a from-scratch
 numpy re-implementation of the 004-stack energies (differences,
 Euclideanizer, potential, boost channel, intensive condensate) evaluated
-on the persisted L4 rung fields (`results/fresh_rung_om*.npz`, with the
-frozen generator direction `results/a0_frozen.npz` and frozen mask
-`results/cw_frozen.npz`) reproduces the recorded totals to $2\cdot10^{-15}$
-and confirms the interior well independently.
+on the persisted rung fields of **both** intensive ladders — L4
+(`results/fresh_rung_om*.npz`, frozen mask `results/cw_frozen.npz`) and
+L5 (`results/fresh5_rung_om*.npz`, with the dynamic weight recomputed
+from each rung field), both with the frozen generator direction
+`results/a0_frozen.npz` — reproduces all six recorded totals to
+$2\cdot10^{-15}$ and confirms both interior wells independently.
 
 ## 5. What this report does not show
 
