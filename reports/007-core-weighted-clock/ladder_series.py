@@ -97,7 +97,8 @@ def pick_generator(Mg, w):
     return best, K1, K2
 
 
-def run_ladder(tag, M0, e_cond_fn, fresh=False, save_rungs=None):
+def run_ladder(tag, M0, e_cond_fn, fresh=False, save_rungs=None,
+               save_prefix="fresh_rung_om"):
     rungs, M_raw = [], M0.clone()
     for om in OMEGAS:
         if fresh:
@@ -123,7 +124,7 @@ def run_ladder(tag, M0, e_cond_fn, fresh=False, save_rungs=None):
         if save_rungs and om in save_rungs:
             np.savez_compressed(
                 os.path.join(HERE, "results",
-                             f"fresh_rung_om{str(om).replace('.', '')}.npz"),
+                             f"{save_prefix}{str(om).replace('.', '')}.npz"),
                 M=Mf.cpu().numpy())
     k = min(range(len(rungs)), key=lambda i: rungs[i]["E_total"])
     return {"rungs": rungs, "min_omega": rungs[k]["omega"],
@@ -210,7 +211,9 @@ def e_cond_dyn(Mf, om):
 
 
 results["L5_intensive_dynamic"] = run_ladder("L5", M_pol, e_cond_dyn,
-                                             fresh=True)
+                                             fresh=True,
+                                             save_rungs=(0.5, 0.8, 1.1),
+                                             save_prefix="fresh5_rung_om")
 results["L5_intensive_dynamic"]["setup"] = results[
     "L3_intensive_transfer"]["setup"]
 

@@ -5,7 +5,9 @@ fresh-ladder rung fields.
 No torch, no import of lattice.py -- the definitions (one-sided
 differences, eta-commutator, Lagrange-projector Euclideanizer G, pinned
 potential V4, boost-channel density, the intensive condensate) are coded
-from scratch against the report-002/004 formulas. Asserts:
+from scratch against the report-002/004 formulas. Asserts, for BOTH the
+frozen-mask ladder (L4, weight from results/cw_frozen.npz) and the
+dynamic-weight ladder (L5, weight recomputed here from each rung field):
 - E_static and E_total of the persisted rungs (omega = 0.5, 0.8, 1.1)
   match results/ladder_series.json to 1e-9 relative;
 - the well shape E(0.5) > E(0.8) < E(1.1) -- the interior clock --
@@ -24,8 +26,9 @@ SG, DELTA, W1 = 8.0, 0.3, 0.000724023879
 C_P = tuple(SG ** p + 1.0 + DELTA ** p for p in range(1, 5))
 ETA = np.diag([-1.0, 1.0, 1.0, 1.0])
 
-need = [os.path.join(HERE, "results", f"fresh_rung_om{t}.npz")
-        for t in ("05", "08", "11")]
+need = [os.path.join(HERE, "results", f"{p}{t}.npz")
+        for t in ("05", "08", "11")
+        for p in ("fresh_rung_om", "fresh5_rung_om")]
 if not all(os.path.exists(p) for p in need):
     print("verify_energies: NOT REPRODUCED HERE -- persisted rung fields "
           "absent (ladder_series.py writes them when 004 fields are "
@@ -105,24 +108,40 @@ def bk_of(M, a0, omega):
     return bk
 
 
-rows = {r["omega"]: r for r in res["L4_intensive_fresh"]["rungs"]}
-E_tot = {}
+def cw_dyn(M):
+    """Dynamic weight recomputed from the rung field (the L5 form)."""
+    Me = M @ ETA
+    P, v4 = Me, 0.0
+    for p in range(4):
+        if p:
+            P = P @ Me
+        v4 = v4 + (np.einsum("...kk->...", P) - C_P[p]) ** 2
+    return v4 / (v4 + V0)
+
+
 worst = 0.0
-for om, tag in ((0.5, "05"), (0.8, "08"), (1.1, "11")):
-    M = np.load(os.path.join(HERE, "results",
-                             f"fresh_rung_om{tag}.npz"))["M"]
-    Es = e_static(M)
-    B = Hh ** 3 * (CW_FROZEN * bk_of(M, A0_FROZEN, om)).sum()
-    Ec = -A_C * B + 3 * B_C * B ** 2
-    E = Es + Ec
-    E_tot[om] = E
-    ref = rows[om]["E_total"]
-    rel = abs(E - ref) / abs(ref)
-    worst = max(worst, rel)
-    print(f"omega {om}: E_numpy = {E:.6f}  vs ladder {ref:.6f}  "
-          f"(rel {rel:.1e})")
+for leg, prefix, wfun in (
+        ("L4_intensive_fresh", "fresh_rung_om", lambda M: CW_FROZEN),
+        ("L5_intensive_dynamic", "fresh5_rung_om", cw_dyn)):
+    rows = {r["omega"]: r for r in res[leg]["rungs"]}
+    E_tot = {}
+    for om, tag in ((0.5, "05"), (0.8, "08"), (1.1, "11")):
+        fp = os.path.join(HERE, "results", f"{prefix}{tag}.npz")
+        M = np.load(fp)["M"]
+        Es = e_static(M)
+        B = Hh ** 3 * (wfun(M) * bk_of(M, A0_FROZEN, om)).sum()
+        Ec = -A_C * B + 3 * B_C * B ** 2
+        E = Es + Ec
+        E_tot[om] = E
+        ref = rows[om]["E_total"]
+        rel = abs(E - ref) / abs(ref)
+        worst = max(worst, rel)
+        print(f"[{leg}] omega {om}: E_numpy = {E:.6f}  vs ladder "
+              f"{ref:.6f}  (rel {rel:.1e})")
+    assert E_tot[0.5] > E_tot[0.8] < E_tot[1.1], \
+        f"interior well must survive ({leg})"
 
 print(f"worst relative difference: {worst:.2e}")
 assert worst < 1e-9, "route-2 energies must match the ladder record"
-assert E_tot[0.5] > E_tot[0.8] < E_tot[1.1], "interior well must survive"
-print("ROUTE-2 ENERGIES MATCH; interior well confirmed independently")
+print("ROUTE-2 ENERGIES MATCH (L4 and L5); interior wells confirmed "
+      "independently")

@@ -204,11 +204,16 @@ and confirms the interior well independently.
   route left untested on the lattice: a *topological-density* weight
   (conserved charge, harder for the field to manufacture support for).
 - The dynamic weight is exploitable in the **local** form (L1); in the
-  intensive form it is not (L5), and the successful mechanism needs no
-  external mask. The frozen-mask run (L4) remains as the controlled
-  comparison. Translation covariance of the L5 functional is by
-  construction (the weight moves with the field), but a translated- or
-  moving-soliton run was not performed.
+  intensive form it is not (L5), and the *weight* needs no external
+  mask. The frozen-mask run (L4) remains as the controlled comparison.
+  However the full reduced functional is **not** translation-covariant:
+  the clock tangent $a_0$ is frozen from the centered polished field
+  (the m5 protocol inherited from report 004's ladders, including its
+  origin-centered envelope), so translating the soliton while keeping
+  that tensor fixed would change $B$. L5 is therefore a dynamic-weight
+  result **on one fixed, centered clock tangent**; an equivariant
+  tangent recomputed from the current field (with a field-defined
+  center) and a translated/moving-soliton test remain open.
 - One configuration (the 004 electron hedgehog), one generator (the
   protocol's largest-$K_1$ boost), one grid size, one calibration point;
   the weight scale $v_0$ (here 0.5·max $v_4$) is a new parameter whose

@@ -74,9 +74,12 @@ axi.tick_params(axis="y", direction="in", pad=-24, labelsize=6.5)
 axi.tick_params(axis="x", labelbottom=False)
 axi.grid(alpha=0.2)
 r5 = {x["omega"]: x["E_total"] for x in lad["L5_intensive_dynamic"]["rungs"]}
-axi.annotate(r"$\omega_*=0.8$ (L4, L5)", xy=(0.8, r5[0.8]),
-             xytext=(0.42, 4.912), fontsize=8, zorder=10,
-             arrowprops=dict(arrowstyle="->", color="0.2", lw=0.9))
+axi.annotate(r"min: $\omega=0.8$ (L4, L5)",
+             xy=(0.8, r5[0.8]),
+             xytext=(0.08, 4.8125), fontsize=7.5, zorder=10,
+             bbox=dict(fc="white", alpha=0.8, pad=1.5, lw=0),
+             arrowprops=dict(arrowstyle="->", color="0.2", lw=0.9,
+                             shrinkB=4))
 ax1.indicate_inset_zoom(axi, edgecolor="0.5")
 
 ax2.axhline(1962, color="0.45", ls=":", lw=1.1)
