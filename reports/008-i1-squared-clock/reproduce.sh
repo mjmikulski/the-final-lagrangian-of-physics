@@ -24,32 +24,61 @@ import os
 R = "results"
 lad = json.load(open(os.path.join(R, "i1sq_ladders.json")))
 gsc = json.load(open(os.path.join(R, "gamma_scaling.json")))
+g16 = json.load(open(os.path.join(R, "gamma16_localization.json")))
 
-# frozen-profile prediction inside the sampled bracket
-assert 0.2 < lad["omega_pred_frozen"] < 0.5
+# predictions inside the sampled brackets, sqrt(3) apart
+assert 0.2 < lad["omega_pred_E"] < 0.5
+assert 0.13 < lad["omega_pred_H"] < 0.26
+assert abs(lad["omega_pred_E"] / lad["omega_pred_H"] - 3 ** 0.5) < 1e-9
 
-# J1: interior well at the 0.35 rung, localized
-j1 = lad["J1_local_covariant"]
-assert j1["interior"] and j1["min_omega"] == 0.35
-rows = {r["omega"]: r for r in j1["rungs"]}
+# convergence criterion: bracket stability -- the minimum's location
+# is identical at every relaxation-protocol level (see README section 6)
+for key in ("JG_E", "JG_H", "J_ETA", "J0"):
+    lv = lad[key]["min_omega_per_level"]
+    assert len(set(lv)) == 1 and lv[0] == lad[key]["min_omega"], key
+# residuals recorded for transparency; sanity bound only
+for key in ("JG_E", "JG_H", "J_ETA", "J0", "J2_intensive"):
+    assert lad[key]["max_grad_inf"] < 5e-2, key
+
+# JG_E: interior well at the 0.35 rung, localized
+jge = lad["JG_E"]
+assert jge["interior"] and jge["min_omega"] == 0.35
+rows = {r["omega"]: r for r in jge["rungs"]}
 assert rows[0.2]["E_total"] > rows[0.35]["E_total"] < rows[0.5]["E_total"]
-assert rows[0.35]["PR_bk_sites"] < 300, "must stay core-localized"
+assert rows[0.35]["PR_k_sites"] < 300, "must stay core-localized"
+
+# JG_H: interior well bracketing the omega_H prediction
+jgh = lad["JG_H"]
+assert jgh["interior"] and jgh["min_omega"] == 0.19
+rh = {r["omega"]: r for r in jgh["rungs"]}
+assert rh[0.13]["E_total"] > rh[0.19]["E_total"] < rh[0.26]["E_total"]
+assert rh[0.19]["PR_k_sites"] < 300
+
+# J_ETA: the faithful raw form is inert -- minimum at zero
+jeta = lad["J_ETA"]
+assert (not jeta["interior"]) and jeta["min_omega"] == 0.0
+re = {r["omega"]: r["E_total"] for r in jeta["rungs"]}
+assert re[0.0] <= min(re.values()) + 1e-12
 
 # J0 control: no interior well, minimum at zero
-j0 = lad["J0_local_control"]
+j0 = lad["J0"]
 assert (not j0["interior"]) and j0["min_omega"] == 0.0
-r0 = {r["omega"]: r["E_total"] for r in j0["rungs"]}
-assert r0[0.0] <= min(r0.values()) + 1e-12
 
-# gamma scaling: same minimum position, depth ratio near 4
+# gamma scaling: same minimum position at every protocol level,
+# depth ratio near 4
 assert gsc["interior"] and gsc["min_omega"] == 0.35
 assert 3.0 < gsc["depth_ratio"] < 5.0
+for lv in range(3):
+    k = min(range(len(gsc["rows"])),
+            key=lambda i: gsc["rows"][i]["E_levels"][lv])
+    assert gsc["rows"][k]["omega"] == 0.35, "4-gamma bracket unstable"
 
-# deep-well (16x) localization: depth ~16x base, PR stays at core scale
-g16 = json.load(open(os.path.join(R, "gamma16_localization.json")))
-base_depth = gsc["base_depth"]
-assert 12.0 < g16["depth"] / base_depth < 20.0
-assert g16["PR_at_min"] < 300, "deep well must stay core-localized"
+# 16x probe: the documented regime BREAK -- the minimum is unstable
+# across protocol levels (frozen-profile prediction fails at 80%
+# statics deformation); this bounds the gamma budget
+assert len(set(g16["min_omega_per_level"])) > 1, \
+    "expected level instability at 16x"
+assert g16["final_min_omega"] > 0.35
 
 # J2 diagnosis: the intensive term's E_extra reaches ~0 inside the range
 j2min = min(r["E_extra"] for r in lad["J2_intensive"]["rungs"])

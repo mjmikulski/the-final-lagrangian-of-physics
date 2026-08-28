@@ -1,18 +1,17 @@
 """Report figures from committed artifacts only (result JSONs plus the
-committed J1 rung field) -- runs on a clean checkout, no 004 fields
-needed. Layout follows the readability rules learned in report 007
-(annotation collisions, 800-px README scaling, color-vision-safe
-linestyles).
+committed rung field) -- runs on a clean checkout, no 004 fields
+needed. Layout follows the readability rules learned in reports 007/008
+review rounds (annotation collisions, 800-px README scaling,
+color-vision-safe linestyles).
 
-fig_i1sq_ladders.png : (a) Delta E(omega) for J1 at gamma and 4*gamma
-                       and the J0 sign control, with the frozen-profile
-                       prediction line; (b) localization PR(omega).
-fig_mechanism.png    : (a) radial profiles of the static I1 density
-                       (the template) and the ticking density at
-                       omega_* -- template matching, with the honest
-                       point that i1_stat is nearly flat; (b) the
-                       intensive variant zeroing its integral -- why
-                       the local form is the physical one.
+fig_i1sq_ladders.png : (a) energy reading -- Delta E(omega) for the
+                       G form at gamma and 4*gamma, the faithful eta
+                       form and the sign control, with the omega_E
+                       prediction; (b) fundamental-Lagrangian reading
+                       -- the JG_H well with the omega_H prediction.
+fig_mechanism.png    : (a) radial template/ticking profiles;
+                       (b) localization PR for all ladders;
+                       (c) the intensive variant zeroing its integral.
 """
 import json
 import os
@@ -31,81 +30,85 @@ R = os.path.join(HERE, "results")
 lad = json.load(open(os.path.join(R, "i1sq_ladders.json")))
 gsc = json.load(open(os.path.join(R, "gamma_scaling.json")))
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.8, 3.3))
-
-series = [
-    ("J1_local_covariant", lad, "#2166ac", "D", "-",
-     r"J1: local $(I_1)^2$, $\gamma$"),
-    (None, gsc, "#7b3294", "^", "-.",
-     r"J1 at $4\gamma$ (depth $\times$4 check)"),
-    ("J0_local_control", lad, "#c0392b", "o", "--",
-     "J0: flipped cross sign (control)"),
+SERIES_E = [
+    ("JG_E", lad, "#2166ac", "D", "-", r"$G$ form, $\gamma$"),
+    (None, gsc, "#1a1a1a", "^", "-.", r"$G$ form, $4\gamma$"),
+    ("J_ETA", lad, "#e67e22", "s", ":",
+     r"faithful $\eta$ form (inert)"),
+    ("J0", lad, "#c0392b", "o", "--", "sign control"),
 ]
 
 
-def dE_series(key, src):
+def dE(key, src):
     rungs = src[key]["rungs"] if key else src["rows"]
-    om = [r["omega"] for r in rungs]
     E0 = rungs[0]["E_total"]
-    return om, [1e4 * (r["E_total"] - E0) for r in rungs]
+    return ([r["omega"] for r in rungs],
+            [1e4 * (r["E_total"] - E0) for r in rungs])
 
 
-# main view: the wells themselves (the figure's thesis); full range in
-# an inset (report-007 lesson: don't let one steep curve crush the story)
-for key, src, col, mk, ls, lab in series:
-    om, dE = dE_series(key, src)
-    ax1.plot(om, dE, color=col, marker=mk, ls=ls, ms=4, lw=1.4,
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.8, 3.3))
+for key, src, col, mk, ls, lab in SERIES_E:
+    om, y = dE(key, src)
+    ax1.plot(om, y, color=col, marker=mk, ls=ls, ms=4, lw=1.4,
              label=lab)
 ax1.set_xlim(-0.03, 0.88)
 ax1.set_ylim(-3.6, 2.0)
-ax1.axvline(lad["omega_pred_frozen"], color="0.35", ls=":", lw=1.1)
-ax1.text(0.02, -3.2, "predicted\n$\\omega_*=%.3f$"
-         % lad["omega_pred_frozen"], fontsize=8.5, color="0.25",
+ax1.axvline(lad["omega_pred_E"], color="0.35", ls=":", lw=1.1)
+ax1.text(0.02, -3.2, "predicted\n$\\omega_E=%.3f$"
+         % lad["omega_pred_E"], fontsize=8.5, color="0.25",
          ha="left", va="bottom",
          bbox=dict(fc="white", alpha=0.8, ec="none", pad=1.2))
 ax1.axhline(0, color="0.75", lw=0.8)
 ax1.set_xlabel(r"$\omega$  [lattice units]")
 ax1.set_ylabel(r"$E(\omega)-E(0)$  [$10^{-4}$ lattice units]")
-ax1.set_title("(a) the $(I_1)^2$ well and its controls")
-ax1.legend(fontsize=8, loc="upper right", framealpha=1.0,
+ax1.set_title("(a) energy reading")
+ax1.legend(fontsize=7.5, loc="upper right", framealpha=1.0,
            borderpad=0.35, handlelength=1.8, handletextpad=0.5)
 ax1.grid(alpha=0.25)
-
 axi = ax1.inset_axes([0.60, 0.08, 0.38, 0.40])
-for key, src, col, mk, ls, lab in series:
-    om, dE = dE_series(key, src)
-    axi.plot(om, dE, color=col, ls=ls, lw=1.0)
+for key, src, col, mk, ls, lab in SERIES_E:
+    om, y = dE(key, src)
+    axi.plot(om, y, color=col, ls=ls, lw=1.0)
 axi.set_xlim(-0.05, 1.25)
 axi.tick_params(labelsize=6, direction="in", pad=2)
 axi.set_title("full range", fontsize=6.5, pad=2)
 axi.grid(alpha=0.2)
 
-# localization: linear axis around the measured band; the delocalized
-# floor is off scale and quoted as text
-for key, src, col, mk, ls, lab in series:
-    rungs = src[key]["rungs"] if key else src["rows"]
-    om = [r["omega"] for r in rungs if r["omega"] > 0]
-    pr = [r["PR_bk_sites"] for r in rungs if r["omega"] > 0]
-    ax2.plot(om, pr, color=col, marker=mk, ls=ls, ms=4, lw=1.4,
-             label=lab)
-ax2.set_ylim(85, 300)
-ax2.text(0.5, 0.955, "delocalized floor (004): 1962 sites, off scale",
-         fontsize=8, color="0.25", ha="center", va="top",
-         transform=ax2.transAxes)
+rungs_h = lad["JG_H"]["rungs"]
+E0h = rungs_h[0]["E_total"]
+om_h = [r["omega"] for r in rungs_h]
+y_h6 = [1e6 * (r["E_total"] - E0h) for r in rungs_h]
+ax2.plot(om_h, y_h6, color="#1b7837", marker="v", ls="-", ms=4.5,
+         lw=1.4)
+ax2.set_xlim(-0.015, 0.30)
+ax2.set_ylim(-24, 13)
+ax2.axvline(lad["omega_pred_H"], color="0.35", ls=":", lw=1.1)
+ax2.text(0.012, 10.5, "$\\omega_H = %.3f$" % lad["omega_pred_H"],
+         fontsize=9, color="0.25", va="top", ha="left",
+         bbox=dict(fc="white", alpha=0.8, ec="none", pad=1.2))
+dmin = min(y_h6)
+ax2.annotate(f"depth {abs(dmin)*1e-6:.1e}",
+             xy=(0.19, dmin), xytext=(0.29, -21.0), fontsize=8.5,
+             color="0.25", ha="right",
+             arrowprops=dict(arrowstyle="->", color="0.35", lw=0.9))
+ax2.axhline(0, color="0.75", lw=0.8)
 ax2.set_xlabel(r"$\omega$  [lattice units]")
-ax2.set_ylabel(r"participation ratio of $b_k$  [sites]")
-ax2.set_title(r"(b) localization ($\omega>0$)")
-ax2.legend(fontsize=7, loc="center left", framealpha=1.0,
-           borderpad=0.3, handlelength=1.8)
+ax2.set_ylabel(r"$E(\omega)-E(0)$  [$10^{-6}$ lattice units]"
+               "\n(note: 100$\\times$ finer than (a))")
+ax2.set_title("(b) fundamental-$L$ reading ($G$ form)")
 ax2.grid(alpha=0.25)
+axh = ax2.inset_axes([0.37, 0.60, 0.34, 0.30])
+axh.plot(om_h, [1e4 * (r["E_total"] - E0h) for r in rungs_h],
+         color="#1b7837", ls="-", lw=1.0)
+axh.tick_params(labelsize=6, direction="in", pad=2)
+axh.set_title("full range", fontsize=6.5, pad=2)
+axh.grid(alpha=0.2)
 fig.tight_layout()
 fig.savefig(os.path.join(R, "fig_i1sq_ladders.png"), dpi=160,
             bbox_inches="tight")
 print("written: results/fig_i1sq_ladders.png")
 
-# ---- mechanism figure: needs only committed artifacts -----------------
-# (numpy definitions re-declared here; verify_energies.py cannot be
-# imported for them because it runs its assertions on import)
+# ---- mechanism figure --------------------------------------------------
 N, Lbox = 32, 48.0
 Hh = Lbox / N
 SG, DELTA = 8.0, 0.3
@@ -141,69 +144,79 @@ def inner_pc(F, X):
     return np.einsum("...ab,...ac,...bd,...cd->...", F, X, X, F)
 
 
-def inner_const(F, X):
-    return np.einsum("...ab,ac,bd,...cd->...", F, X, X, F)
-
-
-fig2, (bx1, bx2) = plt.subplots(1, 2, figsize=(7.8, 3.1))
-rung_fp = os.path.join(R, "j1_rung_om035.npz")
+plt.rcParams.update({"font.size": 13, "axes.titlesize": 13,
+                     "axes.labelsize": 13, "xtick.labelsize": 12,
+                     "ytick.labelsize": 12})
+fig2, (bx1, bx2, bx3) = plt.subplots(1, 3, figsize=(10.6, 3.4))
+rung_fp = os.path.join(R, "jge_rung_om035.npz")
 a0_fp = os.path.join(R, "a0_frozen.npz")
 if os.path.exists(rung_fp) and os.path.exists(a0_fp):
     M = np.load(rung_fp)["M"]
     a0 = np.load(a0_fp)["a0"]
     G = G_of(M)
-    i1s = 0.0
+    om_min = lad["JG_E"]["min_omega"]
+    V = om_min * a0
+    i1s, k = 0.0, 0.0
     for st in ("fwd", "bwd"):
         A = [d1(M, ax, st) for ax in range(3)]
         for i in range(3):
+            k = k + 0.5 * 4.0 * inner_pc(comm(V, A[i]), G)
             for j in range(i + 1, 3):
                 i1s = i1s + 0.5 * 4.0 * inner_pc(comm(A[i], A[j]), G)
-    om_min = lad["J1_local_covariant"]["min_omega"]
-    Vv = om_min * a0
-    bk = 0.0
-    for st in ("fwd", "bwd"):
-        A = [d1(M, ax, st) for ax in range(3)]
-        for i in range(3):
-            F = comm(Vv, A[i])
-            bk = bk + 0.5 * 4.0 * (inner_pc(F, G)
-                                   - inner_const(F, ETA)) / 2
     c = N // 2
-    ii = np.indices((N, N, N))
-    rr = np.sqrt(((ii - c) ** 2).sum(axis=0)) * Hh
+    rr = np.sqrt(((np.indices((N, N, N)) - c) ** 2).sum(axis=0)) * Hh
     rbins = np.arange(0.0, 16.0, 1.0)
-    prof = {}
-    for name, dens in (("i1_stat", i1s), ("b_k", bk)):
-        m = [dens[(rr >= r0) & (rr < r0 + 1.0)].mean()
-             for r0 in rbins[:-1]]
-        prof[name] = np.array(m)
-    for (name, ls, col, lab) in (
-            ("i1_stat", "-", "#2166ac",
-             r"static $i_1$ density (the template)"),
-            ("b_k", "--", "#7b3294",
-             rf"ticking density $b_k$ at $\omega={om_min}$")):
-        y = prof[name] / prof[name].max()
-        bx1.plot(rbins[:-1] + 0.5, y, ls=ls, color=col, lw=1.5,
-                 label=lab)
+    for dens, ls, col, lab in (
+            (i1s, "-", "#2166ac", r"static $i_1$ density (template)"),
+            (k, "--", "#7b3294",
+             rf"ticking density $k$ at $\omega={om_min}$")):
+        m = np.array([dens[(rr >= r0) & (rr < r0 + 1.0)].mean()
+                      for r0 in rbins[:-1]])
+        bx1.plot(rbins[:-1] + 0.5, m / m.max(), ls=ls, color=col,
+                 lw=1.5, label=lab)
     bx1.set_xlabel(r"$r$  [lattice units]")
-    bx1.set_ylabel("shell-averaged density (normalized)")
-    bx1.set_title("(a) template and ticking profiles")
-    bx1.set_ylim(-0.05, 1.32)
-    bx1.legend(fontsize=8, loc="upper center", framealpha=1.0)
+    bx1.set_ylabel("shell-averaged density (norm.)")
+    bx1.set_title("(a) template and ticking")
+    bx1.set_ylim(-0.05, 1.45)
+    bx1.legend(fontsize=9, loc="upper center", framealpha=1.0)
     bx1.grid(alpha=0.25)
 else:
     bx1.text(0.5, 0.5, "committed rung field absent",
              ha="center", va="center", transform=bx1.transAxes)
 
-rj2 = lad["J2_intensive"]["rungs"]
-bx2.plot([r["omega"] for r in rj2],
-         [1e3 * r["E_extra"] for r in rj2], marker="s", ms=3.5,
-         color="#e67e22", lw=1.3)
-bx2.axhline(0, color="0.75", lw=0.8)
-bx2.set_xlabel(r"$\omega$  (intensive-variant scan)")
-bx2.set_ylabel(r"$E_{\rm extra}$  [$10^{-3}$ lattice units]")
-bx2.set_title(r"(b) intensive variant (own $\omega$ scale):"
-              "\nminimum by zeroed integral", fontsize=10)
+for key, col, mk, ls, lab in (
+        ("JG_E", "#2166ac", "D", "-", r"$G$, energy"),
+        ("JG_H", "#1b7837", "v", "-", r"$G$, fundamental"),
+        ("J_ETA", "#e67e22", "s", ":", r"$\eta$ (inert)")):
+    rungs = lad[key]["rungs"]
+    om = [r["omega"] for r in rungs if r["omega"] > 0]
+    pr = [r["PR_k_sites"] for r in rungs if r["omega"] > 0]
+    bx2.plot(om, pr, color=col, marker=mk, ls=ls, ms=4, lw=1.3,
+             label=lab)
+bx2.set_ylim(95, 195)
+bx2.text(0.5, 0.955, "delocalized floor (004): 1962, off scale",
+         fontsize=9, color="0.25", ha="center", va="top",
+         transform=bx2.transAxes)
+bx2.set_xlabel(r"$\omega$  [lattice units]")
+bx2.set_ylabel(r"PR of $k$  [sites]")
+bx2.set_title(r"(b) localization ($\omega>0$)")
+bx2.legend(fontsize=9, loc="upper left",
+           bbox_to_anchor=(0.01, 0.88), framealpha=1.0)
 bx2.grid(alpha=0.25)
+
+rj2 = lad["J2_intensive"]["rungs"]
+bx3.plot([r["omega"] for r in rj2],
+         [1e3 * r["E_extra"] for r in rj2], marker="P", ms=5,
+         color="#8c510a", lw=1.3)
+bx3.axvline(5.0, color="0.35", ls=":", lw=1.0)
+bx3.text(4.85, 9.5, "min: $\\omega=5$", fontsize=9, color="0.25",
+         ha="right")
+bx3.axhline(0, color="0.75", lw=0.8)
+bx3.set_xlabel(r"$\omega$  [lattice units] (intensive scan)")
+bx3.set_ylabel(r"$E_{\rm extra}$  [$10^{-3}$ lattice units]")
+bx3.set_title("(c) intensive variant:\nminimum by zeroed integral",
+              fontsize=11.5)
+bx3.grid(alpha=0.25)
 fig2.tight_layout()
 fig2.savefig(os.path.join(R, "fig_mechanism.png"), dpi=160,
              bbox_inches="tight")
