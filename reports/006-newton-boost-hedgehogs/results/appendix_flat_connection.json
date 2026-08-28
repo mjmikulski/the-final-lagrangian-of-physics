@@ -1,0 +1,20 @@
+{
+ "ansatz": {
+  "m": 0.2,
+  "p": 0.5,
+  "x0": [
+   0.6,
+   -0.3,
+   0.8
+  ],
+  "vacuum": "diag(1,0,0,0)"
+ },
+ "omega_so13_residual": 1.666129942571215e-11,
+ "transport_identity_err": 9.89903992110186e-12,
+ "flatness_residual": {
+  "h=1e-5": 5.576688850289502e-12,
+  "h=1e-4": 1.4907218107015724e-10
+ },
+ "two_center_flatness_residual": 1.6563203933395165e-11,
+ "negative_control_curvature": 1.9999999998686666
+}
