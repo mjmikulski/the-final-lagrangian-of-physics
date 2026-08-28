@@ -7,8 +7,9 @@ color-vision-safe linestyles).
 fig_i1sq_ladders.png : (a) energy reading -- Delta E(omega) for the
                        G form at gamma and 4*gamma, the faithful eta
                        form and the sign control, with the omega_E
-                       prediction; (b) fundamental-Lagrangian reading
-                       -- the JG_H well with the omega_H prediction.
+                       prediction; (b) depth plateau of the JG_E well
+                       across relaxation-protocol levels (round-2
+                       convergence criterion).
 fig_mechanism.png    : (a) radial template/ticking profiles;
                        (b) localization PR for all ladders;
                        (c) the intensive variant zeroing its integral.
@@ -62,7 +63,7 @@ ax1.axhline(0, color="0.75", lw=0.8)
 ax1.set_xlabel(r"$\omega$  [lattice units]")
 ax1.set_ylabel(r"$E(\omega)-E(0)$  [$10^{-4}$ lattice units]")
 ax1.set_title("(a) energy reading")
-ax1.legend(fontsize=7.5, loc="upper right", framealpha=1.0,
+ax1.legend(fontsize=7.5, loc="upper right", framealpha=0.85,
            borderpad=0.35, handlelength=1.8, handletextpad=0.5)
 ax1.grid(alpha=0.25)
 axi = ax1.inset_axes([0.60, 0.08, 0.38, 0.40])
@@ -74,35 +75,27 @@ axi.tick_params(labelsize=6, direction="in", pad=2)
 axi.set_title("full range", fontsize=6.5, pad=2)
 axi.grid(alpha=0.2)
 
-rungs_h = lad["JG_H"]["rungs"]
-E0h = rungs_h[0]["E_total"]
-om_h = [r["omega"] for r in rungs_h]
-y_h6 = [1e6 * (r["E_total"] - E0h) for r in rungs_h]
-ax2.plot(om_h, y_h6, color="#1b7837", marker="v", ls="-", ms=4.5,
-         lw=1.4)
-ax2.set_xlim(-0.015, 0.30)
-ax2.set_ylim(-24, 13)
-ax2.axvline(lad["omega_pred_H"], color="0.35", ls=":", lw=1.1)
-ax2.text(0.012, 10.5, "$\\omega_H = %.3f$" % lad["omega_pred_H"],
-         fontsize=9, color="0.25", va="top", ha="left",
-         bbox=dict(fc="white", alpha=0.8, ec="none", pad=1.2))
-dmin = min(y_h6)
-ax2.annotate(f"depth {abs(dmin)*1e-6:.1e}",
-             xy=(0.19, dmin), xytext=(0.29, -21.0), fontsize=8.5,
-             color="0.25", ha="right",
-             arrowprops=dict(arrowstyle="->", color="0.35", lw=0.9))
-ax2.axhline(0, color="0.75", lw=0.8)
-ax2.set_xlabel(r"$\omega$  [lattice units]")
-ax2.set_ylabel(r"$E(\omega)-E(0)$  [$10^{-6}$ lattice units]"
-               "\n(note: 100$\\times$ finer than (a))")
-ax2.set_title("(b) fundamental-$L$ reading ($G$ form)")
+dpl = lad["JG_E"]["depth_per_level"]
+levels = list(range(len(dpl)))
+ax2.plot(levels, [1e4 * d for d in dpl], color="#2166ac", marker="D",
+         ms=5, lw=1.5)
+ax2.set_xticks(levels)
+ax2.set_xticklabels(["Adam"] + [f"+{i}" for i in range(1, len(dpl))],
+                    fontsize=9)
+ax2.set_xlim(-0.3, 4.3)
+ax2.set_ylim(0, max(1e4 * d for d in dpl) * 1.25)
+ax2.set_xlabel("relaxation level (L-BFGS restarts)")
+ax2.set_ylabel(r"well depth  [$10^{-4}$ lattice units]")
+ax2.set_title("(b) well depth $E(0)-E(0.35)$ plateaus", fontsize=11)
+for i, d in enumerate(dpl[1:], start=1):
+    ch = 1e4 * (dpl[i] - dpl[i - 1])
+    ax2.annotate(f"{ch:+.3f}", (i, 1e4 * dpl[i]),
+                 textcoords="offset points", xytext=(0, -14),
+                 ha="center", fontsize=7.5, color="0.35")
+ax2.text(0.98, 0.05, "labels: step-to-step change, panel units",
+         transform=ax2.transAxes, fontsize=7.5, color="0.35",
+         ha="right")
 ax2.grid(alpha=0.25)
-axh = ax2.inset_axes([0.37, 0.60, 0.34, 0.30])
-axh.plot(om_h, [1e4 * (r["E_total"] - E0h) for r in rungs_h],
-         color="#1b7837", ls="-", lw=1.0)
-axh.tick_params(labelsize=6, direction="in", pad=2)
-axh.set_title("full range", fontsize=6.5, pad=2)
-axh.grid(alpha=0.2)
 fig.tight_layout()
 fig.savefig(os.path.join(R, "fig_i1sq_ladders.png"), dpi=160,
             bbox_inches="tight")
@@ -185,15 +178,14 @@ else:
              ha="center", va="center", transform=bx1.transAxes)
 
 for key, col, mk, ls, lab in (
-        ("JG_E", "#2166ac", "D", "-", r"$G$, energy"),
-        ("JG_H", "#1b7837", "v", "-", r"$G$, fundamental"),
+        ("JG_E", "#2166ac", "D", "-", r"$G$, energy reading"),
         ("J_ETA", "#e67e22", "s", ":", r"$\eta$ (inert)")):
     rungs = lad[key]["rungs"]
     om = [r["omega"] for r in rungs if r["omega"] > 0]
     pr = [r["PR_k_sites"] for r in rungs if r["omega"] > 0]
     bx2.plot(om, pr, color=col, marker=mk, ls=ls, ms=4, lw=1.3,
              label=lab)
-bx2.set_ylim(95, 195)
+bx2.set_ylim(95, 205)
 bx2.text(0.5, 0.955, "delocalized floor (004): 1962, off scale",
          fontsize=9, color="0.25", ha="center", va="top",
          transform=bx2.transAxes)

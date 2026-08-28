@@ -1,16 +1,15 @@
 """Route 2 for the load-bearing lattice numbers: an independent numpy
 re-implementation of the (I1_G)^2 energies, evaluated on the persisted
-rung fields of BOTH readings.
+JG_E rung fields.
 
 No torch, no import of lattice.py -- the definitions (one-sided
 differences, eta-commutator, Lagrange-projector Euclideanizer G, pinned
 potential V4, static I1_G density, G-metric time density, the two
 readings of the quartic term) are coded from scratch against the
 report-002/004 formulas plus this report's docstrings. Asserts:
-- E_total of the persisted JG_E rungs (omega = 0.2, 0.35, 0.5) and
-  JG_H rungs (omega = 0.13, 0.19, 0.26) match
+- E_total of the persisted JG_E rungs (omega = 0.2, 0.35, 0.5) matches
   results/i1sq_ladders.json to 1e-9 relative;
-- both sampled interior wells hold in this independent evaluation.
+- the sampled interior well holds in this independent evaluation.
 """
 import json
 import os
@@ -26,9 +25,7 @@ C_P = tuple(SG ** p + 1.0 + DELTA ** p for p in range(1, 5))
 ETA = np.diag([-1.0, 1.0, 1.0, 1.0])
 
 LEGS = (("JG_E", "jge_rung_om", ((0.2, "02"), (0.35, "035"),
-                                 (0.5, "05")), "energy"),
-        ("JG_H", "jgh_rung_om", ((0.13, "013"), (0.19, "019"),
-                                 (0.26, "026")), "fundamental"))
+                                 (0.5, "05")), "energy"),)
 need = [os.path.join(HERE, "results", f"{p}{t}.npz")
         for _, p, oms, _ in LEGS for _, t in oms]
 if not all(os.path.exists(p) for p in need):
@@ -120,5 +117,5 @@ for leg, prefix, oms, reading in LEGS:
 
 print(f"worst relative difference: {worst:.2e}")
 assert worst < 1e-9, "route-2 energies must match the ladder record"
-print("ROUTE-2 ENERGIES MATCH (both readings); sampled interior wells "
-      "confirmed independently")
+print("ROUTE-2 ENERGIES MATCH; sampled interior well confirmed "
+      "independently")

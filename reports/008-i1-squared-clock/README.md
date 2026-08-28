@@ -3,9 +3,9 @@
 *2026-08-27 · Maciej J. Mikulski (AI-assisted, see [METHOD](../../METHOD.md)) ·
 answers the model author's direct question (correspondence 2026-08-26):
 "does the simplest fourth-order term, $(F_{abcd}F^{abcd})^2$, work?" —
-his candidate for the article-1 Lagrangian. Revised in review round 1,
-which identified the decisive form distinction (§1), the two readings
-(§4) and the convergence criterion (§6).*
+his candidate for the article-1 Lagrangian. Revised in review rounds
+1-2, which identified the decisive form distinction (§1), the fate of
+the two readings (§4) and the convergence criterion (§6).*
 
 ## Context and result
 
@@ -63,12 +63,18 @@ levels as the convergence criterion, §6):
    $\omega_E = \sqrt{C_1/C_2} = 0.326$, $\gamma$-independent; the
    ladder's interior minimum sits at the sampled rung $\omega = 0.35$,
    ticking localized at $\sim$100 sites.
-2. **Fundamental-Lagrangian reading** (§4): the Legendre transform maps
-   the velocity-quartic part $-2\gamma s k + \gamma k^2$ of $L$ to
-   $-2\gamma s k + 3\gamma k^2$ in $H$ (the report-002 distinction),
-   predicting $\omega_H = \sqrt{C_1/(3C_2)} = 0.188$; the JG_H ladder
-   runs at rungs bracketing this value. **Both readings tick; they
-   disagree only on the frequency, by the predicted $\sqrt3$.**
+2. **The fundamental-Lagrangian reading is statically unstable —
+   measured** (§4): the correct Legendre image of
+   $L_{\rm extra} = \gamma(s-k)^2$ carries $-\gamma s^2$ (the static
+   square flips sign in $H = \sum p\dot q - L$; review round 2), which
+   is unbounded below — relaxation blows through the
+   $s \sim 1/\gamma$ threshold immediately (energy $\to -7\cdot10^{13}$,
+   max density $0.01 \to 3.8\cdot10^4$ in 1000 steps, documented in
+   `fundamental_runaway.py`). Flipping the overall Lagrangian sign
+   removes the drive analytically. **The term works as an
+   energy-functional ansatz (JG_E), not as a naive fundamental-$L$
+   term** — an earlier $\sqrt3$-shifted "JG_H well" rested on a
+   sign error caught in review and is withdrawn.
 3. **Faithful $\eta$ ladder** (§3): minimum at $\omega = 0$ — the
    measured no-go of point 1 above.
 4. **Sign control** (§3): the $G$ form with the cross term flipped —
@@ -87,15 +93,17 @@ levels as the convergence criterion, §6):
    minimizes by zeroing its integral — the local density squared is
    the physical form. No nonlocality is needed.
 
-**Caveats, stated plainly:** the wells are shallow (depth
+**Caveats, stated plainly:** the tick is established in the
+energy-functional reading only (the fundamental reading is unstable,
+§4 — which reading is physical stays author-gated per 002/003, but the
+naive fundamental option is now measured out); the wells are shallow
+(depth
 $\propto\gamma$, bounded by the statics-deformation budget: 5% →
 $\sim7\cdot10^{-5}$ at $\gamma$, and the budget itself is bounded —
 the $16\gamma$ regime breaks, §5); the clock tangent is frozen (the
 004/007 protocol); and the tick lives in the $G$-metric realization —
 for the article this means the quartic must be written with the same
-working metric as the kinetic sector, not with raw $\eta$. Which
-reading (energy ansatz vs fundamental $L$) applies is a physics choice
-already flagged in reports 002/003 (author-gated).
+working metric as the kinetic sector, not with raw $\eta$.
 
 ## 1. Setup and the two forms
 
@@ -132,9 +140,19 @@ ticking localized at $\sim$100 sites (report 004's delocalized floor:
 ![i1sq ladders](results/fig_i1sq_ladders.png)
 
 **Route 2** (`verify_energies.py`): a from-scratch numpy
-re-implementation evaluated on the persisted rung fields of **both
-readings** reproduces the recorded totals to $10^{-9}$ relative and
-confirms both sampled wells independently.
+re-implementation evaluated on the persisted JG_E rung fields
+reproduces the recorded totals to $10^{-9}$ relative and confirms the
+sampled well independently.
+
+**Depth plateau (review round 2):** the JG_E bracket runs a deep
+protocol (Adam + four L-BFGS cycles) and the JSON records the well
+depth at every level (`depth_per_level`, `depth_changes`);
+`reproduce.sh` asserts the successive depth changes shrink and the
+last is below 10% of the depth. Measured: the depth settles at
+$6.4$–$6.5\cdot10^{-5}$ with residual oscillation $\sim\pm1\%$
+(changes $-1.7, -0.6, +0.2, +0.7 \cdot 10^{-6}$ across the four
+L-BFGS levels) — the well's magnitude itself plateaus, not just its
+location.
 
 ## 3. The measured no-go ($\eta$ form) and the sign control
 
@@ -146,16 +164,25 @@ confirms both sampled wells independently.
 - **J0** ($G$ form, cross sign flipped): minimum at $\omega = 0$ —
   the JG_E well is the cross term's physics, not protocol noise.
 
-## 4. Fundamental-Lagrangian reading (JG_H)
+## 4. The fundamental-Lagrangian reading: a measured no-go
 
-Treating $\gamma(I_1^G)^2$ as a term of the fundamental Lagrangian, the
-Legendre transform of the $k$-dependent part gives
-$H \supset -2\gamma s k + 3\gamma k^2$ (report 002's velocity-quartic
-rule), so $\omega_H = \omega_E/\sqrt3 = 0.188$. The JG_H ladder
-minimizes the $H$ functional at rungs (0, 0.07, 0.13, 0.19, 0.26,
-0.35, 0.5); the recorded verdict (asserted in `reproduce.sh`) shows an
-interior well bracketing the prediction — the clock survives the
-fundamental reading, at the $\sqrt3$-shifted frequency.
+Review round 2 identified a sign error: our first "fundamental"
+functional kept $+\gamma s^2$ from the energy ansatz, but the correct
+Legendre image of $L_{\rm extra} = \gamma(s-k)^2$ is
+
+$$H_{\rm extra} = -\gamma s^2 - 2\gamma s k + 3\gamma k^2$$
+
+(Euler homogeneity on $k\sim\dot q^2$; the velocity-independent square
+flips sign). The $-\gamma s^2$ term makes $H$ unbounded below once the
+static density beats the linear $e_{\rm static}$ cost at
+$s \sim 1/\gamma = 0.0142$ — and the lattice maximum already sits at
+$0.0102$. Measured (`fundamental_runaway.py`, 1000 Adam steps at
+$\omega = 0$ and $0.19$): the energy dives to $-7\cdot10^{13}$ with
+max $s \to 3.8\cdot10^4$. Choosing $-\gamma$ instead flips drive and
+brake and removes the clock analytically. The earlier
+"$\sqrt3$-shifted JG_H well" was an artifact of the sign error and is
+withdrawn; the report's claims are scoped to the energy-functional
+reading.
 
 ## 5. Scaling, deep-well and intensive checks
 
@@ -220,8 +247,11 @@ $\lVert g\rVert_\infty$ per rung is recorded for transparency
 
 ## Author-gated physics choices
 
-- The reading of the quartic term: energy-functional ansatz vs
-  fundamental Lagrangian (frequencies differ by $\sqrt3$; both tick).
+- The reading of the quartic term: the clock is established in the
+  energy-functional ansatz; the naive fundamental-$L$ reading is
+  measured unstable (§4). Whether another well-posed fundamental
+  completion exists (e.g. with a stabilizing higher static term) is an
+  open physics choice.
 - The statics-deformation budget for $\gamma$ (depth vs 3×3-sector
   purity) — ties into scale anchoring.
 - Writing the article Lagrangian's quartic with the working metric $G$
@@ -231,12 +261,13 @@ $\lVert g\rVert_\infty$ per rung is recorded for transparency
 
 | object | artifact |
 |---|---|
-| ladders JG_E/JG_H/J_ETA/J0/J2, predictions $\omega_E,\omega_H$ | `ladder_i1sq.py` → `results/i1sq_ladders.json` |
+| ladders JG_E/J_ETA/J0/J2, prediction $\omega_E$, depth-plateau record | `ladder_i1sq.py` → `results/i1sq_ladders.json` |
+| fundamental-reading runaway (measured no-go) | `fundamental_runaway.py` → `results/fundamental_runaway.json` |
 | shared densities/relaxation for the checks | `ladder_i1sq_defs.py` |
 | $\gamma$-scaling confirmation | `confirm_gamma_scaling.py` → `results/gamma_scaling.json` |
 | deep-well localization check | `gamma16_localization.py` → `results/gamma16_localization.json` |
 | independent energy route (both readings) | `verify_energies.py` |
-| persisted rung fields, frozen tangent | `results/jge_rung_om*.npz`, `results/jgh_rung_om*.npz`, `results/a0_frozen.npz` |
+| persisted rung fields, frozen tangent | `results/jge_rung_om*.npz`, `results/a0_frozen.npz` |
 | figures (from committed artifacts) | `make_figures.py` |
 
 ## Reproduction

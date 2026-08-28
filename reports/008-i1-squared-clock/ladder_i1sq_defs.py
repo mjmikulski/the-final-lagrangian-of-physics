@@ -1,8 +1,9 @@
 """Shared definitions for the auxiliary checks (gamma scaling, deep
-well): the same densities, relaxation protocol (Adam + L-BFGS to the
-common gradient tolerance) and G-form functionals as ladder_i1sq.py,
-parameterized by gamma. Loaded via runpy by the check scripts so the
-physics is defined once.
+well, runaway): the same densities, fixed-depth relaxation protocol
+(Adam + L-BFGS cycles; no gradient tolerance is reached on this
+landscape -- see README section 6) and G-form functionals as
+ladder_i1sq.py, parameterized by gamma. Loaded via runpy by the check
+scripts so the physics is defined once.
 """
 import json
 import os

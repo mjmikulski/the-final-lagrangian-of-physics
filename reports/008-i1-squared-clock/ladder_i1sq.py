@@ -27,17 +27,14 @@ spreading the ticking density away from the template only costs (the
 Mexican-hat local quartic of 004/007 is instead concave in its linear
 drive -- dilution pays there).
 
-TWO READINGS of the G-form term (review round 1, point 2 -- the
-report-002 distinction for velocity-quartic terms):
-- ENERGY-FUNCTIONAL ansatz: E_extra = gamma*int (i1s - k)^2; reduced
-  frozen-profile energy -2 g C1 w^2 + g C2 w^4, minimum at
-  omega_E = sqrt(C1/C2);
-- FUNDAMENTAL-LAGRANGIAN reading: L_extra = gamma*(I1_G)^2 with k
-  quadratic in the velocity; the Legendre transform maps
-  L = -2 g s k + g k^2 (in the k-dependent part) to
-  H = -2 g s k + 3 g k^2, so the frozen minimum sits at
-  omega_H = sqrt(C1/(3 C2)).
-Both predictions are gamma-independent; both ladders are run.
+READING of the term (review rounds 1-2): the measured clock lives in
+the ENERGY-FUNCTIONAL ansatz E_extra = gamma*int (i1s - k)^2, with the
+reduced frozen-profile energy -2 g C1 w^2 + g C2 w^4 and minimum at
+omega_E = sqrt(C1/C2) (gamma-independent). The naive FUNDAMENTAL-
+LAGRANGIAN reading is measured to be statically unstable: the correct
+Legendre image carries -gamma*s^2 (the static square flips sign in H),
+which is unbounded below on this lattice -- documented in
+fundamental_runaway.py; flipping the overall Lagrangian sign removes
 
 CONVERGENCE (review round 1, point 3): every rung runs the SAME
 fixed-depth protocol -- 500 Adam steps + two L-BFGS cycles (strong
@@ -54,7 +51,7 @@ control caught it).
 
 Ladders:
   JG_E  : G form, energy reading (the well at omega_E)     [persisted]
-  JG_H  : G form, fundamental-Lagrangian reading (omega_H) [persisted]
+          (deep protocol: 4 L-BFGS cycles + depth-plateau record)
   J_ETA : faithful raw-eta form, energy reading (expects min at 0)
   J0    : G form with the cross sign flipped (control, min at 0)
   J2    : intensive (int I1_G)^2 / V (diagnosis: zeroes its integral)
@@ -138,16 +135,14 @@ gamma = 0.05 * Es0 / (H ** 3 * (i1s0 ** 2).sum()).item()
 C1 = (H ** 3 * (i1s0 * k1).sum()).item()
 C2 = (H ** 3 * (k1 ** 2).sum()).item()
 om_E = (C1 / C2) ** 0.5
-om_H = (C1 / (3.0 * C2)) ** 0.5
 print(f"gamma = {gamma:.5f} (5% statics deformation)")
-print(f"frozen-profile predictions: omega_E = {om_E:.3f} (energy "
-      f"reading), omega_H = {om_H:.3f} (fundamental-L reading)")
+print(f"frozen-profile prediction: omega_E = {om_E:.3f}")
 
 results = {"gamma": gamma, "C1": C1, "C2": C2,
-           "omega_pred_E": om_E, "omega_pred_H": om_H, "E_stat0": Es0}
+           "omega_pred_E": om_E, "E_stat0": Es0}
 
 
-def relax(e_total_fn):
+def relax(e_total_fn, cycles=2):
     """Fixed-depth protocol, identical for every rung: 500 Adam steps,
     then two L-BFGS cycles (strong Wolfe, 200 iterations each). The
     landscape has a long flat valley: absolute stationarity is NOT
@@ -164,7 +159,7 @@ def relax(e_total_fn):
         e_total_fn(M_raw).backward()
         opt.step()
     E_levels = [float(e_total_fn(M_raw).detach())]
-    for cycle in range(2):
+    for cycle in range(cycles):
         opt2 = torch.optim.LBFGS([M_raw], max_iter=200,
                                  history_size=25, tolerance_grad=1e-9,
                                  tolerance_change=0,
@@ -181,12 +176,13 @@ def relax(e_total_fn):
     return M_raw.detach(), E_levels, float(g.abs().max())
 
 
-def run_ladder(tag, e_extra, omegas, save_prefix=None, save=()):
+def run_ladder(tag, e_extra, omegas, save_prefix=None, save=(),
+               cycles=2):
     rungs = []
     for om in omegas:
         M_raw, E_levels, ginf = relax(
             lambda Mr, om=om: e_static(field(Mr), "G")
-            + e_extra(field(Mr), om))
+            + e_extra(field(Mr), om), cycles=cycles)
         Mf = field(M_raw)
         Es = e_static(Mf, "G").item()
         Ex = e_extra(Mf, om).item()
@@ -226,14 +222,6 @@ def eG_energy(Mf, om):
     return gamma * H ** 3 * ((i1s - k) ** 2).sum()
 
 
-def eG_fundamental(Mf, om):
-    # Legendre image of L = gamma*(i1s - k)^2 with k ~ omega^2:
-    # H = gamma*i1s^2 - 2 gamma i1s k + 3 gamma k^2
-    i1s, k = densities(Mf, a0, om, "G")
-    return gamma * H ** 3 * (i1s ** 2 - 2.0 * i1s * k
-                             + 3.0 * k ** 2).sum()
-
-
 def eG_flipped(Mf, om):
     i1s, k = densities(Mf, a0, om, "G")
     return gamma * H ** 3 * ((i1s + k) ** 2).sum()
@@ -256,11 +244,15 @@ np.savez_compressed(os.path.join(HERE, "results", "a0_frozen.npz"),
 print("JG_E: G form, energy reading:")
 results["JG_E"] = run_ladder(
     "JG_E", eG_energy, (0.0, 0.1, 0.2, 0.35, 0.5, 0.8, 1.2),
-    save_prefix="jge_rung_om", save=(0.2, 0.35, 0.5))
-print("JG_H: G form, fundamental-Lagrangian reading:")
-results["JG_H"] = run_ladder(
-    "JG_H", eG_fundamental, (0.0, 0.07, 0.13, 0.19, 0.26, 0.35, 0.5),
-    save_prefix="jgh_rung_om", save=(0.13, 0.19, 0.26))
+    save_prefix="jge_rung_om", save=(0.2, 0.35, 0.5), cycles=4)
+# depth-plateau record for the bracket (review round 2, point 2)
+_r = {r["omega"]: r for r in results["JG_E"]["rungs"]}
+_depths = [_r[0.0]["E_levels"][lv] - _r[0.35]["E_levels"][lv]
+           for lv in range(5)]
+results["JG_E"]["depth_per_level"] = _depths
+results["JG_E"]["depth_changes"] = [
+    _depths[i + 1] - _depths[i] for i in range(4)]
+print(f"  [JG_E] depth per level: {['%.3e' % d for d in _depths]}")
 print("J_ETA: faithful raw-eta form, energy reading:")
 results["J_ETA"] = run_ladder(
     "J_ETA", e_eta, (0.0, 0.1, 0.2, 0.35, 0.5, 0.8))
