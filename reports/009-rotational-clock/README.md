@@ -41,16 +41,24 @@ honest picture is:
    (it mixes the spatial axes with eigenvalues $1$ and $\delta$). In
    the infinite-volume limit $\omega = J/I \to 0$: **no isolated
    finite-frequency rotating object exists in this channel.**
-3. **The constructive diagnosis** (§6): the physical spin channel of
-   a hedgehog is the **combined space–internal generator**
-   $\zeta = -(x\partial_y - y\partial_x) + [W, \cdot\,]$ (Skyrme-like
-   spin–orbit locking): for the ideal hedgehog the combined rotation
-   is an asymptotic symmetry, so $\zeta M$ vanishes away from the
-   core and the inertia is finite and core-localized. This is the
-   follow-up (report 010 line), together with the fixed-J
-   formulation, which doubles as the well-posed
-   Lagrangian-reading answer for the rotational sector (the Routhian
-   of $L = \tfrac12 I\dot\theta^2 - V$).
+3. **The natural repair was also tested and also fails — recorded
+   honestly** (§6): the Skyrme-like combined space–internal generator
+   $\zeta = -(x\partial_y - y\partial_x) + [W, \cdot\,]$ would be an
+   asymptotic symmetry of a *uniaxial* hedgehog, but our hedgehog is
+   **biaxial** (transverse eigenvalues $\delta = 0.3$ and $0$
+   differ), and the measurement (working-repo dev,
+   `paper1_dev/fixedJ/combined_generator.py`) shows
+   $|\zeta M|(r)$ *flat* ($\approx 1.13$ on every shell),
+   $I_{\rm comb} = 3.4\cdot10^3$, PR $= 312$: the biaxial radial
+   texture breaks every continuous axial rotation out to the
+   boundary, so **no rigid collective rotation of this defect has
+   finite inertia**. The spin question therefore needs a different
+   structure — a localized transverse-precession mode (a rotational
+   analog of the 008 boost clock), or the near-uniaxial limit
+   ($\delta \to 0$ restores the axial symmetry; note the
+   $\delta = 1/8$ vacuum probe in the working repo) — and stays open.
+   The fixed-J Routhian remains the well-posed Lagrangian-reading
+   formalism for whichever channel is found.
 4. The proxy $\tilde J = I_R\,\omega$ of the first version is retained
    in the JSON for the record but carries **no physical claim** (§3):
    it is convention-dependent (tangent normalization and envelope).
@@ -136,9 +144,10 @@ rotor in the pure internal channel.
 
 ## 6. Limitations and the road forward
 
-- The combined space–internal generator (Context, point 3) is the
-  physical spin candidate; its symmetry check, finite localized
-  inertia and fixed-J scan are the follow-up (report 010 line).
+- Rigid collective rotation is exhausted: pure internal (§5) and
+  combined space–internal (Context, point 3) generators are both
+  measured vacuum-dominated. Open spin candidates: localized
+  transverse precession; the near-uniaxial ($\delta \to 0$) regime.
 - The deep-convergence budget (24 cycles) bounds but does not close
   the creep; the boost-channel contrast (§4) is protocol-matched.
 - $32^3$, one spacing; frozen-shell boundary as in 004–008.
