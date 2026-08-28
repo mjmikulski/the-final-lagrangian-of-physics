@@ -7,8 +7,11 @@ fig_rot_ladders.png : (a) Delta E(omega) for the rotational ladder and
                       full range; (b) well depth vs relaxation level,
                       including the deep-endpoint reference.
 fig_rot_channel.png : (a) localization PR(omega) rotation vs boost
-                      (008); (b) channel angular momentum J = I_R*omega
-                      with the sampled minimum marked.
+                      (008); (b) the convention-dependent channel proxy
+                      J~ = I_R*omega with the sampled minimum marked.
+fig_fixedj.png      : (a) the bounded Routhian check E(J)-E(0) vs
+                      J^2/(2 I_0); (b) the vacuum-domination signature
+                      (extensive inertia, PR ~ 455).
 """
 import json
 import os
@@ -53,9 +56,11 @@ ax1.text(0.012, -0.50, "predicted\n$\\omega_R=%.3f$" % om_R,
 ax1.axhline(0, color="0.75", lw=0.8)
 ax1.set_xlabel(r"$\omega$  [lattice units]")
 ax1.set_ylabel(r"$E(\omega)-E(0)$  [$10^{-4}$ lattice units]")
-ax1.set_title("(a) rotational well")
+ax1.set_title("(a) ladder at fixed protocol depth\n"
+              "(NOT convergent \u2013 see section 4)",
+              fontsize=10)
 ax1.legend(fontsize=7.5, loc="upper left",
-           bbox_to_anchor=(0.01, 0.87), framealpha=1.0,
+           bbox_to_anchor=(0.01, 0.87), framealpha=0.85,
            handlelength=3.0)
 ax1.grid(alpha=0.25)
 axi = ax1.inset_axes([0.62, 0.09, 0.35, 0.34])
@@ -116,14 +121,15 @@ om_min = rot["JR_E"]["min_omega"]
 bx2.axvline(om_min, color="0.35", ls=":", lw=1.0)
 bx2.plot([om_min], [rot["J_at_min"]], marker="*", ms=14,
          color="#b8860b")
-bx2.annotate(f"$J_* = I_R\\,\\omega_* = {rot['J_at_min']:.3f}$",
+bx2.annotate(f"$\\tilde J_* = I_R\\,\\omega_* = {rot['J_at_min']:.3f}$",
              xy=(om_min, rot["J_at_min"]),
              xytext=(om_min + 0.05, rot["J_at_min"] - 0.022),
              fontsize=9, color="0.25",
              arrowprops=dict(arrowstyle="->", color="0.35", lw=0.9))
 bx2.set_xlabel(r"$\omega$  [lattice units]")
-bx2.set_ylabel(r"$J = I_R\,\omega$  [lattice units]")
-bx2.set_title("(b) channel angular momentum")
+bx2.set_ylabel(r"proxy $\tilde J = I_R\,\omega$  [lattice units]")
+bx2.set_title("(b) channel proxy (convention-dependent)",
+              fontsize=10.5)
 bx2.text(0.03, 0.92, f"$I_R = {I_R:.3f}$", transform=bx2.transAxes,
          fontsize=9, color="0.25")
 bx2.grid(alpha=0.25)
@@ -131,3 +137,60 @@ fig2.tight_layout()
 fig2.savefig(os.path.join(R, "fig_rot_channel.png"), dpi=160,
              bbox_inches="tight")
 print("written: results/fig_rot_channel.png")
+
+# ---- fixed-J figure ---------------------------------------------------
+fj = json.load(open(os.path.join(R, "fixedj.json")))
+rows = fj["rows"]
+I0 = fj["I_0"]
+E0 = rows[0]["E_total"]
+Jp = [x["J"] for x in rows[1:]]
+dEp = [x["E_total"] - E0 for x in rows[1:]]
+pred = [j ** 2 / (2 * I0) for j in Jp]
+
+fig3, (cx1, cx2) = plt.subplots(1, 2, figsize=(8.6, 3.4))
+cx1.loglog(Jp, pred, color="0.4", ls="--", lw=1.4,
+           label=r"rigid prediction $J^2/(2 I_0)$")
+cx1.loglog(Jp, dEp, color="#1b7837", marker="o", ms=6, ls="none",
+           label=r"measured $E(J)-E(0)$")
+cx1.set_xticks([0.02, 0.05, 0.1, 0.2, 0.4, 0.8])
+cx1.set_xticklabels(["0.02", "0.05", "0.1", "0.2", "0.4", "0.8"])
+cx1.minorticks_off()
+cx1.set_xlabel(r"$J$  [lattice units]")
+cx1.set_ylabel(r"$E(J)-E(0)$  [lattice units]")
+cx1.set_title("(a) bounded rotational Routhian:\n"
+              r"$E_J = E_{\rm stat} + J^2/2I[M]$", fontsize=10.5)
+cx1.legend(fontsize=8.5, loc="upper left", framealpha=1.0)
+cx1.grid(alpha=0.25, which="major")
+cx1.text(0.97, 0.05,
+         "ratio $\\to$ 1.02 at $J=0.8$\n(small $J$: relaxation "
+         "noise floor)", transform=cx1.transAxes, fontsize=8,
+         color="0.3", ha="right")
+
+Jall = [x["J"] for x in rows]
+cx2b = cx2.twinx()
+cx2.plot(Jall, [x["I"] for x in rows], color="#2166ac", marker="D",
+         ms=5, lw=1.4, label=r"inertia $I[M_*(J)]$")
+cx2b.plot(Jall, [x["PR_kin"] for x in rows], color="#7b3294",
+          marker="^", ms=6, ls="--", lw=1.4,
+          label="PR of kinetic density")
+cx2.set_xscale("symlog", linthresh=0.02)
+cx2.set_xticks([0, 0.05, 0.1, 0.2, 0.4, 0.8])
+cx2.set_xticklabels(["0", "0.05", "0.1", "0.2", "0.4", "0.8"])
+cx2.minorticks_off()
+cx2.set_xlabel(r"$J$  [lattice units]")
+cx2.set_ylabel(r"$I$  [lattice units]", color="#2166ac")
+cx2b.set_ylabel("PR  [sites]", color="#7b3294")
+cx2.set_ylim(3600, 3900)
+cx2b.set_ylim(0, 600)
+cx2.set_title("(b) vacuum domination:\n"
+              r"$I \approx$ const (extensive), PR $\approx 455$",
+              fontsize=10.5)
+h1, l1 = cx2.get_legend_handles_labels()
+h2, l2 = cx2b.get_legend_handles_labels()
+cx2.legend(h1 + h2, l1 + l2, fontsize=8.5, loc="lower right",
+           framealpha=1.0)
+cx2.grid(alpha=0.25)
+fig3.tight_layout()
+fig3.savefig(os.path.join(R, "fig_fixedj.png"), dpi=160,
+             bbox_inches="tight")
+print("written: results/fig_fixedj.png")

@@ -1,153 +1,164 @@
-# Report 009 — The rotational clock: angular momentum from energy minimization
+# Report 009 — The rotational sector: a protocol-limited ladder, a vacuum-dominated channel, and the well-posed fixed-J route
 
 *2026-08-28 · Maciej J. Mikulski (AI-assisted, see [METHOD](../../METHOD.md)) ·
-the angular-momentum half of the article-1 program ("angular momentum
-propulsion"): the same $(I_1^G)^2$ energy ansatz as report 008, with
-the rotation tangent in place of the boost tangent.*
+the angular-momentum half of the article-1 program. Substantially
+revised after review round 1, whose two findings both survived
+deeper measurement and **reversed the original claims**: this report
+now documents two measured obstructions and the formalism that the
+rotational sector actually needs.*
 
 ## Context and result
 
-Report 008 established the clock mechanism in the boost channel. The
-physical electron, however, is characterized by its **angular
-momentum**; the model must rotate, not only tick. This report runs the
-identical functional — $E_{\rm extra} = \gamma\int (i_1^{\rm stat} -
-k)^2$, working metric $G$, energy reading, report-008 protocol — with
-the frozen conjugation tangent of the **rotation generator**
-($\mathrm{rot}_{xy}$, $a_{\rm rot} \propto \mathrm{env}\cdot(WM - MW)$,
-$W$ antisymmetric).
+Report 008 established the localized clock in the boost channel. The
+electron's defining property, however, is angular momentum: the model
+must rotate. This report's first version transplanted 008's ladder to
+the frozen rotation tangent and claimed an interior well at the
+predicted rung; review round 1 found (a) the bracket was not
+converged, and (b) the reported "angular momentum" was not a charge.
+Both findings are confirmed here by deeper measurement, and the
+honest picture is:
 
-**Results.**
+1. **The env-frozen rotational ladder is not protocol-convergent —
+   its well claim is withdrawn** (§2, §4). Continuing the relaxation
+   of the persisted rungs (up to 24 L-BFGS cycles, tol $10^{-7}$)
+   *reorders the bracket*: the energies after the budget order as
+   $E(0.304) < E(0.152) < E(0.217) < E(0)$, with the non-stiff rungs
+   still descending at $\sim 10^{-6}$/cycle without saturation while
+   the $0.217$ rung alone is fully converged. The interior-minimum
+   structure seen at fixed protocol depth does not survive; the
+   ladder can only bound, not locate, any rotational well.
+2. **The pure internal rotation channel is vacuum-dominated —
+   measured in a well-posed fixed-J formulation** (§5). With the
+   collective coordinate on the *pure* interior generator
+   $\dot M = \dot\theta\,(WM - MW)$ (no envelope, no normalization —
+   removing exactly the conventions review round 1 objected to), the
+   bounded Routhian $E_J = E_{\rm stat} + J^2/(2 I[M])$ is well posed
+   and its measurements are clean: $E(J) - E(0) \to J^2/(2I_0)$
+   (ratio $\to 1.02$), $I$ constant to $0.2\%$. But the inertia is
+   **extensive**: $I_0 = 3.75\cdot10^3$ with the kinetic density
+   spread over the whole interior (PR $\approx 455$ sites), because
+   the internal rotation is *not a symmetry of the anisotropic vacuum*
+   (it mixes the spatial axes with eigenvalues $1$ and $\delta$). In
+   the infinite-volume limit $\omega = J/I \to 0$: **no isolated
+   finite-frequency rotating object exists in this channel.**
+3. **The constructive diagnosis** (§6): the physical spin channel of
+   a hedgehog is the **combined space–internal generator**
+   $\zeta = -(x\partial_y - y\partial_x) + [W, \cdot\,]$ (Skyrme-like
+   spin–orbit locking): for the ideal hedgehog the combined rotation
+   is an asymptotic symmetry, so $\zeta M$ vanishes away from the
+   core and the inertia is finite and core-localized. This is the
+   follow-up (report 010 line), together with the fixed-J
+   formulation, which doubles as the well-posed
+   Lagrangian-reading answer for the rotational sector (the Routhian
+   of $L = \tfrac12 I\dot\theta^2 - V$).
+4. The proxy $\tilde J = I_R\,\omega$ of the first version is retained
+   in the JSON for the record but carries **no physical claim** (§3):
+   it is convention-dependent (tangent normalization and envelope).
 
-1. **The rotational well is where the formula says**: frozen-profile
-   prediction $\omega_R = \sqrt{C_1^r/C_2^r} = 0.217$; the ladder's
-   interior minimum sits exactly at the sampled rung $\omega = 0.217$,
-   at **every relaxation level** (5 levels), with the sign control
-   (JR0) at $\omega = 0$. The minimum rung converges unusually well:
-   its five recorded levels agree to $10^{-6}$ with
-   $\lVert g\rVert_\infty = 2.7\cdot10^{-4}$ — an order of magnitude
-   below every other rung.
-2. **Rotational ticking is tighter than boost ticking**: PR $\approx
-   65$ sites at the minimum (boost: $\approx 102$), with the same
-   convex-template localization mechanism.
-3. **Channel angular momentum**: in the quadratic-kinetic reading of
-   the channel (author-gated interpretation, stated in §3) the channel
-   inertia is $I_R = 2\int k_1^r = 0.547$ and the defect's angular
-   momentum at the minimum is
-   $J_* = I_R\,\omega_* = 0.119$ (lattice units) — the "angular
-   momentum from energy minimization" of the article title, measured.
-4. **Depth and its honest trend** (§4): the sampled depth at matched
-   relaxation levels descends $5.5 \to 3.6\cdot10^{-5}$ over the
-   protocol — unlike the boost ladder this is not yet an oscillating
-   plateau, because the $\omega = 0$ *reference* endpoint creeps while
-   the minimum itself is fully converged; the deep (8-cycle)
-   endpoint shows the reference creep settling at
-   $1.5$–$2\cdot10^{-6}$/cycle without further shrinking — the depth
-   value carries this systematic and is quoted as an upper bound
-   ($\le 3.6\cdot10^{-5}$ at matched levels, still descending). The
-   well's existence does not rest on the depth value: the location is
-   level-stable and the sign control is clean.
-5. **A methodological correction, recorded**: an earlier dev run using
-   report 004's channel construct $b_k = (\langle F\rangle_{GG} -
-   \langle F\rangle_{\eta\eta})/2$ found a spurious $\omega_R \sim
-   24.5$: for rotation tangents the $G$ and $\eta$ contractions nearly
-   coincide and the construct cancels the channel density. The clean
-   $G$ contraction (as in 008) has no cancellation; the two channels
-   then have comparable couplings ($\omega_R = 0.217$ vs $\omega_E =
-   0.326$).
-
-**Caveats:** the frozen-tangent protocol of 004/007/008 (no
-translation/rotation covariance of the reduced functional; an
-equivariant tangent remains open); the quadratic-kinetic reading of
-$J$ is an interpretation choice (the canonical, branched-dynamics
-treatment of report 003 is the deeper route, not done here); shallow
-well with the same $\gamma$ budget as 008; $32^3$, one spacing.
+**What survives from the first version:** the raw ladder record and
+its independent route-2 verification (the *energies* are correct; it
+is their convergence status that changed), the sign-control result,
+and the methodological correction about report 004's channel
+construct (which cancels rotational densities, $G \approx \eta$ on
+rotation tangents).
 
 ## 1. Setup
 
-Everything is inherited from report 008 (`ladder_i1sq_defs.py` loaded
-via runpy): densities with the working metric $G$ on the matrix slots,
-$\gamma = 70.61$ (5% statics-deformation budget), fresh-start rungs
-from the polished hedgehog, Adam 500 + L-BFGS cycles with recorded
-`E_levels`. The only change is the tangent:
-$a_{\rm rot} = \mathrm{env}\cdot(WM - MW)/\lVert\cdot\rVert$ with $W$
-the $xy$ rotation generator. Rungs are placed at fixed multiples
-$(0, 0.35, 0.7, 1.0, 1.4, 2.0, 3.0)$ of the predicted $\omega_R$.
+As in report 008 (`ladder_i1sq_defs.py` via runpy): working metric
+$G$, $\gamma = 70.61$, fresh-start rungs, Adam + L-BFGS cycles with
+recorded `E_levels`. Ladder tangent: frozen
+$a_{\rm rot} = \mathrm{env}\cdot(WM - MW)/\lVert\cdot\rVert$. Fixed-J
+scan tangent: pure interior generator, no envelope/normalization.
 
-## 2. The rotational ladder
+## 2. The ladder and its non-convergence
 
-| $\omega$ | 0 | 0.076 | 0.152 | **0.217** | 0.304 | 0.434 | 0.65 |
-|---|---|---|---|---|---|---|---|
-| $E$ | 5.070763 | 5.070755 | 5.070727 | **5.070726** | 5.070757 | 5.071069 | 5.072009 |
-| PR (sites) | — | 65 | 65 | 65 | 66 | 70 | 90 |
-
-Interior minimum at the predicted rung at every relaxation level;
-sign control JR0: minimum at $\omega = 0$, monotone.
+At fixed protocol depth the ladder showed an interior minimum at the
+predicted rung $\omega_R = \sqrt{C_1^r/C_2^r} = 0.217$ (all recorded
+levels), with the sign control clean at $\omega = 0$ — see
+`results/rot_ladders.json` and the figure. Review round 1 tested the
+persisted $0.152$ field with continued relaxation and found it
+dropping below the claimed minimum; the deep run of §4 confirms and
+extends this. **The well-location claim is withdrawn.** What remains
+established: (i) the $0.217$ configuration is a genuinely converged
+stationary point ($\lVert g\rVert_\infty = 2.7\cdot10^{-4}$, five
+levels identical to $10^{-6}$); (ii) the other rungs are *not*
+converged and keep descending — most plausibly toward the deeper
+static family known from report 007 (the two-family structure), at a
+rate growing with $\omega$.
 
 ![rot ladders](results/fig_rot_ladders.png)
 
-**Route 2** (`verify_energies.py`): from-scratch numpy evaluation on
-the persisted bracket fields (0.152/0.217/0.304) with the frozen
-rotation tangent reproduces the recorded totals to $10^{-9}$ relative
-and confirms the sampled well independently.
+**Route 2** (`verify_energies.py`): the persisted bracket energies
+are reproduced from scratch to $10^{-9}$ relative — the *numbers*
+are right; the *interpretation* changed.
 
-## 3. Channel angular momentum
+## 3. The proxy, retained without claims
 
-On the clock configuration $\dot M = \omega\, a_{\rm rot}$ the channel
-kinetic density is $k = \omega^2 k_1^r \ge 0$; reading it as a
-quadratic kinetic energy $T = \tfrac12 I_R \omega^2$ (with the
-$\tfrac12\cdot2$ normalization of the density convention) gives the
-channel inertia $I_R = 2\int k_1^r = 0.547$ and
+$\tilde J = I_R\,\omega$ with $I_R = 2\int k_1^r = 0.547$ (frozen-
+tangent channel scale) is recorded in the JSON. It is not a canonical
+momentum or Noether charge: rescaling the frozen tangent
+$a \to \lambda a$ sends $\tilde J \to \lambda \tilde J$. No conclusion
+rests on it.
 
-$$J \;=\; I_R\,\omega, \qquad J_* = I_R\,\omega_* = 0.119 .$$
+## 4. Deep convergence: the bracket reorders
 
-This is the report's headline observable: a defect that **carries
-angular momentum in its energy minimum**. The interpretation is
-author-gated: it treats the channel as a rigid collective coordinate
-with quadratic kinetics; the canonical treatment through report 003's
-branched structure (where the quartic term deforms the
-$J(\omega)$ relation) is the follow-up.
+`deep_converge.py` continues the persisted rung fields (and a fresh
+$\omega = 0$) for up to 24 L-BFGS cycles (tol $10^{-7}$):
 
-![rot channel](results/fig_rot_channel.png)
+| $\omega$ | 0.0 | 0.152 | **0.217** | 0.304 |
+|---|---|---|---|---|
+| $E$ start | 5.070782 | 5.070727 | 5.070726 | 5.070757 |
+| $E$ after budget | 5.070735 | 5.070679 | **5.070726 (converged)** | 5.070655 |
+| cycles / last change | 24 / $-1.1\cdot10^{-6}$ | 24 / $-1.2\cdot10^{-6}$ | 1 / $-3\cdot10^{-9}$ | 24 / $-1.4\cdot10^{-6}$ |
 
-## 4. Depth trend and the deep endpoint
+The post-budget ordering is $0.304 < 0.152 < 0.217 < 0.0$, still
+descending — no statement about a rotational interior minimum
+survives. Contrast with the boost channel: the identical deep run on
+report 008's persisted bracket keeps its ordering
+$E(0.35) < E(0.2) < E(0)$ under the same common creep (stable
+differences there; unstable here).
 
-At matched levels the depth descends $5.52 \to 4.58 \to 4.04 \to 3.81
-\to 3.64\cdot10^{-5}$: the changes shrink ($-9.5, -5.4, -2.3,
--1.7\cdot10^{-6}$) but have not yet turned into the $\pm1\%$
-oscillation seen in 008's boost ladder. The asymmetry is diagnosed in
-the `E_levels`: the minimum rung is converged to $10^{-6}$ across all
-levels, while the $\omega = 0$ reference creeps (the same flat-valley
-creep measured in 008 §6). The endpoint therefore runs a deep 8-cycle
-budget; `depth_deep_endpoint` in the JSON tracks the deep reference
-against the converged minimum and shows the creep settling at
-$1.5$–$2\cdot10^{-6}$/cycle without vanishing over the tested budget —
-the depth is therefore an upper bound with a known drifting
-systematic, not a converged number. `reproduce.sh` asserts the
-matched-level shrinking-changes criterion and the level-stable
-location — the existence claims rest on the latter.
+## 5. Fixed-J: well-posed, and a measured no-go for the pure channel
 
-## Limitations
+The Routhian $E_J[M] = E_{\rm stat}[M] + J^2/(2 I[M])$ with
+$I[M] = 2\int k_1[\zeta_{\rm int}(M)]$, $\zeta_{\rm int} =
+(1-\text{shell})\,(WM - MW)$, minimized over $M$ at prescribed $J$
+(`fixedj_scan.py`): bounded, no runaway, rigid-profile scaling
+verified ($[E(J)-E(0)]/[J^2/2I_0] \to 1.02$ at $J = 0.8$; small-$J$
+points sit at the relaxation noise floor), $\omega = J/I$ an output.
+Measured: $I \approx 3.75\cdot10^3$, constant to $0.2\%$ over
+$J \in [0, 0.8]$, kinetic-density PR $\approx 455$ — the channel
+turns the whole (anisotropic-vacuum) interior, not the defect. This
+is the quantitative obstruction: extensive inertia, no isolated
+rotor in the pure internal channel.
 
-- Frozen rotation tangent (no equivariance); one generator
-  ($\mathrm{rot}_{xy}$; the hedgehog's isotropy relates the others).
-- $J$ in the quadratic-kinetic reading only (canonical/branched J:
-  open, report 003 route).
-- Shallow well; depth not fully converged (documented trend); $32^3$.
+![fixed-J](results/fig_fixedj.png)
+
+## 6. Limitations and the road forward
+
+- The combined space–internal generator (Context, point 3) is the
+  physical spin candidate; its symmetry check, finite localized
+  inertia and fixed-J scan are the follow-up (report 010 line).
+- The deep-convergence budget (24 cycles) bounds but does not close
+  the creep; the boost-channel contrast (§4) is protocol-matched.
+- $32^3$, one spacing; frozen-shell boundary as in 004–008.
 
 ## Equation-to-artifact map
 
 | object | artifact |
 |---|---|
-| rotational ladders, prediction, $I_R$, $J_*$ | `ladder_rot.py` → `results/rot_ladders.json` |
+| ladder record (fixed protocol depth) + proxy | `ladder_rot.py` → `results/rot_ladders.json` |
+| deep-convergence run (the reordering) | `deep_converge.py` → `results/deep_converge.json` |
+| fixed-J scan (pure internal channel) | `fixedj_scan.py` → `results/fixedj.json` |
 | independent energy route | `verify_energies.py` |
 | persisted bracket fields, frozen tangent | `results/rot_rung_om*.npz`, `results/a0r_frozen.npz` |
-| figures (committed artifacts; 008 comparison from its committed JSON) | `make_figures.py` |
+| figures (committed artifacts) | `make_figures.py` |
 
 ## Reproduction
 
 `bash reproduce.sh` — with report 004's fields (or `M5_FIELDS_DIR`)
-reruns the ladders (sentinel-flagged), the independent route and the
-figures, and asserts the predicted-rung minimum at every level, the
-clean control, the shrinking depth changes, PR localization and the
-route-2 match; without fields it checks the committed artifacts and
-reports NOT-REPRODUCED for the lattice legs.
+reruns all producers (sentinel-flagged) and asserts: the ladder
+record's internal consistency, the deep-run reordering (the withdrawn
+claim stays withdrawn), the fixed-J rigid-scaling ratio and the
+extensive-inertia signature, and the route-2 match; without fields it
+checks the committed artifacts.
