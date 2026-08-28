@@ -27,8 +27,10 @@ whether the simplest quartic can tick:**
    density). Hence $I_1^\eta = i_1^{\rm stat} + k$ with $k \ge 0$: the
    square has no negative cross term, and the faithful
    $(I_1^\eta)^2$ ladder (J_ETA) has its minimum at $\omega = 0$ —
-   **no clock**, in either reading (the fundamental-Lagrangian reading
-   only triples the brake).
+   **no clock**, in either reading (in the fundamental-Lagrangian
+   reading the brake triples while the cross term stays positive, and
+   the static square flips negative — the same static-instability
+   caveat as §4; inert or unstable, never a clock).
 2. **The $G$ form ticks.** With the working Euclideanizer $G$ (reports
    002/004) on the matrix slots and the outer indices raised by
    $\eta$, the matrix-slot contraction of $F_{0i}$ is positive and the
@@ -39,8 +41,9 @@ $$\gamma (I_1^G)^2 = \underbrace{\gamma\,(i_1^{\rm stat})^2}_{\text{statics
 deformation}}\; \underbrace{-\,2\gamma\, i_1^{\rm stat}\,k}_{\text{clock
 drive}}\; +\; \underbrace{\gamma\,k^2}_{\text{quartic brake}}.$$
 
-   The measured wells (below) sit at the frozen-profile predictions of
-   this expansion, in both readings of the term.
+   The measured well (below) sits at the frozen-profile prediction of
+   this expansion, in the energy-functional reading (the fundamental
+   reading is measured unstable, §4).
 
 Why this local quartic does *not* delocalize, when every plain local
 quartic tried in 004/007 did, is a **convexity** fact: the Mexican-hat
@@ -56,8 +59,9 @@ channel.)
 
 **Measurements** (report-004 lattice stack; fresh-start ladders; every
 rung, including $\omega = 0$, relaxed by one fixed-depth protocol —
-Adam + two L-BFGS cycles — with bracket stability across protocol
-levels as the convergence criterion, §6):
+Adam + two L-BFGS cycles, deepened to four cycles for the JG_E ladder
+— with bracket stability across protocol levels plus the JG_E depth
+plateau as the convergence criteria, §6):
 
 1. **Energy reading of the $G$ form** (§2): frozen-profile prediction
    $\omega_E = \sqrt{C_1/C_2} = 0.326$, $\gamma$-independent; the
@@ -147,12 +151,13 @@ sampled well independently.
 **Depth plateau (review round 2):** the JG_E bracket runs a deep
 protocol (Adam + four L-BFGS cycles) and the JSON records the well
 depth at every level (`depth_per_level`, `depth_changes`);
-`reproduce.sh` asserts the successive depth changes shrink and the
-last is below 10% of the depth. Measured: the depth settles at
+`reproduce.sh` asserts the actual plateau criterion: the final
+level-to-level depth change is smaller in magnitude than the first and
+below 10% of the depth. Measured: the depth settles at
 $6.4$–$6.5\cdot10^{-5}$ with residual oscillation $\sim\pm1\%$
 (changes $-1.7, -0.6, +0.2, +0.7 \cdot 10^{-6}$ across the four
-L-BFGS levels) — the well's magnitude itself plateaus, not just its
-location.
+L-BFGS levels; not monotone, but settled) — the well's magnitude
+itself plateaus, not just its location.
 
 ## 3. The measured no-go ($\eta$ form) and the sign control
 
@@ -160,7 +165,9 @@ location.
   all-$\eta$): minimum at $\omega = 0$, no interior well — the
   simplest quartic in its raw form does not tick. In the
   fundamental-$L$ reading the cross term keeps its positive sign and
-  the brake triples: inert a fortiori (analytic).
+  the brake triples, while the static square flips negative — so that
+  reading is inert as a clock and shares the static-instability
+  caveat of §4 (analytic).
 - **J0** ($G$ form, cross sign flipped): minimum at $\omega = 0$ —
   the JG_E well is the cross term's physics, not protocol noise.
 
@@ -212,13 +219,19 @@ the energy keeps *creeping* by $\sim1.5\cdot10^{-6}$ per further
 200-iteration cycle with $\lVert g\rVert_\infty$ stuck at a few
 $10^{-3}$ (a long flat valley of the 327k-dof problem; measured
 explicitly at the $\omega=0$ endpoint over five cycles). Absolute
-stationarity is therefore **not claimed**. The asserted criterion is
-what the physics claim actually needs: every rung runs the SAME
-fixed-depth protocol (500 Adam + two L-BFGS cycles), the energy is
-recorded after each level (`E_levels` per rung), and the **location of
-the well's minimum must be identical at every protocol level**
-(`min_omega_per_level`, asserted in `reproduce.sh`) — the common creep
-mode cancels in energy differences across rungs. Final
+stationarity is therefore **not claimed**. The asserted criteria are
+what the physics claim actually needs. Every rung runs the SAME
+fixed-depth protocol (500 Adam + two L-BFGS cycles; four cycles for
+JG_E), the energy is recorded after each level (`E_levels` per rung),
+and (i) the **location of the well's minimum must be identical at
+every protocol level** (`min_omega_per_level`) — the common creep mode
+cancels in energy differences across rungs; (ii) for JG_E the **depth
+itself must plateau**: the actual, satisfied criterion is that the
+final level-to-level depth change is smaller in magnitude than the
+first and below 10% of the depth (measured changes
+$-1.70, -0.61, +0.21, +0.67\cdot10^{-6}$ — not monotonically
+shrinking, but settling to $\sim$1% oscillation around a depth of
+$6.4$–$6.5\cdot10^{-5}$). Both are asserted in `reproduce.sh`. Final
 $\lVert g\rVert_\infty$ per rung is recorded for transparency
 (`grad_inf`).
 
@@ -266,7 +279,7 @@ $\lVert g\rVert_\infty$ per rung is recorded for transparency
 | shared densities/relaxation for the checks | `ladder_i1sq_defs.py` |
 | $\gamma$-scaling confirmation | `confirm_gamma_scaling.py` → `results/gamma_scaling.json` |
 | deep-well localization check | `gamma16_localization.py` → `results/gamma16_localization.json` |
-| independent energy route (both readings) | `verify_energies.py` |
+| independent energy route (JG_E) | `verify_energies.py` |
 | persisted rung fields, frozen tangent | `results/jge_rung_om*.npz`, `results/a0_frozen.npz` |
 | figures (from committed artifacts) | `make_figures.py` |
 
