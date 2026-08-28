@@ -1,4 +1,4 @@
-# Appendix — the canonical ansatz is a flat so(1,3) connection
+# Appendix — the flat Maurer–Cartan connection of the canonical ansatz
 
 *Added 2026-08-28 under METHOD §7 (new material extending the report).
 This appendix changes no conclusion of report 006; it identifies the
@@ -10,14 +10,15 @@ seconds on CPU), committed record in
 ## Statement
 
 The dressing of the canonical ansatz, $M = o\,M_0\,o^\top$ with
-$o(x)\in SO^+(1,3)$ (any profiles, any centers), is **pure gauge**: the
+$o(x)\in SO^+(1,3)$ (any profiles, any centers), defines the
 right-invariant Maurer–Cartan form
 
 ```math
-\omega_\mu = (\partial_\mu o)\,o^{-1} \in so(1,3)
+\omega_\mu = (\partial_\mu o)\,o^{-1} \in so(1,3),
 ```
 
-carries the whole first-derivative content of the field,
+a **flat (pure-gauge) connection** which carries the whole
+first-derivative content of the field,
 
 ```math
 (\partial_\mu M)\,\eta = [\,\omega_\mu,\; M\eta\,],
@@ -47,9 +48,9 @@ an independent numeric route (below).
 
 ## What this adds to the report
 
-- **§2 read geometrically.** The ansatz is a pure-gauge (zero-curvature)
-  configuration of a Lorentz connection, and the field is static, so the
-  time leg vanishes: $\omega_0 = 0$. The absence of time components of
+- **§2 read geometrically.** The dressing sector of the ansatz is
+  captured by a flat (zero-curvature) Lorentz connection, and the field
+  is static, so the time leg vanishes: $\omega_0 = 0$. The absence of time components of
   $F$ in the derivative slots is thus a property of the construction —
   exact at every order in the dressing amplitude $m$ — while the
   *matrix*-slot spatiality of §2 is the leading-order statement (as §7
@@ -62,9 +63,9 @@ an independent numeric route (below).
   (`APPENDIX-no-connection-from-M.md`) closes both requirements for
   every $C_\mu$ built pointwise from $M$ alone.
 - **A bridge to standard gauge-theory language.** An external reader can
-  now see at a glance that "boost hedgehog dressing" = pure gauge, which
-  makes §2's collapse a one-line consequence rather than an ansatz-specific
-  computation.
+  now see at a glance that "boost hedgehog dressing" = a pure-gauge
+  Maurer–Cartan connection, which makes §2's collapse a one-line
+  consequence rather than an ansatz-specific computation.
 
 ## Measured
 
@@ -93,6 +94,12 @@ control shows the test distinguishes flat from non-flat at $O(1)$.
 - Flatness is a property of the *tested ansatz family* (pure-gauge
   dressings of the vacuum), not of general field configurations of the
   model.
+- "Pure gauge" describes the Maurer–Cartan connection $\omega$, **not**
+  the physical field $M$ (review round 1): local Lorentz transformations
+  are not claimed to be a gauge symmetry of the action, and orbit
+  configurations are physically inequivalent — their derivative
+  invariants ($I_1$, …) differ; only the *algebraic* invariants of $M$
+  are orbit-constant (report 007 §1).
 
 ## Reproduction
 

@@ -52,9 +52,11 @@ The blockade is specific to building from $M$ *alone*.
 
 The theorem leaves exactly one pointwise loophole: mixing the derivative
 slot $\mu$ with the matrix slots ($\delta^a_\mu$ is Lorentz-invariant).
-Minimal covariant realization, built on the normalized timelike
-eigen-axis $u(M)$ of $M\eta$ (the object report 002's $G$-metric is
-built from):
+The $\eta$-realization, built on the timelike eigen-axis $u(M)$ of
+$M\eta$ (the object report 002's $G$-metric is built from), normalized
+**covariantly** — unit timelike, $u^\top\eta u = -1$, future-oriented
+(review round 1 correction: the first committed version normalized by
+the frame-dependent $v/|v^0|$, which is not equivariant):
 
 ```math
 C_{\mu ab} = \lambda\,(\eta_{\mu a}\,u_b - \eta_{\mu b}\,u_a),
@@ -64,15 +66,29 @@ D_\mu M = \partial_\mu M + C_\mu M + M C_\mu^\top ,
 
 antisymmetric in $(ab)$, hence $C_\mu \in so(1,3)$ for any $u$
 (measured residual $10^{-16}$-level; in the vacuum $C_i = -\lambda K_i$,
-a boost). On report 006's **static** ansatz ($m = 0.2$) it does open the
-time sector that the structure theorem of 006 §2 forbids at $\lambda=0$:
+a boost). Equivariance of $u$ has a second route: on the ansatz the
+eigen-axis *is* the boosted frame vector, $u = o\,e_0$, already unit
+timelike — measured $u^\top\eta u = -1$ to $10^{-16}$ and
+$|u_{\mathrm{eig}} - o\,e_0| = 4\cdot10^{-17}$. §2c below shows this
+realization is one of exactly **two** equivariant structures, and the
+only active one. On report 006's **static** ansatz ($m = 0.2$) it does
+open the time sector that the structure theorem of 006 §2 forbids at
+$\lambda=0$:
 
 | $\lambda$ | $\max\lvert F(D)_{0i}\rvert$ | $\max\lvert F(D)_{ij}\rvert$ |
 |---|---|---|
 | 0 (control) | 0 exactly | $3.09\cdot10^{-2}$ |
-| 0.05 | $1.94\cdot10^{-3}$ | $5.09\cdot10^{-2}$ |
-| 0.1 | $4.65\cdot10^{-3}$ | $7.57\cdot10^{-2}$ |
-| 0.4 | $3.71\cdot10^{-2}$ | $3.27\cdot10^{-1}$ |
+| 0.05 | $1.18\cdot10^{-3}$ | $1.56\cdot10^{-2}$ |
+| 0.1 | $1.56\cdot10^{-3}$ | $5.36\cdot10^{-3}$ |
+| 0.2 | $9.33\cdot10^{-5}$ | $2.89\cdot10^{-4}$ |
+| 0.3 | $4.97\cdot10^{-3}$ | $2.10\cdot10^{-2}$ |
+| 0.4 | $1.31\cdot10^{-2}$ | $6.24\cdot10^{-2}$ |
+
+(The collapse of both columns near $\lambda = 0.2$ is an isolated
+interference zero: both sectors are linear in the spatial leg $D_i$, and
+at $\lambda \sim m f(r)$ the connection locally cancels the dressing
+gradient at the probe point — position-dependent, not an identity; see
+(b).)
 
 But the construction pays twice, and the two payments are the same term:
 
@@ -89,22 +105,27 @@ density $\propto$ volume for any quadratic-in-$F$ energy. Measured:
 $\max|F| = \lambda^2$ **exactly** over the scan (figure, panel b);
 negative control $\lambda = 0$ gives $0$ exactly.
 
-**(b) The opened sector is powered by the vacuum-breaking term.** Since
-$D_i = D_i^{\mathrm{vac}} + O(m)$ with $D_i^{\mathrm{vac}}$ the very
-term of (a), and $D_0 = O(\lambda m)$,
+**(b) The opened sector is coherently powered by the vacuum-breaking
+term.** $F(D)_{0i}$ is bilinear, so the split
+$D_i = D_i^{\mathrm{vac}} + (D_i - D_i^{\mathrm{vac}})$ — with
+$D_i^{\mathrm{vac}}$ the very term of (a) — decomposes it **exactly**
+(measured linearity residual $3.5\cdot10^{-18}$):
 
 ```math
-\lvert F(D)_{0i}\rvert \;\sim\; c_1\,\lambda^2 m \;+\; c_2\,\lambda m^2
+F_{0i} = \underbrace{F(D_0, D_i^{\mathrm{vac}})}_{\sim\,\lambda^2 m}
+\;+\; \underbrace{F(D_0, D_i - D_i^{\mathrm{vac}})}_{\sim\,\lambda m^2}.
 ```
 
-— a crossover at $m\sim\lambda$, not a clean power. Measured at
-$\lambda = 0.1$: the vacuum-powered part (spatial legs frozen to their
-vacuum value) carries $0.89$ of the full $|F(D)_{0i}|$ at $m = 0.0125$,
-decreasing to $0.35$ at $m = 0.4$; log–log slopes in $m$: $1.20$ on the
-small side ($\to 1$), $1.77$ on the large side ($\to 2$); slope in
-$\lambda$ at $m = 0.0125$: $1.94$ ($\to 2$) (figure, panel a). So there
-is **no regime in which the time sector works and the vacuum does not
-pay**: at small amplitude the "effect" *is* the pathology.
+Measured at $\lambda = 0.1$ (figure, panel a): the vacuum-powered part
+scales with slope $1.00$ in $m$ and **exactly** $2.000$ in $\lambda$;
+the remainder with slope $2.01$ in $m$; their ratio at $m = 0.0125$ is
+$0.12 \approx m/\lambda$. The full signal is their coherent (signed)
+sum: at $m = \lambda$ the two parts **annihilate** (full
+$1.5\cdot10^{-5}$, a factor $\sim 50$ below either part) — the same
+interference produces the $\lambda \approx 0.2$ dip in the table above.
+So there is **no regime in which the time sector works and the vacuum
+does not pay**: at small amplitude the sector *is* the vacuum term, and
+everywhere else it interferes coherently with it.
 
 **(c) A scalar switch cannot rescue it.** Multiplying $C$ by $s(M)$
 vanishing in the vacuum runs into §1's blindness: on the ansatz every
@@ -114,18 +135,65 @@ Lorentz dressings of report 004's vacuum; negative control with
 orthogonal dressings: drift $2.0$). If $s(\mathrm{vac}) = 0$, then
 $s \equiv 0$ on the whole ansatz and $C \equiv 0$.
 
-*Boundary of the claim:* (a)–(c) are shown for this minimal covariant
-realization. The mechanism of (a) — any nonvanishing covariant vector
-of $M$ is nonzero already in the vacuum — is general, but we do not
-claim a classification of all index-mixed connections.
+## 2c. Classification: the equivariant family is two-dimensional, and only the $\eta$-form acts
+
+Raised by review round 1 (which exhibited the $\varepsilon$-structure
+below as a counterexample to promoting (a) beyond the tested
+realization): the closure needs a quantifier over *all* pointwise
+connections, not one realization. On the canonical orbit the quantifier
+is available in full. There $M = g\,uu^\top$, so the only pointwise
+covariant data is $(g, u)$, and an equivariant $C_{\mu ab}$
+(antisymmetric in $ab$) is determined by its value at $M_0$, which must
+be invariant under the stabilizer $SO(3)$ of $u = e_0$. Two routes:
+
+- *Algebra:* the candidate space decomposes under $SO(3)$ as
+  $(\mathrm{scalar}\oplus\mathrm{vector})_\mu \otimes
+  (\mathrm{vector}\oplus\mathrm{vector})_{[ab]}$; exactly two singlets
+  survive ($\delta_{ij}$ and $\varepsilon_{ijk}$), spanned by
+
+```math
+C^{(\eta)}_{\mu ab} = \eta_{\mu a}u_b - \eta_{\mu b}u_a,
+\qquad
+C^{(\varepsilon)}_{\mu ab} = \varepsilon_{\mu ab\nu}\,u^\nu
+\quad (\varepsilon_{0123} = +1).
+```
+
+- *Numeric:* the joint fixed subspace of the three rotation actions on
+  the 24-dimensional space $\{T_{\mu ab}\}$ has dimension **2** (SVD;
+  both tensors above lie in it to $1.7\cdot10^{-16}$).
+
+**The $\varepsilon$-component is inert on the whole orbit.** One line:
+$(C^{(\varepsilon)}_\mu)_{ab}u^b = \varepsilon_{\mu ab\nu}u^bu^\nu = 0$
+by antisymmetry, and $M = g\,uu^\top$, so
+$C^{(\varepsilon)}_\mu M + M C^{(\varepsilon)\top}_\mu = 0$
+identically: $D = \partial$, $F(D) = F(\partial)$, no vacuum cost, no
+time sector, no effect at all. Measured: $F|_{\mathrm{vac}} = 0$
+exactly and $\max|D_\mu M - \partial_\mu M| = 1.4\cdot10^{-17}$ on the
+dressed ansatz.
+
+**Consequence of the classification.** Every pointwise connection on
+the canonical family is $A\,C^{(\eta)} + B\,C^{(\varepsilon)}$ with
+$A, B$ functions of the algebraic invariants of $M$ — constant on the
+ansatz by §1's blindness. The $\varepsilon$-part does nothing; the
+$\eta$-part is the tested realization of §2. Hence **any pointwise
+connection that opens the canonical time sector at all is, up to an
+inert component, the tested one — and pays the $\lambda^2$ vacuum cost
+of (a).** The quantifier gap flagged by the review is closed on the
+orbit.
+
+*Boundary of the claim:* the classification is a statement about the
+rank-1 orbit (the canonical ansatz family, where report 006's no-go
+lives). Off the orbit — rank-rich vacua, defect cores — the pointwise
+data is larger and no classification is claimed.
 
 ![appendix figure](results/fig_appendix_connections.png)
 
-*Figure: (a) the opened time sector on the static ansatz vs dressing
-amplitude $m$ at $\lambda = 0.1$ — the full signal against its
-vacuum-powered part, with $\propto m$ and $\propto m^2$ guides and the
-$m = \lambda$ crossover; (b) the price: uniform vacuum field strength,
-measured points on the exact $\lambda^2$ law.*
+*Figure: (a) the exact bilinear decomposition of the opened time sector
+on the static ansatz at $\lambda = 0.1$: vacuum-powered part
+($\propto \lambda^2 m$), remainder ($\propto \lambda m^2$), and their
+coherent sum (full), which collapses at $m = \lambda$ where the parts
+cancel; (b) the price: uniform vacuum field strength, measured points on
+the exact $\lambda^2$ law.*
 
 ## 3. Outlook lemmas: derivative-built connections are shut too
 
@@ -173,24 +241,31 @@ vacuum) — the higher-order program of 006 §7 (working-repo
 
 ## Consequence
 
-Within pointwise constructions from $M$: **endomorphism-valued
-connections do not exist (§1), and the index-mixed escape costs the
-vacuum, with its apparent time sector powered by that very cost (§2).**
-Every remaining door out of report 006's no-go requires $\partial M$ in
-the coefficient or connection — i.e. leaves the field-dependent-
-coefficient family entirely and enters the higher-order program, where
-the natural derivative-built representative keeps the time sector shut
-*and* leaves the 006 sign map invariant on the whole canonical family
-(§3).
+Within pointwise constructions from $M$, on the canonical family:
+**endomorphism-valued connections do not exist (§1); the equivariant
+index-mixed family is exactly two-dimensional (§2c); its
+$\varepsilon$-component is inert; and its only active component — the
+$\eta$-realization of §2 — opens the time sector only at the $\lambda^2$
+vacuum cost, which coherently powers the opened sector itself.** Every
+remaining door out of report 006's no-go requires $\partial M$ in the
+coefficient or connection — i.e. leaves the field-dependent-coefficient
+family entirely and enters the higher-order program, where the natural
+derivative-built representative keeps the time sector shut *and* leaves
+the 006 sign map invariant on the whole canonical family (§3).
 
 ## What this appendix does not claim
 
 - No change to report 007's results (§§1–5 stand as merged); the clock
   mechanism and ladder results are untouched.
-- No classification of all index-mixed connections (boundary note in
-  §2); no statement about connections built from $\partial M$ beyond the
-  two lemmas of §3 — their behavior on non-pure-gauge configurations
-  (defect cores, the rank-rich model vacuum) is open.
+- The classification of §2c holds on the rank-1 orbit; off the orbit
+  (rank-rich vacua, defect cores) the pointwise data is larger and no
+  classification is claimed. No statement about connections built from
+  $\partial M$ beyond the two lemmas of §3 — their behavior on
+  non-pure-gauge configurations is open.
+- The interference zeros of §2 (table, $\lambda \approx 0.2$; figure,
+  $m = \lambda$) are pointwise features of the probe location, not
+  identities; only their existence and the decomposition scalings are
+  claimed.
 - The crossover constants $c_1, c_2$ are realization- and
   normalization-dependent; only the structure ($\lambda^2 m$ vs
   $\lambda m^2$, ratios and slopes above) is claimed.
@@ -207,8 +282,11 @@ python make_appendix_figure.py       # figure from the committed JSON
 - Question (raised while discussing §1's blindness theorem) and first
   derivations: working repo `duda-particle-model`,
   `notes/notatka_koneksja_kowariantna_2026-08-27.md` (revised
-  2026-08-28, commits `cdba6c2`, `74523e7`), probe
-  `notes/connection_probe.py`; rescaling lemma and part-B gates:
-  `connection_dev/` (same commit).
+  2026-08-28, commits `cdba6c2`, `74523e7`, `060a969` — the last one
+  the review-round-1 revision), probe `notes/connection_probe.py`;
+  rescaling lemma and part-B gates: `connection_dev/`.
+- Covariance of $u$, the classification requirement, and the
+  $\varepsilon$-structure of §2c: PR #8 review round 1 (Codex critic,
+  comment in the PR thread).
 - Ansatz and conventions: report 006 §1; $u(M)$ / $G$-metric lineage:
   report 002; blindness theorem: this report §1.

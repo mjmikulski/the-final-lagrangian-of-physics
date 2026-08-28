@@ -2,9 +2,10 @@
 
 fig_appendix_connections.png :
   (a) the time sector opened by the index-mixing connection on the static
-      ansatz, |F(D)_0i| vs dressing amplitude m at lam = 0.1, full vs the
-      vacuum-powered part (spatial legs frozen to their vacuum value) --
-      the small-m sector rides on the vacuum-breaking term;
+      ansatz at lam = 0.1: the exact bilinear split of F(D)_0i into the
+      vacuum-powered part (~ lam^2 m, spatial legs frozen to their vacuum
+      value) and the remainder (~ lam m^2); the full signal is their
+      coherent sum and the parts annihilate near m = lam;
   (b) the price: uniform vacuum field strength |F(D)_ij| = lam^2, measured
       points against the exact law.
 """
@@ -24,33 +25,36 @@ plt.rcParams.update({"font.size": 11, "axes.titlesize": 11,
 HERE = os.path.dirname(os.path.abspath(__file__))
 R = os.path.join(HERE, "results")
 res = json.load(open(os.path.join(R, "appendix_no_connection.json")))
-cx = res["index_mixing"]["crossover"]
+cx = res["index_mixing"]["decomposition"]
 vac = res["index_mixing"]["vacuum"]
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.8, 3.4))
 
 ms = np.array(cx["ms"])
-full = np.array(cx["F_0i"])
-vp = np.array(cx["vacuum_powered"])
+full = np.array(cx["F_0i_full"])
+vp = np.array(cx["vacuum_powered_part"])
+rem = np.array(cx["remainder"])
 ax1.loglog(ms, full, "o-", color="#2166ac", ms=5, label="full $|F(D)_{0i}|$")
 ax1.loglog(ms, vp, "s--", color="#c0392b", ms=5, mfc="none", mew=1.5,
            label="vacuum-powered part")
-g1 = 0.55 * full[0] * (ms / ms[0])
-ax1.loglog(ms[:5], g1[:5], ":", color="0.45", lw=1)
-ax1.text(ms[1] * 1.05, g1[1] * 0.52, r"$\propto m$", color="0.35", fontsize=10)
-m2 = np.geomspace(0.12, 0.28, 20)
-g2 = 0.21 * full[-1] * (m2 / ms[-1]) ** 2
-ax1.loglog(m2, g2, ":", color="0.45", lw=1)
-ax1.text(0.262, g2[-1] * 0.92, r"$\propto m^2$", color="0.35", fontsize=10,
-         ha="left", va="center")
+ax1.loglog(ms, rem, "^-.", color="#e67e22", ms=5, mfc="none", mew=1.5,
+           label="remainder")
+ax1.text(0.0195, 2.6e-4, r"$\propto m$", color="#8e2418", fontsize=9,
+         ha="center", va="bottom", rotation=13)
+ax1.text(0.028, 2.4e-5, r"$\propto m^2$", color="#9c5410", fontsize=9,
+         ha="center", va="top", rotation=26)
 ax1.axvline(cx["lam"], color="0.75", lw=0.8, ls="--", zorder=0)
-ax1.text(cx["lam"], 1.4e-4, r"$m=\lambda$", color="0.45", fontsize=9,
+ax1.text(cx["lam"], 1.0e-4, r"$m=\lambda$", color="0.45", fontsize=9,
          rotation=90, va="center", ha="center",
          bbox=dict(fc="white", ec="none", pad=1.5))
+ax1.annotate("parts cancel", xy=(cx["lam"] * 1.04, full[3] * 1.15),
+             xytext=(0.16, 3.4e-5), fontsize=9, color="0.35",
+             arrowprops=dict(arrowstyle="-", color="0.55", lw=0.8))
 ax1.set_xlabel(r"dressing amplitude $m$")
 ax1.set_ylabel(r"$\max|F(D)_{0i}|$  (static ansatz, $\lambda=0.1$)")
-ax1.set_title("(a) opened time sector is vacuum-powered", fontsize=11)
-ax1.legend(loc="upper left", fontsize=9, framealpha=1.0)
+ax1.set_title("(a) time sector: coherently vacuum-powered", fontsize=11)
+ax1.legend(loc="upper left", fontsize=9, framealpha=1.0, handlelength=2.6)
+ax1.margins(y=0.06)
 ax1.xaxis.set_major_locator(FixedLocator([0.0125, 0.025, 0.05, 0.1, 0.2, 0.3, 0.4]))
 ax1.xaxis.set_minor_formatter(NullFormatter())
 ax1.set_xticklabels(["0.0125", "0.025", "0.05", "0.1", "0.2", "0.3", "0.4"],
