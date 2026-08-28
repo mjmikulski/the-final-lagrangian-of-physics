@@ -13,7 +13,12 @@
   "etasym_residual_polynomial": 1.4210854715202004e-14,
   "so13_residual_polynomial": 194.96128666326746,
   "neg_control_so13_residual": 0.0,
-  "neg_control_norm": 0.2505409448018623
+  "neg_control_norm": 0.2505409448018623,
+  "eps_completeness": {
+   "pair_identity_residual": 0.0,
+   "single_eps_candidates_max": 1.7763568394002505e-14,
+   "neg_control_nonsymmetric_chain": 5.798767137702922
+  }
  },
  "index_mixing": {
   "C_so13_residual": 0.0,
@@ -123,7 +128,7 @@
   "eps_component_DM_minus_dM_on_ansatz": 1.3877787807814457e-17
  },
  "blindness": {
-  "lorentz_drift": 3.478582816758841e-13,
+  "lorentz_drift": 8.156165639669168e-13,
   "neg_control_drift": 1.9992372083037853
  },
  "outlook_lemma": {

@@ -48,6 +48,24 @@ the commutator of two $\eta$-symmetric matrices is
 $\eta$-antisymmetric) and nonzero on report 006's ansatz (norm $0.25$).
 The blockade is specific to building from $M$ *alone*.
 
+*Completeness over $\varepsilon$ (review round 2 note).* The reduction
+"endomorphisms = matrix functions of $M\eta$" also covers contractions
+containing the Levi-Civita tensor. An **even** number of
+$\varepsilon$'s reduces to the $\varepsilon$-free class through the
+pair identity ($\varepsilon^{acde}\varepsilon_{bcde} = -3!\,\delta^a_b$
+and its relatives — measured exactly). An **odd** number vanishes
+identically: any index chain of $M$'s and $\eta$'s joining two
+$\varepsilon$ legs is an alternating string $M(\eta M)^k$ — a
+palindrome, hence a *symmetric* matrix — and an endomorphism has only
+two free slots for four antisymmetric $\varepsilon$ legs, so at least
+two legs must pair through such a chain. Measured: single-$\varepsilon$
+endomorphism candidates vanish to $1.8\cdot10^{-14}$; negative control
+with a non-symmetric chain matrix is $O(1)$ ($5.8$). With **three**
+free slots the counting changes — which is exactly why the
+$\varepsilon$ escape exists at the connection level
+($C^{(\varepsilon)}_{\mu ab}$ of §2c) and not at the endomorphism
+level.
+
 ## 2. The pointwise escape — index mixing — and its vacuum cost
 
 The theorem leaves exactly one pointwise loophole: mixing the derivative
@@ -287,6 +305,7 @@ python make_appendix_figure.py       # figure from the committed JSON
   rescaling lemma and part-B gates: `connection_dev/`.
 - Covariance of $u$, the classification requirement, and the
   $\varepsilon$-structure of §2c: PR #8 review round 1 (Codex critic,
-  comment in the PR thread).
+  comment in the PR thread); the $\varepsilon$-completeness note in §1:
+  review round 2.
 - Ansatz and conventions: report 006 §1; $u(M)$ / $G$-metric lineage:
   report 002; blindness theorem: this report §1.

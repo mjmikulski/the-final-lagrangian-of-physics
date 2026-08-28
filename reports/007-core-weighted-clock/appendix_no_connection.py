@@ -263,6 +263,35 @@ out["classification"] = {
     "eps_component_DM_minus_dM_on_ansatz": eps_inert,
 }
 
+# eps-completeness of the section-1 theorem (review round 2, precision
+# note): endomorphism contractions CONTAINING eps either reduce to the
+# eps-free matrix-function class (even # of eps: the pair identity
+# eps^{acde} eps_{bcde} = -3! delta^a_b and its relatives trade eps
+# pairs for deltas) or vanish identically (odd #: any chain of M's and
+# eta's joining two eps legs is a palindrome M(eta M)^k, hence a
+# SYMMETRIC matrix, and with four antisymmetric eps legs but only two
+# free endomorphism slots at least two legs must pair through such a
+# chain). With THREE free slots the counting changes -- which is exactly
+# why the eps escape exists at the connection level (C2 of 2b) and not
+# at the endomorphism level.
+EPSu = -EPS                        # all four indices raised with eta: det(eta) = -1
+pair_id = np.einsum("acde,bcde->ab", EPSu, EPS)
+S1l = ETA @ Mr @ ETA               # chains, fully lowered: M and M(eta M)^2
+S3l = ETA @ Mr @ ETA @ Mr @ ETA @ Mr @ ETA
+cands = [
+    np.einsum("acde,cb,de->ab", EPSu, S1l, S3l),   # legs d,e paired via chain
+    np.einsum("acde,cb,de->ab", EPSu, S3l, S1l),
+    np.einsum("abcd,cd->ab", EPSu, S3l),           # both free slots on eps
+]
+Nr = rng.normal(size=(4, 4))       # negative control: NONsymmetric chain
+neg_eps = float(np.max(np.abs(np.einsum("acde,cb,de->ab", EPSu, S1l,
+                                        ETA @ Nr @ ETA))))
+out["theorem"]["eps_completeness"] = {
+    "pair_identity_residual": float(np.max(np.abs(pair_id + 6 * np.eye(4)))),
+    "single_eps_candidates_max": float(max(np.max(np.abs(c)) for c in cands)),
+    "neg_control_nonsymmetric_chain": neg_eps,
+}
+
 # --- 3. scalar-switch blindness (report 007 section 1, replicated) --------
 inv = lambda Mx: np.array([np.trace(np.linalg.matrix_power(Mx @ ETA, n))
                            for n in (1, 2, 3, 4)] + [np.linalg.det(Mx)])
@@ -315,6 +344,10 @@ assert cl["fixed_subspace_dim"] == 2           # exactly two equivariant tensors
 assert cl["C1_C2_invariance_residual"] < 1e-10
 assert cl["eps_component_vacuum_F"] < 1e-12    # reviewer's eps term: no cost...
 assert cl["eps_component_DM_minus_dM_on_ansatz"] < 1e-12   # ...because inert
+ec = out["theorem"]["eps_completeness"]
+assert ec["pair_identity_residual"] == 0.0     # eps pairs -> deltas, exactly
+assert ec["single_eps_candidates_max"] < 1e-12 # odd-eps endomorphisms vanish
+assert ec["neg_control_nonsymmetric_chain"] > 0.1
 assert abs(im["vacuum"]["F_ij"][4] - 0.09) < 1e-12  # lam = 0.3 -> lam^2 exactly
 assert im["vacuum"]["F_ij"][0] == 0.0               # negative control lam = 0
 assert stat["F_0i"][0] == 0.0                       # lam = 0 reproduces 006
