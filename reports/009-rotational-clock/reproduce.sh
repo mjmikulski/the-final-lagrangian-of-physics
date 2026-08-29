@@ -69,6 +69,13 @@ wz = tx["working"]["zeta_profile"]
 assert min(wz) > 0.5 and wz[0] > 1.0, "working texture stays O(1)"
 assert tx["working"]["I_comb"] > 3 * tx["spherical_biax"]["I_comb"]
 
+# the third class (round 4): finite, box-independent, core-localized
+cd = tx["core_deformed"]
+assert cd["exponent"] < 0.5, "third-class inertia must be L-stable"
+assert all(b["PR"] < 150 for b in cd["boxes"]), "core-localized"
+zp32 = cd["boxes"][-1]["zeta_profile"]
+assert zp32[-1] < 0.25 * zp32[0], "compact support + 1/r residual" 
+
 for f in ("fig_rot_ladders.png", "fig_rot_channel.png",
           "fig_fixedj.png", "fig_scaling.png"):
     assert os.path.getsize(os.path.join(R, f)) > 10000, f

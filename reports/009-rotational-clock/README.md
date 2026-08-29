@@ -71,26 +71,39 @@ honest picture is:
    working repo and *backfires* — the breaking grows as
    $\delta \to 0$ at fixed texture, since the $(1, \delta)$ pair
    splitting grows and the seed texture does not become equivariant
-   by itself.) Review round 3 then closed the remaining
-   loophole in the *proposed repair itself*: for an exactly
-   equivariant configuration $\zeta M \equiv 0$, so $\zeta$ lies in
-   the **stabilizer** — it does not parameterize a collective orbit,
-   the implemented inertia $I[\zeta]$ vanishes in the continuum (the
-   analytic controls' $I_{\rm comb} \sim 6\cdot10^2$ is pure
-   discretization residual, $\propto 1/r$ pointwise, and must vanish
-   as $h \to 0$), and $J^2/(2I)$ is singular. The honest conclusion
-   of the whole series is therefore sharper: **in this anisotropic
-   vacuum every rigid rotation is either extensive (non-equivariant
-   texture; measured $\sim L^{2.93}$) or trivial (equivariant
-   texture; stabilizer)**. A physical spin channel must be a
-   *non-annihilating, spatially localized collective flow* — e.g.\ the
-   quotient of separate spatial/internal rotations by the diagonal
-   stabilizer with a decaying profile — whose profile should be
-   determined variationally (fixed-J minimization over the flow field
-   as well as $M$), with its Noether charge, boundary behavior and
-   $h \to 0$, $L \to \infty$ limits established before any spin
-   claim; this is the follow-up program, not a result of this
-   report.
+   by itself.) Review round 3 then closed a loophole in the
+   *proposed repair itself*: for an exactly equivariant configuration
+   $\zeta M \equiv 0$, so $\zeta$ lies in the **stabilizer** — it
+   does not parameterize a collective orbit, the implemented inertia
+   $I[\zeta]$ vanishes in the continuum (the analytic controls'
+   $I_{\rm comb} \sim 6\cdot10^2$ is pure discretization residual,
+   $\propto 1/r$ pointwise, vanishing as $h \to 0$), and $J^2/(2I)$
+   is singular. Round 4 then showed that the two measured endpoints
+   do **not** exhaust the rigid-rotation possibilities, and its
+   counterexample class was measured here (§6a): a configuration
+   **asymptotically equivariant with a non-equivariant core**,
+   $M = M_{\rm eq} + \chi(r) D$ with compactly supported $\chi$ and
+   $\zeta D \neq 0$, has $\zeta M = \chi\,\zeta D$ compactly
+   supported — and the measurement gives a **finite, box-independent,
+   core-localized inertia** ($I \sim L^{0.14}$ over $L = 24/36/48$,
+   kinetic-density PR $\approx 60$). So the honest classification is
+   a trichotomy: globally non-equivariant textures are *extensive*
+   ($\sim L^{2.93}$), exactly equivariant textures are *trivial*
+   (stabilizer), and **core-breaking configurations on an equivariant
+   background carry a genuine rigid collective orbit with finite
+   inertia** — the physically standard rigid-rotor situation, and the
+   concrete spin candidate. Because the global combined rotation
+   preserves the (equivariant) asymptotics while acting nontrivially
+   on the core, it is a bona fide global symmetry direction there —
+   the route to a Noether $J$ — subject to the follow-up checklist:
+   an energetically relaxed configuration of this class, its charge
+   and boundary behavior, and the $h \to 0$, $L \to \infty$ limits.
+   (A profile-multiplied generator $f(x)\,W$ is *not* by itself a
+   symmetry — its finite transformation produces bulk terms
+   $\propto (\partial_i f)[W, M]$, the smooth version of §5's
+   interface obstruction — so the flow route would need a separately
+   derived conserved charge; the core-breaking rigid route above does
+   not have this problem.)
 4. The proxy $\tilde J = I_R\,\omega$ of the first version is retained
    in the JSON for the record but carries **no physical claim** (§3):
    it is convention-dependent (tangent normalization and envelope).
@@ -227,21 +240,44 @@ $\delta$ genuinely helps.)
 
 ![scaling and texture](results/fig_scaling.png)
 
+### 6a. The third class, measured: finite inertia from a core-breaking texture
+
+Review round 4 exhibited the class this report's dichotomy missed;
+`combined_texture.py` now measures it. The configuration is
+$M = M_{\rm sph} + \varepsilon\,\chi(r)\,D$ with
+$D = \hat x\hat x^\top - \hat y\hat y^\top$ (constant, so the
+orbital part of $\zeta$ annihilates it), $\chi = e^{-(r/r_0)^2}$,
+$\varepsilon = 0.3$, $r_0 = 6$: asymptotically equivariant,
+non-equivariant in the core, $\zeta M = \varepsilon\chi\,[W, D]_c$
+compactly supported. On its own analytic lattice at three box sizes
+(fixed spacing $h = 1.5$):
+
+| $L$ | 24 | 36 | 48 | fit |
+|---|---|---|---|---|
+| $I_{\rm comb}$ | $9.86\cdot10^2$ | $1.04\cdot10^3$ | $1.08\cdot10^3$ | $\sim L^{0.14}$ |
+| PR of the density | 57 | 64 | 69 | core-localized |
+
+Finite, box-independent, core-localized — neither extensive nor
+trivial. The residual slow growth is consistent with the equivariant
+background's own $1/r$ discretization residual (§6); the class is the
+concrete rigid-rotor spin candidate for the follow-up.
+
 ## 7. Limitations and the road forward
 
-- **Rigid rotation is closed as a spin route in this vacuum**, by the
-  dichotomy measured here: non-equivariant textures give extensive
-  inertia ($\sim L^{2.93}$), exactly equivariant textures give a
-  stabilizer direction with $I \to 0$ as $h \to 0$ (trivial channel).
-  The follow-up program is a **localized collective flow**: a
-  non-annihilating direction (separate spatial/internal rotations
-  quotiented by the diagonal stabilizer) with a spatially decaying
-  profile determined *variationally* — fixed-J minimization over the
-  flow field together with $M$ — and validated by its Noether charge,
-  boundary behavior, and $h \to 0$, $L \to \infty$ limits. (An
-  equivariant boundary would still make the angle cyclic for such a
-  flow, addressing §5's caveat (i) — but the flow itself, not the
-  stabilizer, must carry the momentum.)
+- **Rigid rotation splits into three measured classes** (the round-4
+  trichotomy): extensive (globally non-equivariant texture,
+  $\sim L^{2.93}$), trivial (exactly equivariant texture,
+  stabilizer), and **finite** (core-breaking texture on an
+  equivariant background, $\sim L^{0.14}$, PR $\approx 60$ — §6a).
+  The follow-up program is the third class made dynamical: relax an
+  asymptotically equivariant configuration whose core breaks the
+  axial symmetry (the relaxed field, not a hand-built ansatz), derive
+  the Noether charge of the global combined rotation on it (with an
+  equivariant boundary the angle is cyclic), and establish the
+  $h \to 0$ and $L \to \infty$ limits before any spin claim. A
+  profile-multiplied flow $f(x)W$ is not a symmetry (bulk
+  $(\partial_i f)[W,M]$ terms) and would need a separately derived
+  conserved charge — the rigid third-class route avoids this.
 - The deep-convergence budget (24 cycles) bounds but does not close
   the creep; the boost-channel contrast (§4) is protocol-matched.
 - $32^3$, one spacing; frozen-shell boundary as in 004–008.
