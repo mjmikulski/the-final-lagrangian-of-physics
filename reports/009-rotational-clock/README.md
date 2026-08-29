@@ -1,4 +1,4 @@
-# Report 009 — The rotational sector: a protocol-limited ladder, a vacuum-dominated channel, and the well-posed fixed-J route
+# Report 009 — The rotational sector: a protocol-limited ladder, extensive rigid rotations, and a constrained fixed-J surrogate
 
 *2026-08-28 · Maciej J. Mikulski (AI-assisted, see [METHOD](../../METHOD.md)) ·
 the angular-momentum half of the article-1 program. Substantially
@@ -53,7 +53,7 @@ honest picture is:
    (§6): for $\zeta = -(x\partial_y - y\partial_x) + [W, \cdot\,]$
    the residual $|\zeta M|(r)$ is *flat* ($\approx 1.13$ on every
    shell) and $I_{\rm comb} = 3.4\cdot10^3$, PR $= 312$
-   (`combined_generator` producer in this report): **this hedgehog's
+   (`combined_texture.py` producer in this report): **this hedgehog's
    radial texture is not axially equivariant**, so the combined
    rotation buys nothing *on this configuration*. Round 2's
    counterexample is accepted and recorded as constructive: unequal
@@ -71,10 +71,26 @@ honest picture is:
    working repo and *backfires* — the breaking grows as
    $\delta \to 0$ at fixed texture, since the $(1, \delta)$ pair
    splitting grows and the seed texture does not become equivariant
-   by itself.) The concrete spin candidate is the **axially
-   equivariant defect ansatz** — $\zeta$ is its exact symmetry, so a
-   finite, core-localized inertia and a genuine Noether $J$ are
-   available; this is the next-report line.
+   by itself.) Review round 3 then closed the remaining
+   loophole in the *proposed repair itself*: for an exactly
+   equivariant configuration $\zeta M \equiv 0$, so $\zeta$ lies in
+   the **stabilizer** — it does not parameterize a collective orbit,
+   the implemented inertia $I[\zeta]$ vanishes in the continuum (the
+   analytic controls' $I_{\rm comb} \sim 6\cdot10^2$ is pure
+   discretization residual, $\propto 1/r$ pointwise, and must vanish
+   as $h \to 0$), and $J^2/(2I)$ is singular. The honest conclusion
+   of the whole series is therefore sharper: **in this anisotropic
+   vacuum every rigid rotation is either extensive (non-equivariant
+   texture; measured $\sim L^{2.93}$) or trivial (equivariant
+   texture; stabilizer)**. A physical spin channel must be a
+   *non-annihilating, spatially localized collective flow* — e.g.\ the
+   quotient of separate spatial/internal rotations by the diagonal
+   stabilizer with a decaying profile — whose profile should be
+   determined variationally (fixed-J minimization over the flow field
+   as well as $M$), with its Noether charge, boundary behavior and
+   $h \to 0$, $L \to \infty$ limits established before any spin
+   claim; this is the follow-up program, not a result of this
+   report.
 4. The proxy $\tilde J = I_R\,\omega$ of the first version is retained
    in the JSON for the record but carries **no physical claim** (§3):
    it is convention-dependent (tangent normalization and envelope).
@@ -92,7 +108,9 @@ As in report 008 (`ladder_i1sq_defs.py` via runpy): working metric
 $G$, $\gamma = 70.61$, fresh-start rungs, Adam + L-BFGS cycles with
 recorded `E_levels`. Ladder tangent: frozen
 $a_{\rm rot} = \mathrm{env}\cdot(WM - MW)/\lVert\cdot\rVert$. Fixed-J
-scan tangent: pure interior generator, no envelope/normalization.
+scan tangent: the interior conjugation generator
+$(1-\text{shell})(WM - MW)$ — unnormalized, but the sharp interior
+mask is itself an envelope (see the caveat in Context 2).
 
 ## 2. The ladder and its non-convergence
 
@@ -142,14 +160,17 @@ report 008's persisted bracket keeps its ordering
 $E(0.35) < E(0.2) < E(0)$ under the same common creep (stable
 differences there; unstable here).
 
-## 5. Fixed-J: well-posed, and a measured no-go for the pure channel
+## 5. The constrained fixed-J surrogate, and the pure channel's no-go
 
-The Routhian $E_J[M] = E_{\rm stat}[M] + J^2/(2 I[M])$ with
+The bounded constrained surrogate
+$E_J[M] = E_{\rm stat}[M] + J^2/(2 I[M])$ (not a derived Routh
+reduction — Context 2) with
 $I[M] = 2\int k_1[\zeta_{\rm int}(M)]$, $\zeta_{\rm int} =
 (1-\text{shell})\,(WM - MW)$, minimized over $M$ at prescribed $J$
 (`fixedj_scan.py`): bounded, no runaway, rigid-profile scaling
 verified ($[E(J)-E(0)]/[J^2/2I_0] \to 1.02$ at $J = 0.8$; small-$J$
-points sit at the relaxation noise floor), $\omega = J/I$ an output.
+points sit at the relaxation noise floor); $\omega = J/I$ is the
+surrogate's stationarity ratio, not a derived physical frequency.
 Measured: $I \approx 3.75\cdot10^3$, constant to $0.2\%$ over
 $J \in [0, 0.8]$, kinetic-density PR $\approx 455$ — the channel
 turns the whole (anisotropic-vacuum) interior, not the defect. This
@@ -191,7 +212,14 @@ The two equivariant textures fall off as $\propto 1/r$ — the pure
 discretization residual (exact symmetry in the continuum) — **at both
 $\delta = 0$ and $\delta = 0.3$**, while the working texture stays
 $O(1)$ out to the boundary. The symmetry breaking is a property of
-the texture choice, not of the biaxial spectrum. (The spherical-frame
+the texture choice, not of the biaxial spectrum. Two consequences,
+stated precisely (review round 3): the equivariant textures'
+$I_{\rm comb} \sim 6\cdot10^2$ is *itself* discretization residual
+and vanishes in the continuum limit — it is **not** a finite core
+inertia; and because $\zeta M \equiv 0$ on them exactly, $\zeta$ is
+a stabilizer direction on that class — a symmetry of the action that
+annihilates the configuration supplies no rotational zero mode, so
+the equivariant class has a *trivial*, not finite, $\zeta$-channel. (The spherical-frame
 texture pays for its equivariance with a frame singularity on the $z$
 axis — the well-known linear defect of biaxial hedgehogs — whose cost
 scales with the transverse amplitude $\delta$; this is where a small
@@ -201,14 +229,19 @@ $\delta$ genuinely helps.)
 
 ## 7. Limitations and the road forward
 
-- Rigid collective rotation of the **working radial texture** is
-  exhausted (extensive inertia, measured scaling); the equivariant
-  ansatz of §6 is the concrete spin candidate (next report): analytic
-  spherical-frame seed with an equivariant boundary, statics
-  competitiveness, finite $I(L)$, and a genuine fixed-J reduction
-  (with an equivariant boundary the rotation is a symmetry of the
-  configuration space, so the angle is cyclic and $J$ is a Noether
-  charge — closing this report's §5 caveat (i)).
+- **Rigid rotation is closed as a spin route in this vacuum**, by the
+  dichotomy measured here: non-equivariant textures give extensive
+  inertia ($\sim L^{2.93}$), exactly equivariant textures give a
+  stabilizer direction with $I \to 0$ as $h \to 0$ (trivial channel).
+  The follow-up program is a **localized collective flow**: a
+  non-annihilating direction (separate spatial/internal rotations
+  quotiented by the diagonal stabilizer) with a spatially decaying
+  profile determined *variationally* — fixed-J minimization over the
+  flow field together with $M$ — and validated by its Noether charge,
+  boundary behavior, and $h \to 0$, $L \to \infty$ limits. (An
+  equivariant boundary would still make the angle cyclic for such a
+  flow, addressing §5's caveat (i) — but the flow itself, not the
+  stabilizer, must carry the momentum.)
 - The deep-convergence budget (24 cycles) bounds but does not close
   the creep; the boost-channel contrast (§4) is protocol-matched.
 - $32^3$, one spacing; frozen-shell boundary as in 004–008.
