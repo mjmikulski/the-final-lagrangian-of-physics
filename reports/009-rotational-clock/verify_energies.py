@@ -102,7 +102,7 @@ for om, tag in OMS:
 
 print(f"worst relative difference: {worst:.2e}")
 assert worst < 1e-9, "route-2 energies must match the ladder record"
-lo, mid, hi = (E_tot[o] for o, _ in OMS)
-assert lo > mid < hi, "sampled interior well must survive"
-print("ROUTE-2 ENERGIES MATCH; sampled rotational well confirmed "
-      "independently")
+print("ROUTE-2 ENERGIES MATCH: the persisted fixed-depth energies are "
+      "independently reproduced. (No well claim is made here -- the "
+      "fixed-depth ordering is the protocol artifact documented in "
+      "README section 4.)")

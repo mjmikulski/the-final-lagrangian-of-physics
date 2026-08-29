@@ -6,11 +6,15 @@ set -euo pipefail
 cd "$(dirname "$0")"
 PY=${PYTHON:-python3}
 
-rm -f results/rot_ran.flag results/deep_ran.flag results/fixedj_ran.flag
+rm -f results/rot_ran.flag results/deep_ran.flag \
+      results/fixedj_ran.flag results/scaling_ran.flag \
+      results/texture_ran.flag
 
 $PY ladder_rot.py
 $PY deep_converge.py
 $PY fixedj_scan.py
+$PY inertia_scaling.py
+$PY combined_texture.py
 $PY verify_energies.py
 $PY make_figures.py
 
@@ -49,12 +53,29 @@ assert 0.9 < ratio < 1.2, ratio
 assert all(r["PR_kin"] > 300 for r in rows), "vacuum domination"
 assert max(r["I"] for r in rows) / min(r["I"] for r in rows) < 1.05
 
+# box-size scaling: the extensivity claim rests on the exponent
+sc = json.load(open(os.path.join(R, "inertia_scaling.json")))
+assert sc["exponent_I_pure"] > 2.5, "volume-law scaling expected"
+assert sc["rows"][-1]["I_pure"] > 5 * sc["rows"][0]["I_pure"]
+
+# texture test: equivariant analytic textures decay ~1/r, the working
+# texture stays O(1) -- at BOTH delta values
+tx = json.load(open(os.path.join(R, "combined_texture.json")))
+for tag in ("uniaxial", "spherical_biax"):
+    zp = tx[tag]["zeta_profile"]
+    assert zp[-1] < 0.35 * zp[0], tag  # falls off
+    assert zp[-1] < 0.15, tag
+wz = tx["working"]["zeta_profile"]
+assert min(wz) > 0.5 and wz[0] > 1.0, "working texture stays O(1)"
+assert tx["working"]["I_comb"] > 3 * tx["spherical_biax"]["I_comb"]
+
 for f in ("fig_rot_ladders.png", "fig_rot_channel.png",
-          "fig_fixedj.png"):
+          "fig_fixedj.png", "fig_scaling.png"):
     assert os.path.getsize(os.path.join(R, f)) > 10000, f
 
 ran = all(os.path.exists(os.path.join(R, f))
-          for f in ("rot_ran.flag", "deep_ran.flag", "fixedj_ran.flag"))
+          for f in ("rot_ran.flag", "deep_ran.flag", "fixedj_ran.flag",
+                    "scaling_ran.flag", "texture_ran.flag"))
 if ran:
     print("REPRODUCED: producers ran here and all structural checks "
           "pass.")

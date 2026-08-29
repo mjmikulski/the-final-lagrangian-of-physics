@@ -27,38 +27,54 @@ honest picture is:
    the $0.217$ rung alone is fully converged. The interior-minimum
    structure seen at fixed protocol depth does not survive; the
    ladder can only bound, not locate, any rotational well.
-2. **The pure internal rotation channel is vacuum-dominated —
-   measured in a well-posed fixed-J formulation** (§5). With the
-   collective coordinate on the *pure* interior generator
-   $\dot M = \dot\theta\,(WM - MW)$ (no envelope, no normalization —
-   removing exactly the conventions review round 1 objected to), the
-   bounded Routhian $E_J = E_{\rm stat} + J^2/(2 I[M])$ is well posed
-   and its measurements are clean: $E(J) - E(0) \to J^2/(2I_0)$
-   (ratio $\to 1.02$), $I$ constant to $0.2\%$. But the inertia is
-   **extensive**: $I_0 = 3.75\cdot10^3$ with the kinetic density
-   spread over the whole interior (PR $\approx 455$ sites), because
-   the internal rotation is *not a symmetry of the anisotropic vacuum*
-   (it mixes the spatial axes with eigenvalues $1$ and $\delta$). In
-   the infinite-volume limit $\omega = J/I \to 0$: **no isolated
-   finite-frequency rotating object exists in this channel.**
-3. **The natural repair was also tested and also fails — recorded
-   honestly** (§6): the Skyrme-like combined space–internal generator
-   $\zeta = -(x\partial_y - y\partial_x) + [W, \cdot\,]$ would be an
-   asymptotic symmetry of a *uniaxial* hedgehog, but our hedgehog is
-   **biaxial** (transverse eigenvalues $\delta = 0.3$ and $0$
-   differ), and the measurement (working-repo dev,
-   `paper1_dev/fixedJ/combined_generator.py`) shows
-   $|\zeta M|(r)$ *flat* ($\approx 1.13$ on every shell),
-   $I_{\rm comb} = 3.4\cdot10^3$, PR $= 312$: the biaxial radial
-   texture breaks every continuous axial rotation out to the
-   boundary, so **no rigid collective rotation of this defect has
-   finite inertia**. The spin question therefore needs a different
-   structure — a localized transverse-precession mode (a rotational
-   analog of the 008 boost clock), or the near-uniaxial limit
-   ($\delta \to 0$ restores the axial symmetry; note the
-   $\delta = 1/8$ vacuum probe in the working repo) — and stays open.
-   The fixed-J Routhian remains the well-posed Lagrangian-reading
-   formalism for whichever channel is found.
+2. **The pure internal rotation channel is broad-and-stiff on this
+   box — measured in a bounded constrained surrogate** (§5; scope
+   corrected in review round 2). The functional
+   $E_J = E_{\rm stat} + J^2/(2 I[M])$ with the interior conjugation
+   tangent is bounded, minimizes cleanly, and matches the
+   rigid-profile scaling ($[E(J)-E(0)]/[J^2/2I_0] \to 1.02$, $I$
+   constant to $0.2\%$). Two honest scope limits, both from round 2:
+   (i) this is **not a derived Routh reduction** for the
+   pinned-boundary problem — the masked tangent's flow
+   $M_\theta = e^{\theta m(x)W} M e^{-\theta m(x)W}$ carries an
+   interface term $\propto (\partial_i m)[W, M]$ across the frozen
+   shell, so the angle is not cyclic, $J$ is a *prescribed parameter*
+   (not a Noether charge), and the interior mask is itself a sharp
+   envelope; a genuine reduction needs the boundary rotated by the
+   global generator (or the interface potential included). (ii) The
+   single-box measurement ($I_0 = 3.75\cdot10^3$, kinetic-density
+   PR $\approx 455$ on $32^3$) shows only that the channel is broad
+   on this box, so the extensivity claim is now backed by the
+   **measured box-size scaling** (§5a): at fixed spacing, boxes
+   $L = 24, 36, 48$ give $I_{\rm pure} \sim L^{2.93}$ — the volume
+   law, measured.
+3. **The Skyrme-like combined generator was measured on this field
+   and does not help — with the claim's scope corrected in round 2**
+   (§6): for $\zeta = -(x\partial_y - y\partial_x) + [W, \cdot\,]$
+   the residual $|\zeta M|(r)$ is *flat* ($\approx 1.13$ on every
+   shell) and $I_{\rm comb} = 3.4\cdot10^3$, PR $= 312$
+   (`combined_generator` producer in this report): **this hedgehog's
+   radial texture is not axially equivariant**, so the combined
+   rotation buys nothing *on this configuration*. Round 2's
+   counterexample is accepted and recorded as constructive: unequal
+   transverse eigenvalues do **not** by themselves forbid
+   equivariance — the $\varphi$-wound texture
+   $M = R_z(\varphi)\,B(\rho, z)\,R_z(\varphi)^\top$ has three
+   distinct eigenvalues yet $\zeta M \equiv 0$ exactly. The
+   measured obstruction is therefore a property of the *radial
+   hedgehog texture*, not of biaxiality per se — confirmed
+   analytically in §6: the uniaxial hedgehog AND a spherical-frame
+   biaxial hedgehog at full $\delta = 0.3$ (the counterexample class)
+   both show only a $\propto 1/r$ discretization residual, while the
+   working texture's residual is $O(1)$ and flat. (A naive
+   "shrink $\delta$ in the potential" route was also probed in the
+   working repo and *backfires* — the breaking grows as
+   $\delta \to 0$ at fixed texture, since the $(1, \delta)$ pair
+   splitting grows and the seed texture does not become equivariant
+   by itself.) The concrete spin candidate is the **axially
+   equivariant defect ansatz** — $\zeta$ is its exact symmetry, so a
+   finite, core-localized inertia and a genuine Noether $J$ are
+   available; this is the next-report line.
 4. The proxy $\tilde J = I_R\,\omega$ of the first version is retained
    in the JSON for the record but carries **no physical claim** (§3):
    it is convention-dependent (tangent normalization and envelope).
@@ -137,17 +153,62 @@ points sit at the relaxation noise floor), $\omega = J/I$ an output.
 Measured: $I \approx 3.75\cdot10^3$, constant to $0.2\%$ over
 $J \in [0, 0.8]$, kinetic-density PR $\approx 455$ — the channel
 turns the whole (anisotropic-vacuum) interior, not the defect. This
-is the quantitative obstruction: extensive inertia, no isolated
-rotor in the pure internal channel.
+is the quantitative obstruction on this box; the scaling below makes
+it extensivity.
 
 ![fixed-J](results/fig_fixedj.png)
 
-## 6. Limitations and the road forward
+### 5a. Box-size scaling: the volume law, measured
 
-- Rigid collective rotation is exhausted: pure internal (§5) and
-  combined space–internal (Context, point 3) generators are both
-  measured vacuum-dominated. Open spin candidates: localized
-  transverse precession; the near-uniaxial ($\delta \to 0$) regime.
+`inertia_scaling.py` repeats the inertia measurement in three boxes at
+fixed spacing $H = 1.5$ (central crops of the seed, same texture
+pinned at a smaller radius; short static relax per box):
+
+| $L$ | 24 | 36 | 48 | fit |
+|---|---|---|---|---|
+| $I_{\rm pure}$ | $3.59\cdot10^2$ | $1.33\cdot10^3$ | $2.71\cdot10^3$ | $\sim L^{2.93}$ |
+| $I_{\rm comb}$ | $3.54\cdot10^2$ | $1.11\cdot10^3$ | $2.07\cdot10^3$ | $\sim L^{2.56}$ |
+
+$I_{\rm pure}$ follows the volume law: the pure internal channel's
+inertia is extensive, and $\omega = J/I \to 0$ at fixed $J$ as the
+box grows — the isolated-rotor no-go for this channel, now with the
+scaling evidence review round 2 asked for. ($I_{\rm comb}$ also grows
+strongly on these sizes; its sub-volume exponent reflects the partial
+cancellation and boundary effects, not finiteness.)
+
+## 6. The texture test: what actually breaks the symmetry
+
+`combined_texture.py` measures the off-axis shell profile of the
+axial-symmetry residual $|\zeta M|(r)$ on three configurations:
+
+| configuration | $|\zeta M|$ at $r = 4.5$ | at $r = 19.5$ | $I_{\rm comb}$ |
+|---|---|---|---|
+| working 004 field ($\delta = 0.3$) | 1.10 | 0.59 | $3.4\cdot10^3$ |
+| uniaxial hedgehog (analytic) | 0.32 | 0.077 | $5.7\cdot10^2$ |
+| spherical-frame biaxial, $\delta = 0.3$ (analytic) | 0.33 | 0.088 | $6.9\cdot10^2$ |
+
+The two equivariant textures fall off as $\propto 1/r$ — the pure
+discretization residual (exact symmetry in the continuum) — **at both
+$\delta = 0$ and $\delta = 0.3$**, while the working texture stays
+$O(1)$ out to the boundary. The symmetry breaking is a property of
+the texture choice, not of the biaxial spectrum. (The spherical-frame
+texture pays for its equivariance with a frame singularity on the $z$
+axis — the well-known linear defect of biaxial hedgehogs — whose cost
+scales with the transverse amplitude $\delta$; this is where a small
+$\delta$ genuinely helps.)
+
+![scaling and texture](results/fig_scaling.png)
+
+## 7. Limitations and the road forward
+
+- Rigid collective rotation of the **working radial texture** is
+  exhausted (extensive inertia, measured scaling); the equivariant
+  ansatz of §6 is the concrete spin candidate (next report): analytic
+  spherical-frame seed with an equivariant boundary, statics
+  competitiveness, finite $I(L)$, and a genuine fixed-J reduction
+  (with an equivariant boundary the rotation is a symmetry of the
+  configuration space, so the angle is cyclic and $J$ is a Noether
+  charge — closing this report's §5 caveat (i)).
 - The deep-convergence budget (24 cycles) bounds but does not close
   the creep; the boost-channel contrast (§4) is protocol-matched.
 - $32^3$, one spacing; frozen-shell boundary as in 004–008.
@@ -159,6 +220,8 @@ rotor in the pure internal channel.
 | ladder record (fixed protocol depth) + proxy | `ladder_rot.py` → `results/rot_ladders.json` |
 | deep-convergence run (the reordering) | `deep_converge.py` → `results/deep_converge.json` |
 | fixed-J scan (pure internal channel) | `fixedj_scan.py` → `results/fixedj.json` |
+| box-size scaling of the inertia | `inertia_scaling.py` → `results/inertia_scaling.json` |
+| texture test (working vs equivariant analytic) | `combined_texture.py` → `results/combined_texture.json` |
 | independent energy route | `verify_energies.py` |
 | persisted bracket fields, frozen tangent | `results/rot_rung_om*.npz`, `results/a0r_frozen.npz` |
 | figures (committed artifacts) | `make_figures.py` |

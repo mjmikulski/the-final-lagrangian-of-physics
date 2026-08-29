@@ -194,3 +194,55 @@ fig3.tight_layout()
 fig3.savefig(os.path.join(R, "fig_fixedj.png"), dpi=160,
              bbox_inches="tight")
 print("written: results/fig_fixedj.png")
+
+# ---- scaling + texture figure ----------------------------------------
+sc = json.load(open(os.path.join(R, "inertia_scaling.json")))
+tx = json.load(open(os.path.join(R, "combined_texture.json")))
+
+fig4, (dx1, dx2) = plt.subplots(1, 2, figsize=(8.6, 3.4))
+Ls = [x["Lbox"] for x in sc["rows"]]
+for q, col, mk, lab in (
+        ("I_pure", "#2166ac", "D", "pure internal"),
+        ("I_comb", "#7b3294", "^", "combined")):
+    dx1.loglog(Ls, [x[q] for x in sc["rows"]], color=col, marker=mk,
+               ms=6, lw=1.4,
+               label=f"{lab}: $I \\sim L^{{{sc['exponent_' + q]:.2f}}}$")
+dx1.loglog(Ls, [sc["rows"][0]["I_pure"] * (l / Ls[0]) ** 3
+                for l in Ls], color="0.6", ls=":", lw=1.2,
+           label=r"volume law $L^3$")
+dx1.set_xticks([24, 36, 48])
+dx1.set_xticklabels(["24", "36", "48"])
+dx1.minorticks_off()
+dx1.set_xlabel(r"box size $L$  [lattice units]")
+dx1.set_ylabel(r"inertia $I$  [lattice units]")
+dx1.set_title("(a) extensivity, measured:\nfixed spacing, growing box",
+              fontsize=10)
+dx1.legend(fontsize=8, loc="upper left", framealpha=1.0)
+dx1.grid(alpha=0.25, which="major")
+
+for tag, col, ls, mk, lab in (
+        ("working", "#c0392b", "-", "o",
+         "working 004 ($\\delta=0.3$)"),
+        ("spherical_biax", "#1b7837", "--", "^",
+         "spherical biax ($\\delta=0.3$)"),
+        ("uniaxial", "#2166ac", ":", "D", "uniaxial")):
+    m = tx[tag]
+    dx2.plot(m["r_mid"], m["zeta_profile"], color=col, ls=ls,
+             marker=mk, ms=5, lw=1.5, label=lab)
+rm = tx["uniaxial"]["r_mid"]
+dx2.plot(rm, [tx["uniaxial"]["zeta_profile"][0] * rm[0] / x
+              for x in rm], color="0.6", lw=0.9, ls="-.",
+         label=r"$\propto 1/r$ (discretization)")
+dx2.set_ylim(0, 1.32)
+dx2.set_xlabel(r"shell radius $r$  [lattice units, off-axis]")
+dx2.set_ylabel(r"$|\zeta M|$")
+dx2.set_title("(b) the texture decides, not $\\delta$:\n"
+              "equivariant frames are symmetric at any $\\delta$",
+              fontsize=10)
+dx2.legend(fontsize=7.5, loc="lower center",
+           bbox_to_anchor=(0.63, 0.13), framealpha=1.0)
+dx2.grid(alpha=0.25)
+fig4.tight_layout()
+fig4.savefig(os.path.join(R, "fig_scaling.png"), dpi=160,
+             bbox_inches="tight")
+print("written: results/fig_scaling.png")
