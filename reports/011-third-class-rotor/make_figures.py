@@ -26,6 +26,7 @@ ra = json.load(open(os.path.join(R, "relax_all.json")))
 tw = json.load(open(os.path.join(R, "frame_twist.json")))
 rs = json.load(open(os.path.join(R, "rot_stabilization.json")))
 lp = json.load(open(os.path.join(R, "lambda_plateau.json")))
+lp2 = json.load(open(os.path.join(R, "lambda_plateau2.json")))
 cbj = json.load(open(os.path.join(R, "centrifugal_branches.json")))
 
 
@@ -35,8 +36,9 @@ def sci(v):
 
 
 Ls = [24, 36, 48]
-plateau = [lp["cases"][t]["trajectory"][-1]["excess"]
-           for t in ("EQ_N16", "EQ_N24", "EQ_N32")]
+plateau = [lp["cases"]["EQ_N16"]["trajectory"][-1]["excess"],
+           lp2["cases"]["EQ_N24"]["final_excess"],
+           lp2["cases"]["EQ_N32"]["final_excess"]]
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8.6, 3.4))
 ax1.semilogy(Ls, plateau, color="#2166ac", marker="D", ms=7,
              mfc="none", mew=1.6, lw=1.4, ls="-",

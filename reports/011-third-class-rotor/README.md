@@ -23,21 +23,21 @@ relaxation*, i.e.\ is there a relaxed (not hand-built) representative?
 **Answers, measured:**
 
 1. **The axial defect carries a constant, small line tension —
-   the first version's "shrinking" claim was a relaxation artifact
-   and is corrected** (§2; review round 1). With per-cycle
-   trajectories of the tube observable itself (`lambda_plateau.py`,
-   continued relaxation to a common stopping rule), the excess at
-   $L = 48$ *rises* from the under-relaxed $5.5\cdot10^{-5}$ to a
-   plateau at $7.7\cdot10^{-4}$, matching $L = 36$
-   ($7.6\cdot10^{-4}$, stable over 20 further cycles): the axial
-   line tension is **constant in $L$** at
-   $\lambda_{\rm axis} \approx 7.6\cdot10^{-4}$ for $L \ge 36$
-   (the $L = 24$ box, $5.0\cdot10^{-3}$, is too small). The axial
-   cost is therefore first-order extensive — linear in $L$, like the
-   hedgehog's own radial-texture energy — small (14–26\% of the
-   local tube background) but **not** vanishing. Known systematic:
-   at $L = 24$ halving $h$ shifts the excess by $+43\%$
-   ($5.0 \to 7.1\cdot10^{-3}$); an $h$-study at $L \ge 36$ is open.
+   now established under an observable-level stopping rule** (§2;
+   the first version's "shrinking" claim was a relaxation artifact,
+   round 1; round 2 correctly noted the first continuation gated on
+   the energy, not the observable). `lambda_plateau2.py` continues
+   $L = 36$ and $L = 48$ until the tube excess itself drifts
+   $< 1\%$ over four consecutive cycles: $L = 36$ settles at
+   $8.271\cdot10^{-4}$ (four identical records), $L = 48$ at
+   $7.735\cdot10^{-4}$ — **plateaus agreeing to $6.5\%$**. The
+   axial line tension is constant in $L$ at
+   $\lambda_{\rm axis} \approx (7.7$–$8.3)\cdot10^{-4}$ for
+   $L \ge 36$ (the $L = 24$ box, $5.0\cdot10^{-3}$, is too small):
+   first-order extensive — linear in $L$, like the radial-texture
+   energy — small, but not vanishing. Known systematic: at $L = 24$
+   halving $h$ shifts the excess by $+43\%$; an $h$-study at
+   $L \ge 36$ is open.
 2. **The $\delta = 1/8$ sign claim survives at trajectory level**
    (§2): the excess stays negative through all 24 continuation
    cycles ($-2.47 \to -2.27\cdot10^{-3}$, drifting slowly toward
@@ -58,26 +58,28 @@ relaxation*, i.e.\ is there a relaxed (not hand-built) representative?
    is likewise ironed out — raw inertia difference $-5.2$ after
    relaxation, excess density diffuse (PR $\approx 970$). **Nothing
    in the static energy stabilizes a symmetry-breaking core.**
-5. **Prescribed rotation builds inertia spontaneously and
-   reversibly — but on the periphery, not in the core** (§4;
-   corrected in review round 1 by the two-branch, matched-accuracy
-   protocol with an order parameter). Both branches (EQ-start and
-   CB-start) at $J = 2, 4, 6$ grow large inertia
-   ($I \approx 277/596/954$ from the *equivariant* seed — genuine
-   spontaneity, no pre-seeded deformation needed), the branches
-   agree qualitatively (EQ-start even reaches lower $E_J$ at
-   $J = 2, 4$), and the hysteresis check is clean (the $J = 4$
-   endpoint melts back to $I = 108$ at $J = 0$: fully reversible).
-   **But the order parameter kills the core-rotor reading**: the
-   shell profile of the kinetic-density excess is concentrated at
-   $r \in (9, 18)$ with centroid $r \approx 14.7$–$15.5$ against
-   the boundary at $18$ — the minimizer buys inertia where the
-   orbital lever arm is longest (density $\propto \rho^2$), i.e.\ at
-   the **periphery**. This is an orbital-lever mode, presumably
-   box-limited, not a stabilized core deformation; the earlier
-   "centrifugally stabilized core rotor" headline is **withdrawn**.
-   The core mode remains unstabilized by everything tried in this
-   report, and the spin question stays open (road forward in §5).
+5. **Prescribed rotation grows peripheral inertia without a seeded
+   deformation — a qualitative observation, scoped in round 2**
+   (§4). The EQ-start runs show that at $J = 2, 4, 6$ the minimizer
+   grows large inertia ($I \approx 277/596/954$) from the purely
+   equivariant seed, and the order parameter shows where: the
+   kinetic-density excess is concentrated at $r \in (9, 18)$,
+   centroid $\approx 14.7$ against the boundary at $18$ — an
+   orbital-lever **peripheral** mode (density $\propto \rho^2$),
+   presumably box-limited, not a stabilized core deformation.
+   Round 2's accuracy audit is accepted in full: none of the eight
+   branch runs met the stated tolerance (all hit the 16-cycle cap;
+   residuals $0.017$–$0.183$; the $J = 4$ branch gap $0.014$ is
+   smaller than the unresolved last-cycle decreases $0.017$), so
+   **no branch-selection or matched-accuracy claim is made**, and
+   the $J = 4 \to 0$ continuation shows only that the inertia
+   *scalar* returns ($591 \to 108$) — configuration-space
+   reversibility against a converged reference is not established
+   (the continuation in fact found $E_{\rm stat} = 4.470$, below
+   the unconverged $J = 0$ endpoint $4.485$). The earlier
+   "centrifugally stabilized core rotor" headline stays withdrawn;
+   the core mode remains unstabilized by everything tried here, and
+   the spin question stays open (§5).
 
 **Honest scope:** the relaxation budget (Adam 1000 + 6 L-BFGS cycles
 from analytic seeds) does not converge the $32^3$ boxes to the
@@ -110,23 +112,25 @@ case. Deep protocol from the start (the 009 lesson): Adam 1000 +
 The tube pair ($\rho < 3$, $|{\rm axis}| > 6$) compares the axial
 defect against the hedgehog's own radial-texture background at the
 same distance. Round 1 correctly objected that the first version's
-endpoints had incomparable residuals; `lambda_plateau.py` therefore
-continues each EQ endpoint under a common stopping rule
-($|\Delta E| < 5\cdot10^{-4}$/cycle or 24 cycles) recording the tube
-observable at **every cycle**:
+endpoints had incomparable residuals; round 2 that the first
+continuation (`lambda_plateau.py`) gated on the total energy, so its
+$L = 36$ record was not actually flat (it dipped to $4.9\cdot10^{-4}$
+and was still rising $1.8\%$/cycle when the energy rule fired).
+`lambda_plateau2.py` therefore continues $L = 36$ and $L = 48$ under
+an **observable-level** rule — stop only when the tube excess drifts
+$< 1\%$ over four consecutive cycles:
 
 | $L$ | 24 | 36 | 48 |
 |---|---|---|---|
-| $\lambda_z - \lambda_x$, plateau | $5.0\cdot10^{-3}$ | $7.59\cdot10^{-4}$ | $7.70\cdot10^{-4}$ |
-| trajectory behavior | converged (1 cycle) | flat over 20 cycles | rises from $5.5\cdot10^{-5}$, saturates |
-| relative to tube background | 21% | 14% | 26% |
+| $\lambda_z - \lambda_x$, observable-level plateau | $5.0\cdot10^{-3}$ | $8.271\cdot10^{-4}$ | $7.735\cdot10^{-4}$ |
+| how it stopped | converged (1 cycle) | +13 cycles, then four identical records | +4 cycles, drift $< 1\%$ |
 
-The $L = 36$ and $L = 48$ plateaus agree to 1.4\%: the axial defect
-has a **constant line tension** $\approx 7.6\cdot10^{-4}$ (total
-axial cost linear in $L$, the same order of extensivity as the
-radial-texture energy itself — no worse class, but not vanishing;
-the first version's "shrinking to 2\%" was the unconverged $L = 48$
-point). $h$-sensitivity at $L = 24$: $+43\%$ under $h \to h/2$
+The plateaus agree to $6.5\%$: the axial defect has a **constant
+line tension** $\approx (7.7$–$8.3)\cdot10^{-4}$ (total axial cost
+linear in $L$, the same order of extensivity as the radial-texture
+energy — no worse class, but not vanishing; the first version's
+"shrinking to 2\%" was the unconverged $L = 48$ point, and the first
+continuation's "1.4\% agreement" was an energy-gated coincidence). $h$-sensitivity at $L = 24$: $+43\%$ under $h \to h/2$
 (measured on well-converged endpoints, $\lVert g\rVert_\infty \le
 5\cdot10^{-3}$); the $h$-study at plateau-relevant $L$ is open. At
 $\delta = 1/8$ the excess is negative on the entire 24-cycle
@@ -156,12 +160,14 @@ hence rotationally trivial.
 ## 4. Prescribed rotation: spontaneous, reversible, peripheral
 
 Round 1 objected that the single CB-start run could not distinguish
-selection from initialization. `centrifugal_branches.py` therefore
-runs **both branches** (EQ-start and CB-start) at $J = 0, 2, 4, 6$
-under a common stopping rule with recorded residuals, a hysteresis
-check, and a field-space order parameter (the shell profile and
-centroid of the signed kinetic-density excess over the shared
-EQ-start $J = 0$ endpoint):
+selection from initialization; `centrifugal_branches.py` runs both
+branches (EQ-start and CB-start) at $J = 0, 2, 4, 6$ with recorded
+residuals, a hysteresis continuation, and a field-space order
+parameter. Round 2's audit of this producer is accepted: **every run
+hit the 16-cycle cap without meeting the $10^{-3}$ stopping rule**
+(final per-cycle decreases $3.3\cdot10^{-3}$–$1.1\cdot10^{-2}$,
+$\lVert g\rVert_\infty$ up to $0.183$), so the table below is a
+**qualitative record**, not a matched-accuracy comparison:
 
 | $J$ | 0 | 2 | 4 | 6 |
 |---|---|---|---|---|
@@ -170,14 +176,16 @@ EQ-start $J = 0$ endpoint):
 | $E_J$ (EQ / CB) | 4.485 / 4.493 | 4.489 / 4.509 | 4.519 / 4.534 | 4.564 / 4.532 |
 | excess centroid $r$ (EQ) | — | 14.7 | 14.7 | 14.5 |
 
-Three findings. (i) **Spontaneity is real**: the equivariant seed
-builds the same large inertia as the pre-broken one — no seeded
-deformation is needed, and the branches agree qualitatively
-(EQ-start reaches *lower* $E_J$ at $J = 2, 4$; at $J = 6$ the still
-unconverged branches cross — recorded, not interpreted).
-(ii) **Reversibility is clean**: continuing the $J = 4$ endpoint at
-$J = 0$ melts the deformation back ($I: 591 \to 108$) — no
-hysteresis, no metastable static deformation, consistent with §3.
+Three findings, at their honest strength. (i) **Qualitative
+spontaneity**: the equivariant seed builds inertia of the same order
+as the pre-broken one ($596$ vs $641$ at $J = 4$) — no seeded
+deformation is needed. The branch $E_J$ orderings are **not
+resolved** (gaps smaller than the unresolved decreases); no
+selection claim. (ii) **The inertia scalar reverses**: continuing
+the $J = 4$ endpoint at $J = 0$ returns $I: 591 \to 108$; because
+the reference itself is unconverged, this is not yet
+configuration-space reversibility (a field-distance comparison
+against a converged reference is the open check).
 (iii) **The order parameter overturns the core reading**: the excess
 density lives in the outer shells, $r \in (9, 18)$ with centroid
 $\approx 15$ against the boundary at $18$ — the minimizer buys
@@ -241,6 +249,7 @@ $J$.
 | centrifugal stabilization test | `rotational_stabilization.py` → `results/rot_stabilization.json` |
 | fixed-J scan on the relaxed field | `fixedj_cb.py` → `results/fixedj_cb.json` |
 | per-cycle tube-observable trajectories (plateau) | `lambda_plateau.py` → `results/lambda_plateau.json` |
+| observable-level plateau ($L = 36, 48$) | `lambda_plateau2.py` → `results/lambda_plateau2.json` |
 | two-branch centrifugal test + hysteresis + order parameter | `centrifugal_branches.py` → `results/centrifugal_branches.json` |
 | figures | `make_figures.py` |
 

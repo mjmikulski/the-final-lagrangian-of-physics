@@ -8,7 +8,8 @@ PY=${PYTHON:-python3}
 
 rm -f results/relax_ran.flag results/twist_ran.flag \
       results/rotstab_ran.flag results/fixedj_ran.flag \
-      results/plateau_ran.flag results/branches_ran.flag
+      results/plateau_ran.flag results/plateau2_ran.flag \
+      results/branches_ran.flag
 
 $PY relax_all.py
 $PY analysis.py
@@ -16,6 +17,7 @@ $PY frame_twist.py
 $PY rotational_stabilization.py
 $PY fixedj_cb.py
 $PY lambda_plateau.py
+$PY lambda_plateau2.py
 $PY centrifugal_branches.py
 $PY make_figures.py
 
@@ -31,11 +33,14 @@ rs = json.load(open(os.path.join(R, "rot_stabilization.json")))
 
 # (A) statics: the deep-continued tube observable plateaus at a
 # CONSTANT line tension for L >= 36 (the corrected claim)
-lp = json.load(open(os.path.join(R, "lambda_plateau.json")))
-p36 = lp["cases"]["EQ_N24"]["trajectory"][-1]["excess"]
-p48 = lp["cases"]["EQ_N32"]["trajectory"][-1]["excess"]
+lp2 = json.load(open(os.path.join(R, "lambda_plateau2.json")))
+for tag in ("EQ_N24", "EQ_N32"):
+    assert lp2["cases"][tag]["stopped_on_observable"], tag
+p36 = lp2["cases"]["EQ_N24"]["final_excess"]
+p48 = lp2["cases"]["EQ_N32"]["final_excess"]
 assert p36 > 0 and p48 > 0
-assert abs(p48 - p36) < 0.1 * p36, "constant line tension L>=36"
+assert lp2["agreement_rel"] < 0.10, "constant line tension L>=36"
+lp = json.load(open(os.path.join(R, "lambda_plateau.json")))
 # the L=48 trajectory must show the rise that falsified round 1's
 # shrinking claim
 t48 = [t["excess"] for t in lp["cases"]["EQ_N32"]["trajectory"]]
@@ -59,10 +64,12 @@ assert tw["PR_excess"] > 300, "no core-localized excess remains"
 # parameter that withdrew the core-rotor headline
 cbj = json.load(open(os.path.join(R, "centrifugal_branches.json")))
 B = cbj["branches"]
-assert B["EQ_J4.0"]["I"] > 4 * B["EQ_J0.0"]["I"], "spontaneous"
-assert abs(B["EQ_J4.0"]["I"] - B["CB_J4.0"]["I"]) \
-    < 0.15 * B["CB_J4.0"]["I"], "branches agree"
-assert cbj["hysteresis"]["I"] < 1.3 * B["EQ_J0.0"]["I"], "reversible"
+# qualitative record only (round 2): no branch-selection or
+# matched-accuracy invariants are asserted
+assert B["EQ_J4.0"]["I"] > 4 * B["EQ_J0.0"]["I"], "spontaneous growth"
+assert B["CB_J4.0"]["I"] > 4 * B["CB_J0.0"]["I"]
+assert cbj["hysteresis"]["I"] < 1.3 * B["EQ_J0.0"]["I"], \
+    "the inertia scalar returns"
 for J in ("2.0", "4.0", "6.0"):
     assert B[f"EQ_J{J}"]["excess_centroid_r"] > 12, "peripheral"
     prof = B[f"EQ_J{J}"]["excess_shell_profile"]
@@ -78,7 +85,8 @@ for f in ("fig_statics.png", "fig_survival.png",
 ran = all(os.path.exists(os.path.join(R, f))
           for f in ("relax_ran.flag", "twist_ran.flag",
                     "rotstab_ran.flag", "fixedj_ran.flag",
-                    "plateau_ran.flag", "branches_ran.flag"))
+                    "plateau_ran.flag", "plateau2_ran.flag",
+                    "branches_ran.flag"))
 print("REPRODUCED" if ran else "STRUCTURAL CHECKS PASS on committed "
       "artifacts (004 stack absent)")
 EOF
