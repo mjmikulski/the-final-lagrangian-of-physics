@@ -1,0 +1,7 @@
+results/*.flag
+results/M_*.npz
+!results/M_CB_N32.npz
+!results/M_EQ_N32.npz
+!results/M_EQ_d125.npz
+!results/M_EQ_N24.npz
+!results/M_CB_N24.npz
