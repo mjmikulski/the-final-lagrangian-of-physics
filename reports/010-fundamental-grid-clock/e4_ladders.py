@@ -181,7 +181,9 @@ def main():
     Mr = load_or_make_base()
     Mg = field(Mr)
     a0 = a0_of(gen_catalog()[pe['generator']], Mg)
-    done = json.load(open(RESULTS)) if os.path.exists(RESULTS) else {}
+    fresh = bool(os.environ.get('M5_FRESH'))  # ignore resumable state
+    done = {} if fresh else (
+        json.load(open(RESULTS)) if os.path.exists(RESULTS) else {})
 
     cells = sys.argv[1:] or pe['e4_order']
 

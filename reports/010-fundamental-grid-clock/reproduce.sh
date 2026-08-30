@@ -2,7 +2,9 @@
 # Report 010 reproduction. CPU part (~10 min): exact structural suites -- each
 # script asserts its claims and regenerates its results JSON. GPU part
 # (optional, hours): set M5_RUN_LATTICE=1 with a CUDA device; regenerates the
-# base profile against the 004 oracle and reruns the ladder campaign.
+# base profile against the 004 oracle and reruns the lattice runs. With
+# M5_FRESH=1 the cached base profile and resumable ladder state are ignored
+# (a fresh reproduction); without it interrupted runs resume.
 set -euo pipefail
 cd "$(dirname "$0")"
 PY=${PYTHON:-python}
@@ -28,12 +30,13 @@ echo "== E3: reduced-family Legendre (sympy, exact) =="
 $PY e3_reduced_legendre.py
 
 if [ "${M5_RUN_LATTICE:-0}" = "1" ]; then
-  echo "== E4: lattice campaign (GPU; hours) =="
+  echo "== E4: lattice runs (GPU; hours) =="
   $PY pre_e4.py
   $PY e4_ladders.py
   $PY e4_gamma_arm.py
   $PY e5_arms.py
   $PY e5_deep_bracket.py
+  $PY gyro_family_lattice.py
 else
   echo "== E4 lattice legs SKIPPED (set M5_RUN_LATTICE=1 to rerun) =="
 fi

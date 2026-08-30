@@ -5,8 +5,8 @@ slide gently to the omega cap, dive cells run away at omega ~ 1.2-1.6. If the
 runaway persists at gamma x100 and x10^4 (statics budget still untouched, the
 deformation was ~0%), the brake is evaded structurally — the spatial profile
 reorganizes so the j-density vanishes where the record drive pays — and the
-no-go is gamma-robust, not a tuning accident. Representatives: C10 (creep,
-flagship), C19 (creep, p=4), C9 (dive). Writes results/e4_gamma_arm.json.
+no-go is gamma-robust, not a tuning accident. Representatives: C10 (creep),
+C19 (creep, p=4), C9 (dive). Writes results/e4_gamma_arm.json.
 """
 
 import json

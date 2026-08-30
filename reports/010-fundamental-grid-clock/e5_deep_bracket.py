@@ -1,5 +1,6 @@
-"""Review finding 2 (PR #12): a converged-level demonstration of one well
-inside the window. Deep protocol (Adam 500 + six L-BFGS(150) cycles) at
+"""Review finding 2 (PR #12): a converged-level test of one candidate well
+inside the window (the committed outcome is negative: the minimum migrates
+to the still-descending top rung). Deep protocol (Adam 500 + six L-BFGS(150) cycles) at
 C10 x14, rungs {0, 0.1, 0.15, 0.2, 0.28}: per-level energies AND |grad|_inf
 recorded, final rung fields persisted, and BOTH bracket inequalities checked
 per level with margins compared against the per-level energy creep.

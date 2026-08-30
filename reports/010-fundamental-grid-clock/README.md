@@ -53,8 +53,11 @@ a canonical Hamiltonian with an interior clock well. Results, in order:
    $P$ — which is **purely linear in the velocity** ($k(P)\equiv0$ too),
    so its Legendre image vanishes identically (degree-1 terms cancel, E0).
    $\ker s=\ker(s,k)$ exactly: **no invariant with $s\equiv0$ and
-   $k\not\equiv0$ exists anywhere in the span** — there is no
-   static-tail-free brake, and the grid filters are unaffected. The
+   $k\not\equiv0$ exists anywhere in the span** — the kernel direction
+   cannot supply an $\omega^4$ brake. It is not inert under *squaring*,
+   however (review round 2): $\gamma P^2$ contributes $\gamma m_P^2$ to
+   $H$, and mixtures $Q+\lambda P$ form one-parameter j-families — treated
+   in result 5. The
    quantitative side stands: static leaks on the physical hedgehog orbit
    are suppressed with measured orders $\ell\propto m_d^{2}$ (single caps)
    and $m_d^{4}$ (double caps).
@@ -65,9 +68,25 @@ a canonical Hamiltonian with an interior clock well. Results, in order:
    (12 classes; confirmed over $\mathbb{Q}$), while the derivative-capped
    C9–C11 are the only capped survivors. Same mechanism as the
    $\varepsilon$-connection inertness of the 007 appendix.
-5. **The grid factorizes and then almost dies.** The statics filter forces
-   $\alpha=-1$, $I_i=I_1$ — the record term, uniquely; 16 j-cells survive
-   the analytic filters. On the lattice (004 stack, $\eta$-relaxed electron
+5. **The ray-grid factorizes and then almost dies.** The statics filter
+   forces $\alpha=-1$, $I_i=I_1$ — the record term, uniquely; 16 j-cells
+   survive the analytic filters. The scan is over the 21 diagram rays; the
+   span additionally contains, per cell, the one-parameter family
+   $I_j=Q+\lambda P$ built from the gyroscopic kernel direction of result
+   3 (review round 2). This family leaves $s_j$, $k_j$ — hence the F4 leak
+   and the $\omega^4$ brake — unchanged and moves only the $\omega^2$ and
+   $\omega^3$ coefficients: $A(\lambda)=A_Q+\gamma(2\lambda\langle
+   m_Qm_P\rangle+\lambda^2\langle m_P^2\rangle)$, an upward parabola,
+   and $B(\lambda)=B_Q+4\gamma\lambda\langle m_Pk_Q\rangle$; by the E3
+   result the frozen-level well criterion stays $A(\lambda)<0$, $C>0$.
+   Measured on the electron channel (`gyro_family_lattice.py`): the
+   $s_P=k_P\equiv0$ identity holds on the lattice to $10^{-18}$,
+   $\langle m_P^2\rangle=6.8\times10^{-7}$, and $\langle
+   m_Qm_P\rangle=0$ for all four candidate cells (C10, C13, C16;
+   $2.5\times10^{-11}$ for C19) — for them $\lambda=0$ is the A-optimal
+   member of its family. Cells with $m_Q\neq0$ (C6–C8) admit a bounded
+   improvement $\gamma\langle m_Qm_P\rangle^2/\langle m_P^2\rangle$;
+   the $\lambda$-scan itself is not run (limitation). On the lattice (004 stack, $\eta$-relaxed electron
    profile regenerated to the committed oracle bit-for-bit), with $\gamma$
    tuned on the frozen profile: **no cell has an interior well.** The
    relaxing field evades the brake: the drive $-k_1\omega^2$ is linear in
@@ -112,7 +131,7 @@ fundamental clock needs the missing convex template (a same-channel
 drive–brake pairing outside this grid's single-invariant grammar) — is the
 sharp open question this report leaves.
 
-**The flagship Lagrangian, written out.** The winning C10 cell is, explicitly,
+**The primary Lagrangian (the C10 cell), written out:**
 
 ```math
 L=-\tfrac12\,F_{\mu\nu\alpha\beta}F^{\mu\nu\alpha\beta}-V(M)
@@ -134,7 +153,7 @@ I_1^{G\partial}\equiv G^{\mu\rho}G^{\nu\sigma}\eta^{\alpha\gamma}
 ```
 
 the square of the *difference between the derivative-pair-G and
-derivative-pair-η contractions of the same* $F^2$. The other three ticking
+derivative-pair-η contractions of the same* $F^2$. The other three candidate
 cells replace the squared invariant by: C16
 $=u^\alpha u^\gamma F_{\mu\nu\alpha\beta}F^{\mu\nu}{}_\gamma{}^\beta$
 (matrix-slot caps — the G-matrix decoration of 008,
@@ -191,7 +210,7 @@ pseudoscalars vanish there exactly, and 008's η-vs-G sign flip is
 reproduced ($k(I_1)=+4$, $k(I_1^{G\text{-mat}})=-4$). $P_{dm}$ dies at the
 lattice level: $K_2=0$ exactly on the electron boost channel.
 
-## 4. The lattice campaign (E4)
+## 4. The lattice runs (E4)
 
 004 stack verbatim (`lattice_grid_defs.py` runs `../004-lattice-clock/
 lattice.py`); base profile regenerated from the committed seed (oracle
@@ -209,10 +228,11 @@ largest-leak band, $\omega\approx0.7$).
 
 γ-arm: ×100/×10⁴ monotone rising for C10/C19 (evasion stopped, drive dead);
 C9 ×10⁴ ignites the $-\gamma s^2$ instability (guard-caught). Bisection:
-C10 ×3 creeps, **×10 ticks, ×30 dead** — with the confirmation arm: fine
+C10 ×3 creeps, **×10 shows a fixed-depth interior minimum, ×30 is
+monotone rising** — with the confirmation arm: fine
 rungs sharpen the well to $\omega^*\approx0.2$
 ($E(0)>E(0.2)<E(0.28)$, level-stable, depth $-2.1\times10^{-3}$), and
-C19/C13/C16 at their ×10 tick with nearly identical wells — consistent with
+C19/C13/C16 at their ×10 show nearly identical fixed-depth wells — consistent with
 the mechanism: the well is carved by the shared record drive against a
 normalized brake; the j-choice sets the brake scale and the window position.
 
@@ -232,7 +252,8 @@ Deep-protocol probes and the finer window map (`e5_arms.py`,
   $(-2.38,-2.47,-2.43,-2.44,-2.45)\times10^{-3}$ — final change
   $9\times10^{-6}$, under 0.4% of the depth.
 - **Window map:** ×5 still descends (min at the top rung), ×7 is the
-  boundary (flat, level-unstable), **×10 ticks at $\omega^*\approx0.15$**
+  boundary (flat, level-unstable), **×10: fixed-depth interior minimum at
+  $\omega^*\approx0.15$**
   (with the extra fine rungs: $E(0.1)>E(0.15)<E(0.2)$), **×14 at
   $\omega^*=0.15$** (depth $-1.6\times10^{-3}$, level-stable), **×20 at
   $\omega^*=0.1$** ($-1.3\times10^{-3}$, level-stable), ×30 monotone
@@ -271,6 +292,9 @@ Deep-protocol probes and the finer window map (`e5_arms.py`,
 - The u-caps on the lattice are the working Lagrange realization of
   $uu^\top$ (exact on-spectrum; $2\times10^{-4}$ off); the exact-eigen
   variant is not run.
+- The j-scan runs over the 21 diagram rays; the span's gyroscopic
+  $\lambda$-families (result 5) are characterized analytically and their
+  lattice coefficients measured, but no $\lambda\neq0$ ladder is run.
 - Scope pins of the family: F stays the η-commutator; no ε-decorated
   diagrams (the three 005 pseudoscalars ride along and die); no linear-in-F
   terms.
@@ -297,7 +321,8 @@ bash reproduce.sh          # CPU: E0-E3 exact suites (~10 min)
 `reproduce.sh` asserts the structural claims (counts, ranks, identities,
 theorem checks, orbit zeros, split guards) on CPU; with a CUDA device and
 `M5_RUN_LATTICE=1` it regenerates the base profile against the 004 oracle
-and reruns the ladder campaign (sentinel-flagged; hours). Committed JSONs
+and reruns the lattice legs (`M5_FRESH=1` ignores the cached base profile
+and resumable ladder state for a fresh reproduction; hours). Committed JSONs
 under `results/` carry every number quoted above; figures regenerate from
 the committed JSONs via `make_figures.py`.
 
@@ -311,6 +336,7 @@ the committed JSONs via `make_figures.py`.
 | reduced quartic well + caustic (E3) | `e3_reduced_legendre.py` → `results/e3_reduced_legendre.json` |
 | matrix-cap orbit zeros (exact) | `orbit_zeros_exact.py` → `results/orbit_zeros_exact.json` |
 | span-level static kernel (T1′) | `static_kernel_exact.py` → `results/static_kernel_exact.json` |
+| gyroscopic λ-family coefficients on the lattice | `gyro_family_lattice.py` → `results/gyro_family_lattice.json` |
 | artifact-only headline assertions | `verify_artifacts.py` |
 | deep-bracket demonstration (×14) | `e5_deep_bracket.py` → `results/e5_deep_bracket.json`, `results/deep14_om*.npz` |
 | lattice port + validations | `lattice_grid_defs.py` (gate: 004 oracle; statics identity; U-vs-eigen) |
@@ -326,7 +352,7 @@ the committed JSONs via `make_figures.py`.
 - Conventions and prior results: reports 001–008 (this repo); equations of
   record and the Q0/Q1 quartic prereg: working repo `duda-particle-model`
   (`notes/prereg_quartic.md`, `notes/equations_of_record.md`).
-- Plan and prereg for this campaign (with the deviations register):
+- Plan and prereg for this scan (with the deviations register):
   working repo `duda-particle-model`, `notes/plan_hamiltonian_grid.md`,
   `notes/prereg_hamiltonian_grid.md`, `hamiltonian_grid/NOTES.md`
   (commits `eddc4dd`..`c092de1`, 2026-08-29).

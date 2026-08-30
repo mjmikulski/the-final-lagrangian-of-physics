@@ -212,9 +212,10 @@ def validate(M, a0):
 
 
 def load_or_make_base():
-    """Eta-relaxed electron profile (004 gate), cached in runs/."""
+    """Eta-relaxed electron profile (004 gate). Cached; M5_FRESH=1 ignores
+    the cache and regenerates from the committed seed (review round 2)."""
     path = os.path.join(RUNS, 'M_eta_base.npz')
-    if os.path.exists(path):
+    if os.path.exists(path) and not os.environ.get('M5_FRESH'):
         return torch.tensor(np.load(path)['M'], dtype=DT, device=DEV)
     M0 = seed_embedded()
     oracle = e_static(field(M0), 'eta').item()

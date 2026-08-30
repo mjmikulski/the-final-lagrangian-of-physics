@@ -1,8 +1,11 @@
 """E2 exact route: Fraction-arithmetic confirmations of the split verdicts.
 
-1. T1 at generic level: every class representative has s != 0 on exact static
-   samples (A0 = 0, random rational A_i, random rational unit-timelike u) —
-   no exact covariant pure-kinetic invariant exists in the family.
+1. Representative-level check: every class representative has s != 0 on
+   exact static samples (A0 = 0, random rational A_i, random rational
+   unit-timelike u). NOTE (review round 1/2): this is representative-level
+   only; the span-level statement — the s-kernel is 1-dimensional, purely
+   linear in velocity, and no (s == 0, k != 0) direction exists — is settled
+   in static_kernel_exact.py.
 2. m == 0 candidates from the float route (C3 = I1, C16) hold exactly on
    generic exact samples: I(+A0) == I(-A0).
 3. Degree <= 2 in A0 holds exactly for every representative.

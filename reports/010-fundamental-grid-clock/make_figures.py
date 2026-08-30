@@ -1,12 +1,13 @@
 """Report 010 figures, regenerated from the committed results JSONs only.
 
-Fig 1 (fig_grid_ladders.png): the campaign in two panels — (a) the main sweep
-at frozen-tuned gamma (no wells: creep vs dive, gamma=0 control), (b) the
-two-sided gamma-window of the flagship C10 (evasion below, tick at x10, drive
-death above; drive-flip control).
+Fig 1 (fig_grid_ladders.png): two panels — (a) the main sweep at frozen-tuned
+gamma (no wells: creep vs dive, gamma=0 control), (b) the two-sided
+gamma-window of the C10 cell (evasion below, a fixed-depth candidate well at
+x10, drive death above; drive-flip control).
 
-Fig 2 (fig_well_anatomy.png): the winning well — (a) fine rungs at x10 with
-the drive-flip control, (b) the 008-style depth-per-level plateau.
+Fig 2 (fig_well_anatomy.png): the C10 candidate well — (a) fine rungs at x10
+with the drive-flip control, (b) the depth-per-level record at a probe point,
+(c) the deep-bracket test at x14 (outcome negative).
 """
 
 import json
@@ -65,7 +66,7 @@ def fig1(e4, garm, e5, conf):
                   '(ladders end at the first runaway rung \u00d7; '
                   'inset: linear zoom at the well-depth scale)', fontsize=9.5)
     ax1.legend(handles=[
-        plt.Line2D([], [], color='tab:blue', lw=2, label='C10 (flagship)'),
+        plt.Line2D([], [], color='tab:blue', lw=2, label='C10'),
         plt.Line2D([], [], color='tab:orange', lw=2,
                    label='\u2202\u2013\u2202 caps \u2014 2 more cells'),
         plt.Line2D([], [], color='tab:green', lw=2,

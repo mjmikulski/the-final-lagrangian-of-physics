@@ -1,6 +1,6 @@
-"""Artifact-only assertions for every lattice headline (PR #12 finding 3).
+"""Artifact-only assertions for the main lattice results (PR #12 finding 3).
 
-This does NOT reproduce the GPU campaign; it structurally checks that the
+This does NOT reproduce the GPU runs; it structurally checks that the
 committed results JSONs actually contain the verdicts the README claims, so
 `reproduce.sh` cannot say ALL PASS against inconsistent artifacts. A CUDA
 rerun is the M5_RUN_LATTICE=1 path.
@@ -98,6 +98,16 @@ def main():
     sk = load('static_kernel_exact')
     assert sk['counterexample_confirmed'] and not sk['pure_kinetic_exists']
     assert sk['kernel_dim_mod_identities'] == 1
+
+    # gyroscopic lambda-family lattice coefficients (round 2, finding 1)
+    gf = load('gyro_family_lattice')
+    assert gf['s_P_max'] < 1e-9 * gf['density_scale']
+    assert gf['k_P_max'] < 1e-9 * gf['density_scale']
+    assert gf['MP2'] > 0
+    for c in ('C10', 'C13', 'C16'):
+        assert gf['cross'][c]['mP_mQ'] == 0.0, c
+    print('artifact check: gyro family -- s_P = k_P = 0 on the lattice, '
+          '<m_P^2> > 0, <m_P m_Q> = 0 for C10/C13/C16')
 
     print('ARTIFACT CHECKS PASS (structural consistency of committed JSONs; '
           'not a GPU reproduction — set M5_RUN_LATTICE=1 for that)')
