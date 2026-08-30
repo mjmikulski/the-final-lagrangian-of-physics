@@ -1,4 +1,4 @@
-# Report 012 — Scaling toward the proposed vacuum hierarchy: δ is flat down to 10⁻⁹; g is live and potential-variant-sensitive
+# Report 012 — Scaling toward the proposed vacuum hierarchy: δ is flat at the target scale; g is live and potential-variant-sensitive
 
 *2026-08-30 · Maciej J. Mikulski (AI-assisted, see [METHOD](../../METHOD.md)) ·
 pre-registered measurement (PREREG.md, committed in the working
@@ -69,12 +69,16 @@ cycles with recorded per-level energies).
    at $0.03\%$; edge cases $C_2$ at $4.8\%$ and the well depth at
    $2.0\%$). Review round 1 correctly objected that three sampled
    octaves cannot bound an intermediate crossover scale; the
-   response is measurement, not argument: **two further points at
-   $\delta = 10^{-6}$ and $10^{-9}$** (`fix_round1.py`) reproduce
+   response is measurement, not argument: further points at
+   $\delta = 10^{-6}$ and $10^{-9}$ (`fix_round1.py`) and — after
+   round 2 correctly noted that $10^{-9}$ still leaves one decade of
+   extrapolation — **at the proposed target itself and below,
+   $\delta = 10^{-10}$ and $10^{-11}$** (`fix_round2.py`; every
+   quantity remains exactly representable in float64), all reproduce
    the drive and $\omega_{\rm pred}$ to four significant digits of
-   the $\delta = 1/8$ values. No crossover exists anywhere in the
-   sampled range $[10^{-9}, 1/8]$ — the flat direction is measured
-   essentially at the target scale, not extrapolated to it. (The
+   the $\delta = 1/8$ values. For the sampled observables the
+   $\delta = 10^{-10}$ statement is a **measurement at the target**,
+   with no extrapolation left. (The
    transverse-sector observables of report 011, where the $\delta$
    sign flip lives, are deliberately *not* in this grid; they remain
    regime-sensitive.)
@@ -90,14 +94,22 @@ cycles with recorded per-level energies).
    confirmed by the control row).** The grid's relative-potential
    variant rescales the effective pinning stiffness as $g^{-2p}$, so
    its $g$-trends are not automatically those of the original
-   fixed-weight theory. The control row (`fix_round1.py`: absolute
-   potential, $\delta = 1/8$, $g = 8/64/512$) measures the
-   difference: in the **original theory** the drive also grows with
-   $g$ ($-0.220 \to -0.253 \to -0.261$) but $\omega_{\rm pred}$
-   **rises** ($0.45 \to 0.68$), opposite to the relative variant's
-   fall ($\sim g^{-0.19}$). What transfers between the variants is
-   the *sign structure* (result 2) and the direction of the drive's
-   growth; the individual slopes belong to their variant. The
+   fixed-weight theory. The control rows measure the difference — and,
+   after round 2 objected that the first control profiles were not
+   demonstrated stationary, they were recomputed under an
+   **observable-level stopping rule** (`fix_round2.py`: both the
+   drive and $\omega_{\rm pred}$ must drift $< 1\%$ over four
+   consecutive cycles; both rows stop on the criterion, with full
+   trajectories committed): in the **original theory** the drive
+   grows with $g$ ($-0.2196 \to -0.2534$ for $g = 8 \to 64$) and
+   $\omega_{\rm pred}$ **rises** ($0.444 \to 0.678$), opposite to
+   the relative variant's fall ($\sim g^{-0.19}$); the full sign
+   structure is measured on the same converged profiles (the
+   $\eta$-contraction time part is **positive** — inert — in the
+   original theory too: $+0.2195, +0.2534$). What transfers between
+   the variants is the sign structure and the direction of the
+   drive's growth; the individual slopes belong to their variant,
+   and the original-theory comparison uses only $g = 8, 64$. The
    original-theory row is quantitative only up to $g = 64$: at
    $g = 512$ the absolute-potential relaxation does not converge
    ($\lVert g\rVert_\infty = 80$) and the pinning signal sits at
@@ -147,9 +159,9 @@ cycles with recorded per-level energies).
 
 **Answer to the regime question:** the missing ten orders of
 magnitude split into two very different halves. The $\delta$ half is
-*measured, not extrapolated*: flatness holds at $\delta = 10^{-9}$,
-one order of magnitude from the proposal, with no crossover anywhere
-in $[10^{-9}, 1/8]$ (transverse-sector quantities excepted). The
+*measured at the target*: flatness holds at $\delta = 10^{-10}$ (the
+proposal itself) and $10^{-11}$, identical to $\delta = 1/8$ to four
+significant digits (transverse-sector quantities excepted). The
 $g$ half is *live and harder than it looked*: the trends are
 potential-variant-sensitive, the original theory is measured only to
 $g = 64$ (beyond which its pinning is ill-conditioned — the
@@ -189,6 +201,7 @@ anywhere.
 | per-observable verdicts, slopes, sign stability | `analysis.py` → `results/scaling_verdicts.json` |
 | persisted relaxed fields (δ = 1/8 row) | `results/M_d0.125000_g*.npz` |
 | round-1 fixes: absolute-potential control row, δ = 10⁻⁶/10⁻⁹ extension, true dual-precision test, cancellation diagnostic | `fix_round1.py` → `results/fix_round1.json` |
+| round-2 fixes: observable-converged absolute rows (g = 8, 64) with full sign structure; δ = 10⁻¹⁰/10⁻¹¹ at-target points | `fix_round2.py` → `results/fix_round2.json` |
 | figures | `make_figures.py` |
 
 ## Reproduction

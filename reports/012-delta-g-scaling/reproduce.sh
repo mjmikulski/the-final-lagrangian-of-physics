@@ -7,11 +7,12 @@ set -euo pipefail
 cd "$(dirname "$0")"
 PY=${PYTHON:-python3}
 
-rm -f results/grid_ran.flag results/ladders_ran.flag results/fix1_ran.flag
+rm -f results/grid_ran.flag results/ladders_ran.flag results/fix1_ran.flag results/fix2_ran.flag
 
 $PY grid_scan.py
 $PY extended_ladders.py
 $PY fix_round1.py
+$PY fix_round2.py
 $PY analysis.py
 $PY make_figures.py
 
@@ -68,14 +69,30 @@ for r in FX["C_delta_extension"]:
     assert r["true_float32_rel"] < 1e-6
 A = {r["g"]: r for r in FX["A_absolute_row"]}
 assert all(r["time_part_G"] < 0 for r in FX["A_absolute_row"])
-assert abs(A[8]["time_part_G"]) < abs(A[64]["time_part_G"]) \
-    < abs(A[512]["time_part_G"]), "drive grows with g in both variants"
-assert A[64]["om_pred"] > A[8]["om_pred"], \
-    "original-theory om_pred rises (variant sensitivity)"
+# g = 512 is documented as broken and is NOT used in any trend claim
 assert A[512]["ginf"] > 1.0, "documented absolute-potential breakdown"
 assert A[512]["cancellation"][3]["signal_over_ulp"] < 100
 for r in FX["A_absolute_row"]:
     assert r["true_float32_rel"] < 1e-6
+
+# round-2 fixes: the original-theory trend on observable-CONVERGED
+# profiles (g = 8, 64 only), with the full sign structure; and the
+# at-target delta points
+F2 = json.load(open(os.path.join(R, "fix_round2.json")))
+AC = {r["g"]: r for r in F2["absolute_converged"]}
+for g_ in (8, 64):
+    assert AC[g_]["stopped_on_observable"], g_
+    assert AC[g_]["final"]["time_part_G"] < 0
+    assert AC[g_]["final"]["time_part_eta"] > 0, "eta inert (absolute)"
+assert abs(AC[8]["final"]["time_part_G"]) \
+    < abs(AC[64]["final"]["time_part_G"]), "drive grows (converged)"
+assert AC[64]["final"]["om_pred"] > AC[8]["final"]["om_pred"]
+for r in F2["delta_at_target"]:
+    assert r["stopped_on_observable"]
+    assert abs(r["final"]["time_part_G"] - base["time_part_G"]) \
+        < 0.01 * abs(base["time_part_G"]), r["delta"]
+    assert abs(r["final"]["om_pred"] - base["om_pred"]) \
+        < 0.01 * base["om_pred"]
 # the old input-quantization diagnostic is retained in grid.json but
 # no longer carries the cleanliness claim
 assert V["max_float32_rel"] < 1e-9
@@ -85,7 +102,7 @@ for f in ("fig_grid.png", "fig_ladders.png"):
 
 ran = all(os.path.exists(os.path.join(R, f))
           for f in ("grid_ran.flag", "ladders_ran.flag",
-                    "fix1_ran.flag"))
+                    "fix1_ran.flag", "fix2_ran.flag"))
 print("REPRODUCED" if ran else "STRUCTURAL CHECKS PASS on committed "
       "artifacts (004 stack absent)")
 EOF
