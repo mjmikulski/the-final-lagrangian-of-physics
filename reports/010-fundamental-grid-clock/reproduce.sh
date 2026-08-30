@@ -21,6 +21,8 @@ echo "== E2: exact split checks =="
 $PY exact_split_checks.py
 echo "== E2: matrix-cap orbit zeros (exact) =="
 $PY orbit_zeros_exact.py
+echo "== T1': span-level static kernel (exact) =="
+$PY static_kernel_exact.py
 
 echo "== E3: reduced-family Legendre (sympy, exact) =="
 $PY e3_reduced_legendre.py
@@ -31,10 +33,13 @@ if [ "${M5_RUN_LATTICE:-0}" = "1" ]; then
   $PY e4_ladders.py
   $PY e4_gamma_arm.py
   $PY e5_arms.py
+  $PY e5_deep_bracket.py
 else
   echo "== E4 lattice legs SKIPPED (set M5_RUN_LATTICE=1 to rerun) =="
-  echo "   committed results verified for internal consistency by make_figures"
 fi
+
+echo "== artifact-only assertions of every lattice headline =="
+$PY verify_artifacts.py
 
 echo "== figures from committed JSONs =="
 $PY make_figures.py

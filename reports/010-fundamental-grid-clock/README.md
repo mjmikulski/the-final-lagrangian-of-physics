@@ -1,4 +1,4 @@
-# Report 010 — The fundamental-reading clock grid: the u-decorated family, the Legendre filter, and a measured tick inside a two-sided γ-window
+# Report 010 — The fundamental-reading clock grid: the u-decorated family, the Legendre filter, and fixed-depth candidate wells inside a two-sided γ-window
 
 *2026-08-29 · Maciej J. Mikulski (AI-assisted, see [METHOD](../../METHOD.md)) ·
 stage result of the extended-kinetic-term program; answers the program
@@ -77,29 +77,40 @@ a canonical Hamiltonian with an interior clock well. Results, in order:
    the convex template ($2\gamma s_jk_j\approx0$) that localized 008's
    energy-reading clock. The $\gamma=0$ control reproduces the record
    disease (monotone descent, dive at $\omega=0.8$).
-6. **The γ-window is two-sided, and the clock lives inside it.** Increasing
-   $\gamma$ stops the evasion (ladders become monotone rising at
-   $100\gamma$) before the $-\gamma s_j^2$ instability ignites at extreme
-   $\gamma$ ($2.6\times10^9$ for C9: caught by the guard). In between —
-   measured at ×10, ×14 and ×20 of the frozen-tuned value — **four cells
-   tick in the fundamental reading**: C10 ($=B_k$, the covariantized 003
-   mechanism), C19, C13, C16 — interior, protocol-level-stable wells at
-   $\omega^*\approx0.1$–$0.2$ (decreasing with $\gamma$), depth
-   $1.3$–$2.5\times10^{-3}$, ticking localized (PR ≈ 30–50 sites), statics
-   untouched, and the ×10 depth settles under the 008 four-cycle plateau
-   criterion. **The drive-flip control kills the
-   well**; the cross-flip control is measured inert — consistent with the
-   suppressed-leak structure: the working Hamiltonian is
-   $H = E_{\rm stat}+V-k_1\omega^2+3\gamma k_j^2\omega^4$, i.e. the
-   covariant completion of the quartic prereg's arm Q0, now with a lattice
-   existence proof.
+6. **The γ-window is two-sided, and candidate wells live inside it — at
+   fixed relaxation depth; the converged-level certification is open
+   (scoped in review round 1).** Increasing $\gamma$ stops the evasion
+   (ladders become monotone rising at $100\gamma$) before the
+   $-\gamma s_j^2$ instability ignites at extreme $\gamma$
+   ($2.6\times10^9$ for C9: caught by the guard). In between — at ×10, ×14
+   and ×20 of the frozen-tuned value — four cells (C10 $=B_k$, the
+   covariantized 003 mechanism; C19; C13; C16) show **interior,
+   level-stable wells at the fixed standard protocol** (Adam 300 + one
+   L-BFGS cycle) at $\omega^*\approx0.1$–$0.2$, depth
+   $1.3$–$2.5\times10^{-3}$, localized (PR ≈ 30–50 sites), statics
+   untouched; the drive-flip control kills the well and the cross-flip
+   control is measured inert (working Hamiltonian
+   $H=E_{\rm stat}+V-k_1\omega^2+3\gamma k_j^2\omega^4$, arm Q0). **The
+   deep-protocol certification fails**: at ×14, six L-BFGS cycles migrate
+   the minimum from the interior $\omega=0.15$ (stable through four
+   levels) to the top sampled rung $\omega=0.28$ — still unconverged
+   ($\lVert g\rVert_\infty=0.15$, per-level change $2.9\times10^{-4}$,
+   comparable to the bracket gaps — `e5_deep_bracket.py`, fields
+   persisted). The same drift was already visible at the ×10 upper bracket.
+   The evasion mechanism of result 5 is therefore *slowed* inside the
+   window, not removed: the wells are **protocol-depth-limited
+   candidates**, not converged minima.
 
-**Answer to the program question:** yes — the oscillation energy can be read
-directly from the canonical H of a covariant Lagrangian of the family, but
-only inside a bounded, two-sided γ-window, and the window is a *measured*
-object, not a tuning convenience: below it the Mexican-hat concavity
-delocalizes the clock, above it the drive dies, far above the
-static-square instability (filter F4 below) returns.
+**Answer to the program question, scoped to the evidence:** the grid's
+structure is settled exactly (results 1–5) and the γ-window with its two
+measured boundaries is real; inside it the fundamental reading produces
+reproducible, control-validated candidate wells at fixed relaxation depth —
+but a converged-level interior minimum is **not yet demonstrated**: deeper
+relaxation slowly re-opens the dilution channel even inside the window.
+Whether any cell has a well at full convergence — or whether the
+fundamental clock needs the missing convex template (a same-channel
+drive–brake pairing outside this grid's single-invariant grammar) — is the
+sharp open question this report leaves.
 
 **The flagship Lagrangian, written out.** The winning C10 cell is, explicitly,
 
@@ -213,7 +224,8 @@ negligible at the suppressed leaks, as the theorem predicts).
 
 ![well anatomy](results/fig_well_anatomy.png)
 
-Deep-protocol probe and the finer window map (`e5_arms.py`):
+Deep-protocol probes and the finer window map (`e5_arms.py`,
+`e5_deep_bracket.py`):
 
 - **Depth plateau (008 criterion): settled.** Adam + four L-BFGS cycles at
   $\omega\in\{0,0.2,0.28\}$: the ×10 well depth per level is
@@ -226,12 +238,16 @@ Deep-protocol probe and the finer window map (`e5_arms.py`):
   $\omega^*=0.1$** ($-1.3\times10^{-3}$, level-stable), ×30 monotone
   rising. $\omega^*(\gamma)$ decreases across the window, as the frozen
   formula $\omega^{*2}\propto\gamma^{-1}$ predicts qualitatively.
-- **A position caveat, stated plainly:** at the deepest protocol level the
-  ×10 upper bracket reverses ($E(0.28)<E(0.2)$) — near the lower window
-  edge the well position drifts upward with relaxation depth, even though
-  its depth plateaus. The ×14/×20 wells sit further inside the window and
-  are level-stable at the standard protocol; their deep-protocol
-  position-stability is untested (limitation below).
+- **The deep-bracket run at ×14 (review round 1) settles the position
+  question negatively for now**: with Adam 500 + six L-BFGS cycles on
+  rungs $\{0,0.1,0.15,0.2,0.28\}$ (per-level energies and gradients
+  recorded, final fields persisted as `results/deep14_om*.npz`), the
+  minimum sits at the interior $\omega=0.15$ through four levels and then
+  migrates to the top rung 0.28, which is still descending
+  ($\lVert g\rVert_\infty=0.15$). The ×10 upper-bracket reversal seen
+  earlier is the same drift. Conclusion: within the window the evasion is
+  slowed, not removed — the wells are fixed-depth candidates and the
+  converged-level existence question is open.
 
 ## 5. What this report does not show
 
@@ -240,13 +256,13 @@ Deep-protocol probe and the finer window map (`e5_arms.py`):
   not constructed (002 §6 / 003 caveats carry over verbatim).
 - **Frozen clock tangent** (004/007/008 protocol); one generator (boost-x);
   $32^3$ box, one spacing, no continuum extrapolation.
-- The sweep protocol is lighter than 008's (Adam 300 + one L-BFGS cycle,
-  two levels); the deep protocol ran for the ×10 well only, where the depth
-  plateaus but the **position drifts up with relaxation depth** (the 0.28
-  bracket reverses at the deepest level) — the deep-protocol
-  position-stability of the ×14/×20 wells is untested. No persisted rung
-  fields / independent route-2 energy verification yet (review-round
-  candidate).
+- **The headline wells are fixed-depth candidates.** The sweep protocol is
+  Adam 300 + one L-BFGS cycle (two levels); deep-protocol runs exist for
+  ×10 (depth plateaus at a probe point, upper bracket reverses) and ×14
+  (six cycles: interior minimum for four levels, then migration to the
+  still-descending top rung) — no converged interior minimum is
+  demonstrated anywhere yet. Deep-bracket rung fields are persisted; an
+  independent route-2 energy verification on them remains open.
 - The γ-window is mapped coarsely (×3/×5/×7/×10/×14/×20/×30/×100); no
   claim about its exact boundaries or their scaling with the leak order.
 - $\omega^*$ is rung-resolved (0.1–0.2 across the window; no continuum

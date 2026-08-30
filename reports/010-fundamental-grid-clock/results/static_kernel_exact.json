@@ -1,0 +1,9 @@
+{
+ "counterexample_confirmed": true,
+ "rank_generic": 18,
+ "rank_static_map": 17,
+ "rank_joint_sk_map": 17,
+ "kernel_dim_mod_identities": 1,
+ "kernel_generator": "C0 - 4*C2 + C5 (= I6 - 4*I5 + I2)",
+ "pure_kinetic_exists": false
+}

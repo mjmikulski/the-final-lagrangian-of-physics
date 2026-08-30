@@ -152,8 +152,8 @@ def fig1(e4, garm, e5, conf):
     fig.savefig('results/fig_grid_ladders.png', bbox_inches='tight')
 
 
-def fig2(conf, e5):
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10.8, 4.4), dpi=150)
+def fig2(conf, e5, db=None):
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(14.6, 4.4), dpi=150)
     fine = list(conf['C10_x10_fine']['rows'])
     if 'x10_fine_extra' in e5:
         fine += e5['x10_fine_extra']['rows']
@@ -205,6 +205,29 @@ def fig2(conf, e5):
         ax2.set_title('(b) SEPARATE deep-protocol run (Adam 500 + 4 L-BFGS):\n'
                       'value at probe \u03c9=0.2 per level \u2014 settled',
                       fontsize=9.5)
+    if db:
+        rungs = sorted(db['rungs'], key=float)
+        L0 = db['rungs']['0.0']['levels']
+        nlev = len(L0)
+        cols = {'0.1': 'tab:blue', '0.15': 'tab:red', '0.2': 'tab:purple',
+                '0.28': 'dimgray'}
+        for om in rungs:
+            if om == '0.0':
+                continue
+            lv = db['rungs'][om]['levels']
+            rel = [(l - l0) * 1e3 for l, l0 in zip(lv, L0)]
+            ax3.plot(range(nlev), rel, 'o-', ms=4, lw=1.4,
+                     color=cols.get(om, 'k'), label=f'\u03c9={om}')
+        ax3.axhline(0, color='k', lw=0.6, alpha=0.5)
+        ax3.set_xticks(range(nlev))
+        ax3.set_xticklabels(['Adam'] + [f'L{i+1}' for i in range(nlev - 1)],
+                            fontsize=8)
+        ax3.set_ylabel('E(\u03c9) \u2212 E(0), same level   [\u00d710\u207b\u00b3]')
+        ax3.set_title('(c) \u00d714 deep bracket (Adam 500 + 6 L-BFGS):\n'
+                      'interior minimum at 0.15 for four levels,\n'
+                      'then \u03c9=0.28 (unconverged) overtakes \u2014 '
+                      'NOT certified', fontsize=9)
+        ax3.legend(fontsize=7.5, loc='lower left')
     fig.tight_layout()
     fig.savefig('results/fig_well_anatomy.png', bbox_inches='tight')
 
@@ -217,8 +240,12 @@ def main():
         e5 = load('e5_arms')
     except FileNotFoundError:
         e5 = {}
+    try:
+        db = load('e5_deep_bracket')
+    except FileNotFoundError:
+        db = None
     fig1(e4, garm, e5, conf)
-    fig2(conf, e5)
+    fig2(conf, e5, db)
     print('figures -> results/fig_grid_ladders.png, results/fig_well_anatomy.png')
 
 
