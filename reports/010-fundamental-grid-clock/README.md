@@ -42,7 +42,7 @@ a canonical Hamiltonian with an interior clock well. Results, in order:
    $H=H_0+A\omega^2+B\omega^3+C\omega^4$ with $A<0,C>0$ giving exactly one
    interior minimum, below $H(0)$, for **every** sign of the chirality
    term $B$ — always on the Legendre caustic (002 §6).
-3. **No exact pure-kinetic invariant exists — at the span level** (T1′,
+3. **No $(s\equiv0,\,k\not\equiv0)$ direction exists in the span** (T1′,
    corrected in review round 1): the original check covered only the 21
    individual representatives; the reviewer exhibited
    $P=I_2-4I_5+I_6$ ($=C0-4C2+C5$) with $s(P)\equiv0$ in the span. The
@@ -302,8 +302,9 @@ Deep-protocol probes and the finer window map (`e5_arms.py`,
 ## 6. Author-gated physics choices
 
 - The physical reading (fundamental vs energy) stays author-gated; this
-  report *adds* the measured fact that the fundamental reading has interior
-  wells in a bounded γ-window.
+  report *adds* the measured fact that the fundamental reading has
+  fixed-depth candidate wells in a bounded γ-window (the deep bracket is
+  unresolved).
 - The window position ($\gamma$ anchoring) and the drive channel (boost-x)
   tie into scale anchoring ($\omega^*=mc^2/\hbar$), unresolved as before.
 - Whether the article Lagrangian should adopt the C10 cell (the covariant
@@ -321,8 +322,10 @@ bash reproduce.sh          # CPU: E0-E3 exact suites (~10 min)
 `reproduce.sh` asserts the structural claims (counts, ranks, identities,
 theorem checks, orbit zeros, split guards) on CPU; with a CUDA device and
 `M5_RUN_LATTICE=1` it regenerates the base profile against the 004 oracle
-and reruns the lattice legs (`M5_FRESH=1` ignores the cached base profile
-and resumable ladder state for a fresh reproduction; hours). Committed JSONs
+and reruns the lattice legs (`M5_FRESH=1` removes the cached base profile
+and ladder state once up front; the base is regenerated a single time in
+`pre_e4.py` and every later stage loads that shared result; hours).
+Committed JSONs
 under `results/` carry every number quoted above; figures regenerate from
 the committed JSONs via `make_figures.py`.
 

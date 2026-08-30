@@ -91,7 +91,7 @@ def fig1(e4, garm, e5, conf):
     axi.set_ylim(-8e-3, 1e-3)
     axi.axhline(0, color='k', lw=0.5, alpha=0.5)
     axi.axhline(-2.3e-3, color='tab:red', lw=0.7, ls='--')
-    axi.annotate('the \u00d710 well depth', (0.02, -2.9e-3), fontsize=6.5,
+    axi.annotate('\u00d710 candidate-well depth', (0.02, -2.9e-3), fontsize=6.5,
                  color='tab:red')
     axi.tick_params(labelsize=6)
     axi.set_title('linear zoom: all descend, no minima', fontsize=7)
@@ -126,7 +126,7 @@ def fig1(e4, garm, e5, conf):
     def_ = [r['E_total'] - om0 for r in fine]
     ax2.plot(omf, def_, 'o-', ms=5, lw=2.0, color='tab:red', zorder=5)
     i = int(np.argmin(def_))
-    ax2.annotate('\u00d710: the well', (omf[i], def_[i]), fontsize=9,
+    ax2.annotate('\u00d710: fixed-depth\ncandidate well', (omf[i], def_[i]), fontsize=8,
                  color='tab:red', fontweight='bold',
                  textcoords='offset points', xytext=(-30, -16))
     for tag, col in (('x14', 'tab:purple'), ('x20', 'tab:brown')):
@@ -177,7 +177,7 @@ def fig2(conf, e5, db=None):
     ax1.set_ylim(-3.4, 9.5)
     ax1.set_xlabel('\u03c9')
     ax1.set_ylabel('E(\u03c9) \u2212 E(0)   [\u00d710\u207b\u00b3]')
-    ax1.set_title('(a) C10 \u00d710 well, standard protocol '
+    ax1.set_title('(a) C10 \u00d710 fixed-depth candidate well, standard protocol '
                   '(Adam 300 + 1 L-BFGS);\nupper curves clipped',
                   fontsize=9.5)
     ax1.legend(fontsize=8, loc='upper left')

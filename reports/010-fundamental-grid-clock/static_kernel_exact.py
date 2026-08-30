@@ -9,10 +9,11 @@ span-level question over Q:
      (sampled on 30 exact static configurations) modulo the three family
      identities, and the kernel of the joint (s, k) map on generic configs;
   3. asserts the grid-relevant statement: every kernel direction of s is also
-     a kernel direction of k — i.e. NO invariant in the span has s == 0 with
-     k != 0 (no exact pure-kinetic brake exists), and the s-kernel modulo the
-     identities is spanned by the reviewer's pure-linear P, which drops out
-     of H identically (degree-1 terms cancel in the Legendre transform, E0).
+     a kernel direction of k — i.e. no (s == 0, k != 0) direction exists in
+     the span (no static-free omega^4 brake), and the s-kernel modulo the
+     identities is spanned by the reviewer's pure-linear P. As a LINEAR
+     Lagrangian term P drops out of H (degree-1 cancellation, E0); under
+     squaring it is not inert — see gyro_family_lattice.py.
 
 Writes results/static_kernel_exact.json.
 """
@@ -104,9 +105,10 @@ def main():
     assert rank_G - rank_S == 1, \
         f'expected a 1-dim s-kernel modulo identities, got {rank_G - rank_S}'
     print('3. ker(s) == ker(s, k): every static-free direction is also '
-          'kinetic-free (pure linear). NO pure-kinetic invariant exists in '
-          'the span; the s-kernel modulo the 3 identities is 1-dimensional '
-          '(the reviewer\'s P), and degree-1 terms drop from H identically.')
+          'kinetic-free (pure linear). No (s == 0, k != 0) direction exists '
+          'in the span; the s-kernel modulo the 3 identities is '
+          '1-dimensional (the reviewer\'s P). As a linear term it drops '
+          'from H; under squaring it feeds the lambda-families.')
 
     with open('results/static_kernel_exact.json', 'w') as f:
         json.dump({'counterexample_confirmed': True,
