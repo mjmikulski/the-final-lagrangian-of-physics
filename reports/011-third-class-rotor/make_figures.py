@@ -25,6 +25,8 @@ an = json.load(open(os.path.join(R, "analysis.json")))
 ra = json.load(open(os.path.join(R, "relax_all.json")))
 tw = json.load(open(os.path.join(R, "frame_twist.json")))
 rs = json.load(open(os.path.join(R, "rot_stabilization.json")))
+lp = json.load(open(os.path.join(R, "lambda_plateau.json")))
+cbj = json.load(open(os.path.join(R, "centrifugal_branches.json")))
 
 
 def sci(v):
@@ -33,19 +35,30 @@ def sci(v):
 
 
 Ls = [24, 36, 48]
+plateau = [lp["cases"][t]["trajectory"][-1]["excess"]
+           for t in ("EQ_N16", "EQ_N24", "EQ_N32")]
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8.6, 3.4))
-ax1.semilogy(Ls, an["lam_excess_EQ"], color="#2166ac", marker="D",
-             ms=7, mfc="none", mew=1.6, lw=1.4, ls="-", label="EQ")
-ax1.semilogy(Ls, an["lam_excess_CB"], color="#7b3294", marker="^",
-             ms=6, lw=1.4, ls="--", label="CB")
+ax1.semilogy(Ls, plateau, color="#2166ac", marker="D", ms=7,
+             mfc="none", mew=1.6, lw=1.4, ls="-",
+             label="EQ, deep-continued plateau")
+ax1.semilogy([48], [an["lam_excess_EQ"][2]], color="#c0392b",
+             marker="x", ms=9, mew=2, ls="none",
+             label="round-1 endpoint (unconverged)")
+ax1.annotate("", xy=(48, plateau[2] * 0.85),
+             xytext=(48, an["lam_excess_EQ"][2] * 1.5),
+             arrowprops=dict(arrowstyle="->", color="0.45", lw=1.0))
+ax1.axhline(plateau[1], color="0.6", ls=":", lw=1.0)
+ax1.text(24.5, plateau[1] * 1.15,
+         r"constant line tension $\approx 7.6\cdot10^{-4}$",
+         fontsize=8, color="0.35")
 ax1.set_xticks(Ls)
-ax1.margins(y=0.15)
+ax1.margins(y=0.2)
 ax1.set_xlabel(r"box size $L$  [lattice units]")
 ax1.set_ylabel(r"$\lambda_z - \lambda_x$  [lattice units / length]")
-ax1.set_title("(a) axial line-tension excess SHRINKS with $L$\n"
-              "(relative to background: 21% $\\to$ 14% $\\to$ 2%)",
-              fontsize=9.5)
-ax1.legend(fontsize=8.5, framealpha=1.0)
+ax1.set_title("(a) the axial line tension is CONSTANT for "
+              "$L \\geq 36$\n(the round-1 shrinking claim was an "
+              "artifact)", fontsize=9.5)
+ax1.legend(fontsize=8, framealpha=1.0, loc="upper right")
 ax1.grid(alpha=0.25, which="both")
 ax1.set_axisbelow(True)
 
@@ -135,47 +148,47 @@ fig2.savefig(os.path.join(R, "fig_survival.png"), dpi=160,
              bbox_inches="tight")
 print("written: results/fig_survival.png")
 
-rows = {r["J"]: r for r in rs["rows"]}
-Js = [0.0, 0.4, 0.8, 4.0]
-fig3, (cx1, cx2) = plt.subplots(1, 2, figsize=(8.6, 3.3))
-cx1.plot(Js, [rows[j]["I"] for j in Js], color="#1b7837", marker="o",
-         ms=7, lw=1.6)
-cx1.axvline(4.0, color="0.5", ls=":", lw=1.0)
-cx1.annotate("threshold estimate\n$J_{\\rm thr}\\sim\\sqrt{2I\\,"
-             "\\Delta E_{\\rm def}}\\approx 4$", xy=(3.95, 300),
-             xytext=(0.6, 470), fontsize=8.5, color="0.3",
-             arrowprops=dict(arrowstyle="->", color="0.4", lw=0.9,
-                             shrinkA=6, shrinkB=4))
-cx1.set_xlim(-0.15, 4.3)
-cx1.margins(y=0.12)
+B = cbj["branches"]
+Js = [0.0, 2.0, 4.0, 6.0]
+fig3, (cx1, cx2) = plt.subplots(1, 2, figsize=(8.6, 3.4))
+cx1.plot(Js, [B[f"EQ_J{j}"]["I"] for j in Js], color="#2166ac",
+         marker="D", ms=7, mfc="none", mew=1.6, lw=1.5, ls="-",
+         label="EQ-start branch")
+cx1.plot(Js, [B[f"CB_J{j}"]["I"] for j in Js], color="#7b3294",
+         marker="^", ms=6, lw=1.4, ls="--", label="CB-start branch")
+cx1.annotate("hysteresis:\n$J{=}4 \\to 0$ melts back",
+             xy=(0.15, cbj["hysteresis"]["I"]),
+             xytext=(1.35, 460), fontsize=8, color="0.3",
+             arrowprops=dict(arrowstyle="->", color="0.4", lw=0.9))
+cx1.plot([0.0], [cbj["hysteresis"]["I"]], marker="v", ms=7,
+         color="#b8860b")
 cx1.set_xlabel(r"prescribed $J$  [lattice units]")
 cx1.set_ylabel(r"$I$ after minimization  [lattice units]")
-cx1.set_title("(a) centrifugal stabilization:\nthe inertia jumps at "
-              "threshold", fontsize=10)
+cx1.set_title("(a) both branches grow inertia spontaneously\n"
+              "and reversibly", fontsize=9.5)
+cx1.legend(fontsize=8, framealpha=1.0, loc="upper left")
 cx1.grid(alpha=0.25)
 cx1.set_axisbelow(True)
 
-exJ = [0.4, 0.8, 4.0]
-exPR = [rs["excess_J0.4"]["PR_excess"], rs["excess_J0.8"]["PR_excess"],
-        rs["excess_J4.0"]["PR_excess"]]
-cx2.semilogy(exJ, exPR, color="#7b3294", marker="^", ms=7, lw=1.6)
-for j, v in zip(exJ, exPR):
-    cx2.text(j, v * 1.3, f"{v:.0f}", ha="center", fontsize=8.5,
-             color="0.2")
-cx2.axhline(200, color="0.6", ls="--", lw=1.0)
-cx2.text(4.25, 210, "PR = 200", fontsize=8, color="0.35", ha="right",
-         va="bottom")
-cx2.text(0.45, 230, "localized below this line", fontsize=8.5,
-         color="0.35")
-cx2.set_xlim(-0.15, 4.3)
-cx2.set_ylim(60, 3500)
-cx2.minorticks_off()
-cx2.set_xlabel(r"prescribed $J$  [lattice units]")
-cx2.set_ylabel("PR of excess density  [sites]")
-cx2.set_title("(b) the rebuilt deformation is core-localized\n"
-              "(diffuse noise at small $J$, PR = 137 at $J = 4$)",
-              fontsize=10)
-cx2.grid(alpha=0.25, which="major")
+edges = [1.5, 4.5, 7.5, 10.5, 13.5, 16.5]
+prof = B["EQ_J4.0"]["excess_shell_profile"]
+cx2.bar(edges, prof, width=2.5, color="#1b7837")
+cx2.axvline(B["EQ_J4.0"]["excess_centroid_r"], color="0.35", ls=":",
+            lw=1.2)
+cx2.text(9.6, max(prof) * 0.86, "centroid\n$r = 14.7$",
+         fontsize=8, color="0.3", ha="right")
+cx2.annotate("", xy=(B["EQ_J4.0"]["excess_centroid_r"] - 0.15,
+                     max(prof) * 0.84),
+             xytext=(9.8, max(prof) * 0.84),
+             arrowprops=dict(arrowstyle="->", color="0.45", lw=0.9))
+cx2.axvline(18.0, color="#c0392b", ls="--", lw=1.1)
+cx2.text(17.6, max(prof) * 0.55, "boundary", fontsize=8,
+         color="#c0392b", ha="right", rotation=90)
+cx2.set_xlabel(r"shell radius $r$  [lattice units]")
+cx2.set_ylabel("inertia-excess per shell  [lattice units]")
+cx2.set_title("(b) the excess lives at the PERIPHERY\n"
+              "(EQ-start, $J = 4$; core shells empty)", fontsize=9.5)
+cx2.grid(alpha=0.25, axis="y")
 cx2.set_axisbelow(True)
 fig3.tight_layout()
 fig3.savefig(os.path.join(R, "fig_centrifugal.png"), dpi=160,
