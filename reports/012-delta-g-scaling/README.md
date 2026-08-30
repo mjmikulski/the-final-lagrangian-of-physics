@@ -1,4 +1,4 @@
-# Report 012 — Scaling toward the proposed vacuum hierarchy: δ is flat, g is live
+# Report 012 — Scaling toward the proposed vacuum hierarchy: δ is flat down to 10⁻⁹; g is live and potential-variant-sensitive
 
 *2026-08-30 · Maciej J. Mikulski (AI-assisted, see [METHOD](../../METHOD.md)) ·
 pre-registered measurement (PREREG.md, committed in the working
@@ -62,19 +62,21 @@ cycles with recorded per-level energies).
 
 ## Results
 
-1. **δ is a flat direction over three octaves — every observable.**
-   Along $\delta: 1/8 \to 1/64 \to 1/512$ at fixed $g$, the maximal
-   relative spread is below $2\%$ for every headline observable
-   (time parts, $\omega_{\rm pred}$, $C_1$, the rotational inertias
-   at $0.03\%$, the axis-3/4 mixing curvature, the static energy);
-   the largest spread anywhere is $C_2$ at $4.8\%$. The
-   pre-registered expectation (transverse contributions enter at
-   order $\delta^2$ and are already invisible at $\delta = 1/8$) is
-   confirmed: **for these observables the extrapolation
-   $\delta \to 10^{-10}$ is controlled** — there is no
-   $\delta$-dependent term above the noise. (The transverse-sector
-   observables of report 011, where the $\delta$ sign flip lives,
-   are deliberately *not* in this grid; they remain
+1. **δ is a flat direction all the way to $10^{-9}$ — one order of
+   magnitude from the proposed target.** Along $\delta: 1/8 \to
+   1/64 \to 1/512$ at fixed $g$ the maximal relative spread is
+   below $2\%$ for every headline observable (rotational inertias
+   at $0.03\%$; edge cases $C_2$ at $4.8\%$ and the well depth at
+   $2.0\%$). Review round 1 correctly objected that three sampled
+   octaves cannot bound an intermediate crossover scale; the
+   response is measurement, not argument: **two further points at
+   $\delta = 10^{-6}$ and $10^{-9}$** (`fix_round1.py`) reproduce
+   the drive and $\omega_{\rm pred}$ to four significant digits of
+   the $\delta = 1/8$ values. No crossover exists anywhere in the
+   sampled range $[10^{-9}, 1/8]$ — the flat direction is measured
+   essentially at the target scale, not extrapolated to it. (The
+   transverse-sector observables of report 011, where the $\delta$
+   sign flip lives, are deliberately *not* in this grid; they remain
    regime-sensitive.)
 2. **The two time-part signs are stable across the whole grid.** The
    $G$-contraction time part is negative (drive) and the
@@ -83,13 +85,30 @@ cycles with recorded per-level energies).
    requires the repaired metric) is robust over two octaves in $g$
    and three in $\delta$. The drive magnitude *grows* with $g$
    (measured slope $\sim g^{0.16}$ over the sampled range).
-3. **g is the live direction.** Measured log-log slopes at
-   $\delta = 1/8$: time parts $\sim g^{+0.16}$, $\omega_{\rm pred}
-   \sim g^{-0.19}$, $C_2 \sim g^{+0.53}$, well depth
-   $\sim g^{+0.22}$; the rotational inertias, the mixing curvature
-   and the static energy are $g$-flat ($\le 0.4\%$ over two
-   octaves). Three points per axis make these slopes coarse trends,
-   not precision exponents; their *sign pattern* is the result.
+3. **g is the live direction — and its trends are
+   potential-variant-sensitive (review round 1's central objection,
+   confirmed by the control row).** The grid's relative-potential
+   variant rescales the effective pinning stiffness as $g^{-2p}$, so
+   its $g$-trends are not automatically those of the original
+   fixed-weight theory. The control row (`fix_round1.py`: absolute
+   potential, $\delta = 1/8$, $g = 8/64/512$) measures the
+   difference: in the **original theory** the drive also grows with
+   $g$ ($-0.220 \to -0.253 \to -0.261$) but $\omega_{\rm pred}$
+   **rises** ($0.45 \to 0.68$), opposite to the relative variant's
+   fall ($\sim g^{-0.19}$). What transfers between the variants is
+   the *sign structure* (result 2) and the direction of the drive's
+   growth; the individual slopes belong to their variant. The
+   original-theory row is quantitative only up to $g = 64$: at
+   $g = 512$ the absolute-potential relaxation does not converge
+   ($\lVert g\rVert_\infty = 80$) and the pinning signal sits at
+   $13\,\mathrm{ulp}$ of $C_4$ — the cancellation the relative
+   variant was introduced to avoid, now measured rather than
+   assumed. Within the relative variant the measured slopes at
+   $\delta = 1/8$ are: time parts $\sim g^{+0.16}$,
+   $\omega_{\rm pred} \sim g^{-0.19}$, $C_2 \sim g^{+0.53}$, well
+   depth $\sim g^{+0.22}$; inertias, mixing curvature and static
+   energy $g$-flat. Three points per axis: coarse trends, sign
+   patterns are the claim.
 4. **The clock well exists at every sampled g, but the
    frozen-profile prediction degrades.** Seven-rung extended ladders
    at $\delta = 1/8$ (rungs up to $4\times\omega_{\rm pred}$,
@@ -110,10 +129,17 @@ cycles with recorded per-level energies).
    template), not to $g$. Whether localization survives large $g$
    is an open question for a polished-stack study; this grid can
    only say that it does not *measure* localization.
-6. **The relative-potential variant is numerically clean at every
-   point**: the float32-degradation diagnostic is at $10^{-12}$
-   across the grid, and the trace ratios stay within representable
-   range even at $g = 512$ — larger $g$ is reachable if needed.
+6. **The relative-potential variant is numerically clean — by the
+   honest diagnostic.** Review round 1 caught a bug in the original
+   check (the field was rounded to float32 but the energy was still
+   evaluated in float64, measuring input quantization only). The
+   corrected test (`fix_round1.py`) re-evaluates the entire static
+   energy — derivatives, commutators, the working metric, the
+   potential, the sums — in float32 numpy and compares with float64:
+   the true degradation is $\le 2\cdot10^{-7}$, i.e.\ at the
+   float32 machine-epsilon level, with no catastrophic cancellation,
+   at every probed point including $g = 512$. (The absolute variant
+   at $g = 512$ is *not* clean: signal at $13$ ulp — result 3.)
 
 ![grid](results/fig_grid.png)
 
@@ -121,15 +147,21 @@ cycles with recorded per-level energies).
 
 **Answer to the regime question:** the missing ten orders of
 magnitude split into two very different halves. The $\delta$ half is
-*free*: three octaves of measured flatness, consistent with the
-pre-registered $\delta^2$ suppression, license the extrapolation for
-every observable in this grid (transverse-sector quantities
-excepted). The $g$ half is *live*: several clock observables move
-with measured fractional-power trends, the well position outruns the
-frozen-profile prediction, and any statement about the model at
-$g \sim 10^{10}$ must either measure along $g$ further or derive the
-$g$-dependence analytically. No sign of any measured quantity flips
-anywhere on the grid.
+*measured, not extrapolated*: flatness holds at $\delta = 10^{-9}$,
+one order of magnitude from the proposal, with no crossover anywhere
+in $[10^{-9}, 1/8]$ (transverse-sector quantities excepted). The
+$g$ half is *live and harder than it looked*: the trends are
+potential-variant-sensitive, the original theory is measured only to
+$g = 64$ (beyond which its pinning is ill-conditioned — the
+motivation for the relative variant, now documented), and any
+statement at $g \sim 10^{10}$ requires either an analytic
+$g$-theory or a reformulation that stays conditioned at large $g$
+(the relative variant is one, but it is a different theory and its
+slopes are its own). What does transfer across variants and the
+whole sampled region: the sign structure — the $G$-contraction
+drives, the $\eta$-contraction is inert, and the drive grows with
+$g$ in both variants. No sign of any measured quantity flips
+anywhere.
 
 ## Limitations
 
@@ -156,6 +188,7 @@ anywhere on the grid.
 | extended ladders at δ = 1/8, all g | `extended_ladders.py` → `results/extended_ladders_all.json` |
 | per-observable verdicts, slopes, sign stability | `analysis.py` → `results/scaling_verdicts.json` |
 | persisted relaxed fields (δ = 1/8 row) | `results/M_d0.125000_g*.npz` |
+| round-1 fixes: absolute-potential control row, δ = 10⁻⁶/10⁻⁹ extension, true dual-precision test, cancellation diagnostic | `fix_round1.py` → `results/fix_round1.json` |
 | figures | `make_figures.py` |
 
 ## Reproduction
