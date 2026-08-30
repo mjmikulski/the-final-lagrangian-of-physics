@@ -88,8 +88,50 @@ a canonical Hamiltonian with an interior clock well. Results, in order:
 directly from the canonical H of a covariant Lagrangian of the family, but
 only inside a bounded, two-sided γ-window, and the window is a *measured*
 object, not a tuning convenience: below it the Mexican-hat concavity
-delocalizes the clock, above it the drive dies, far above the F4 disease
-returns.
+delocalizes the clock, above it the drive dies, far above the
+static-square instability (filter F4 below) returns.
+
+**The flagship Lagrangian, written out.** The winning C10 cell is, explicitly,
+
+```math
+L=-\tfrac12\,F_{\mu\nu\alpha\beta}F^{\mu\nu\alpha\beta}-V(M)
++\gamma\left(u^\mu u^\rho F_{\mu\nu\alpha\beta}F_\rho{}^{\nu\alpha\beta}\right)^2 ,
+```
+
+everything except the last term being the model of record. The squared
+bracket is the η-norm of the time-leg (electric) component of $F$ seen by
+the field's own clock axis, $E_{\nu\alpha\beta}=u^\mu F_{\mu\nu\alpha\beta}$
+— report 003's $B_k$ channel, up to normalization. Equivalently, with no
+explicit $u$ at all (only the working metric $G=\eta+2uu$ the model already
+uses):
+
+```math
+L=-\tfrac12 I_1-V+\tfrac{\gamma}{16}\left(I_1^{G\partial}-I_1\right)^2,
+\qquad
+I_1^{G\partial}\equiv G^{\mu\rho}G^{\nu\sigma}\eta^{\alpha\gamma}
+\eta^{\beta\delta}F_{\mu\nu\alpha\beta}F_{\rho\sigma\gamma\delta},
+```
+
+the square of the *difference between the derivative-pair-G and
+derivative-pair-η contractions of the same* $F^2$. The other three ticking
+cells replace the squared invariant by: C16
+$=u^\alpha u^\gamma F_{\mu\nu\alpha\beta}F^{\mu\nu}{}_\gamma{}^\beta$
+(matrix-slot caps — the G-matrix decoration of 008,
+$(I_1^{G\text{-mat}}-I_1)/4$); C13
+$=u^\mu u^\gamma F_{\mu\nu\alpha\beta}F^{\nu\alpha}{}_\gamma{}^\beta$
+(one derivative cap, one matrix cap); C19
+$=u^\mu u^\alpha u^\rho u^\gamma F_{\mu\nu\alpha\beta}
+F_\rho{}^\nu{}_\gamma{}^\beta$ (one cap on every antisymmetric pair — the
+corner invisible to the η/G grammar).
+
+*Notation used throughout:* **C0–C20** are the 21 proportionality classes of
+the enumeration (§2; representatives with slot lists in
+`results/u_family_float.json`; named map C3=I₁, C5=I₂, C4=I₃, C1=I₄, C2=I₅,
+C0=I₆, C10=$B_k$). **F1–F5** are the pre-registered grid filters (working
+repo prereg): F1 statics carried, F2 drive sign, F3 brake exists, **F4 the
+static-leak suppression** (the Legendre image of $\gamma(I_j)^2$ contains
+$-\gamma s_j^2$, unbounded below — 008 §4 — so $s_j$ must be suppressed;
+"the F4 disease" = that instability igniting), F5 chirality bookkeeping.
 
 ## 1. Conventions and the family
 
