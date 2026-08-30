@@ -1,21 +1,23 @@
-"""Finding-1 response: the two-branch, matched-accuracy centrifugal
-test with hysteresis and a deformation order parameter.
+"""Finding-1 response: the two-branch qualitative record of the
+centrifugal response, with a scalar-return continuation and a
+deformation order parameter. (Round 2: all eight runs hit the
+16-cycle cap without meeting TOL, so this is NOT a matched-accuracy
+comparison and no branch is selected -- see the README scoping.)
 
 For J in (0, 2, 4, 6), TWO branches at N = 24:
   EQ-start: minimize E_J from the equivariant seed;
   CB-start: minimize E_J from the core-broken spectral seed.
 Protocol per run: Adam 1000 + L-BFGS cycles until the per-cycle
 energy change < 1e-3 (max 16), with the final residual recorded.
-Branch comparison at each J: converged E_J values decide which branch
-is SELECTED (initialization independence <=> equal E_J and equal
-order parameter). Hysteresis: continue the CB-start J = 4 endpoint at
+Branch comparison at each J: the E_J values are recorded but, at
+these residuals, do not resolve any branch ordering. Hysteresis: continue the CB-start J = 4 endpoint at
 J = 0 (same stopping rule) -- does the inertia SCALAR return? (this
 tests one scalar of one branch; configuration-space reversibility
 would need a field-distance comparison against a converged
 reference, which is not done here)
 Order parameter: the radial shell profile of the signed kinetic-density
 excess k[zeta](branch) - k[zeta](EQ-start J=0 endpoint), plus its
-centroid radius -- showing WHERE the selected deformation lives.
+centroid radius -- showing WHERE the observed peripheral excess lives.
 Out: results/centrifugal_branches.json
 """
 import json
