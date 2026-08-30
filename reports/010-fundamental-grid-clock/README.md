@@ -282,8 +282,10 @@ Deep-protocol probes and the finer window map (`e5_arms.py`,
   ×10 (depth plateaus at a probe point, upper bracket reverses) and ×14
   (six cycles: interior minimum for four levels, then migration to the
   still-descending top rung) — no converged interior minimum is
-  demonstrated anywhere yet. Deep-bracket rung fields are persisted; an
-  independent route-2 energy verification on them remains open.
+  demonstrated anywhere yet. Deep-bracket rung fields are persisted;
+  their independent route-2 energy verification is closed in
+  [APPENDIX-route2-deep14](APPENDIX-route2-deep14.md) (agreement
+  $1.0\cdot10^{-14}$).
 - The γ-window is mapped coarsely (×3/×5/×7/×10/×14/×20/×30/×100); no
   claim about its exact boundaries or their scaling with the leak order.
 - $\omega^*$ is rung-resolved (0.1–0.2 across the window; no continuum
