@@ -30,8 +30,8 @@ not.
 ## Notation (self-contained)
 
 $M(x)$ is the model's symmetric $4\times4$ field on a $32^3$ lattice
-(box 48, spacing 1.5). $F_{\mu\nu} = \partial_\mu M\,\eta\,
-\partial_\nu M - \partial_\nu M\,\eta\,\partial_\mu M$ is the field
+(box 48, spacing 1.5). $F_{\mu\nu} = \partial_\mu M \eta 
+\partial_\nu M - \partial_\nu M \eta \partial_\mu M$ is the field
 strength; $I_1$ is its full square. $G$ is the working metric: the
 field-dependent positive metric that repairs the static sector (it
 flips the sign of the timelike eigendirection of $M\eta$); a
@@ -40,12 +40,12 @@ flips the sign of the timelike eigendirection of $M\eta$); a
 traces of powers of $M\eta$ to their vacuum targets
 $C_p = g^p + 1 + \delta^p$; this report uses the **relative variant**
 
-$$V_{\rm rel} \;=\; \sum_{p=1}^{4}\left(\frac{\mathrm{tr}\,(M\eta)^p}{C_p} - 1\right)^{2},$$
+$$V_{\rm rel} = \sum_{p=1}^{4}\left(\frac{\mathrm{tr} (M\eta)^p}{C_p} - 1\right)^{2},$$
 
 which is dimensionless and avoids the catastrophic cancellation the
 absolute variant would suffer at $g = 512$ (where it squares numbers
 of order $10^{21}$); the potential weight is unchanged. A clock
-configuration is $\dot M = \omega\, a_0$ with $a_0$ the frozen boost
+configuration is $\dot M = \omega  a_0$ with $a_0$ the frozen boost
 conjugation tangent; on it $I_1$ splits into a static density and a
 kinetic density $k$, and the frozen-profile prediction of the
 energy-reading clock-well position is $\omega_{\rm pred} =
@@ -114,7 +114,7 @@ cycles with recorded per-level energies).
    original-theory row is quantitative only up to $g = 64$: at
    $g = 512$ the absolute-potential relaxation does not converge
    ($\lVert g\rVert_\infty = 80$) and the pinning signal sits at
-   $13\,\mathrm{ulp}$ of $C_4$ — the cancellation the relative
+   $13 \mathrm{ulp}$ of $C_4$ — the cancellation the relative
    variant was introduced to avoid, now measured rather than
    assumed. Within the relative variant the measured slopes at
    $\delta = 1/8$ are: time parts $\sim g^{+0.16}$,
