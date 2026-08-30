@@ -73,10 +73,11 @@ cycles with recorded per-level energies).
    $\delta = 10^{-6}$ and $10^{-9}$ (`fix_round1.py`) and — after
    round 2 correctly noted that $10^{-9}$ still leaves one decade of
    extrapolation — **at the proposed target itself and below,
-   $\delta = 10^{-10}$ and $10^{-11}$** (`fix_round2.py`; every
-   quantity remains exactly representable in float64), all reproduce
-   the drive and $\omega_{\rm pred}$ to four significant digits of
-   the $\delta = 1/8$ values. For the sampled observables the
+   $\delta = 10^{-10}$ and $10^{-11}$** (`fix_round2.py`; the values
+   are stored as their nearest float64 neighbors, and every derived
+   quantity remains well-conditioned), all reproduce the drive and
+   $\omega_{\rm pred}$ of the $\delta = 1/8$ values to within
+   $0.1\%$. For the sampled observables the
    $\delta = 10^{-10}$ statement is a **measurement at the target**,
    with no extrapolation left. (The
    transverse-sector observables of report 011, where the $\delta$
@@ -160,8 +161,8 @@ cycles with recorded per-level energies).
 **Answer to the regime question:** the missing ten orders of
 magnitude split into two very different halves. The $\delta$ half is
 *measured at the target*: flatness holds at $\delta = 10^{-10}$ (the
-proposal itself) and $10^{-11}$, identical to $\delta = 1/8$ to four
-significant digits (transverse-sector quantities excepted). The
+proposal itself) and $10^{-11}$, matching $\delta = 1/8$ to within
+$0.1\%$ (transverse-sector quantities excepted). The
 $g$ half is *live and harder than it looked*: the trends are
 potential-variant-sensitive, the original theory is measured only to
 $g = 64$ (beyond which its pinning is ill-conditioned — the
