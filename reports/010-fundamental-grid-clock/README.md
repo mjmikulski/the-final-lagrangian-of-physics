@@ -33,21 +33,31 @@ a canonical Hamiltonian with an interior clock well. Results, in order:
 2. **The grid Legendre theorem.** Every family member splits by velocity
    degree, $I=s+m+k$, and exactly (proven symbolically on the full
    10-component $\dot M$):
-   ```math
-   H=\alpha(-s_i+k_i)+\gamma\left(-s_j^2+m_j^2+2s_jk_j+4m_jk_j+3k_j^2\right)+V .
-   ```
+
+   $$H=\alpha(-s_i+k_i)+\gamma\left(-s_j^2+m_j^2+2s_jk_j+4m_jk_j+3k_j^2\right)+V .$$
+
    Degree-0 terms flip (the $-\gamma s_j^2$ disease of 008 §4), degree-1
    terms cancel (and are real: $I_3$ has $m\not\equiv0$), the brake arrives
-   tripled. On the frozen-tangent family $H=H_0+A\omega^2+B\omega^3+
-   C\omega^4$ with $A<0,C>0$ giving exactly one interior minimum, below
-   $H(0)$, for **every** sign of the chirality term $B$ — always on the
-   Legendre caustic (002 §6).
-3. **No exact pure-kinetic invariant exists** (T1): every class has
-   $s\not\equiv0$, exactly, on generic static fields — covariance obstructs
-   pure kineticity (the Q0/Q1 tension of the quartic prereg, now
-   family-wide). The verdict is therefore quantitative: static leaks on the
-   physical hedgehog orbit are suppressed with measured orders
-   $\ell\propto m_d^{2}$ (single caps) and $m_d^{4}$ (double caps).
+   tripled. On the frozen-tangent family
+   $H=H_0+A\omega^2+B\omega^3+C\omega^4$ with $A<0,C>0$ giving exactly one
+   interior minimum, below $H(0)$, for **every** sign of the chirality
+   term $B$ — always on the Legendre caustic (002 §6).
+3. **No exact pure-kinetic invariant exists — at the span level** (T1′,
+   corrected in review round 1): the original check covered only the 21
+   individual representatives; the reviewer exhibited
+   $P=I_2-4I_5+I_6$ ($=C0-4C2+C5$) with $s(P)\equiv0$ in the span. The
+   span-level computation (`static_kernel_exact.py`, exact over
+   $\mathbb{Q}$) confirms the counterexample and settles the question: the
+   static-part map on the 18-dimensional span has a **one-dimensional
+   kernel** modulo the three family identities, spanned by exactly this
+   $P$ — which is **purely linear in the velocity** ($k(P)\equiv0$ too),
+   so its Legendre image vanishes identically (degree-1 terms cancel, E0).
+   $\ker s=\ker(s,k)$ exactly: **no invariant with $s\equiv0$ and
+   $k\not\equiv0$ exists anywhere in the span** — there is no
+   static-tail-free brake, and the grid filters are unaffected. The
+   quantitative side stands: static leaks on the physical hedgehog orbit
+   are suppressed with measured orders $\ell\propto m_d^{2}$ (single caps)
+   and $m_d^{4}$ (double caps).
 4. **Matrix-cap orbit zeros (exact theorem).** On the rank-1 canonical orbit
    $M=vv^\top$: $F_{ij}=w_jw_i^\top-w_iw_j^\top$ carries no $v$-component,
    the exact eigen-axis is $u=-\eta v$, and $w_i^\top\eta v=0$ — so **every
@@ -157,9 +167,12 @@ C1, C2, C0; $B_k=$ C10.
 
 ## 3. Velocity splits, statics filter, leaks, channels (E2)
 
-`velocity_split.py` + `exact_split_checks.py` + `orbit_zeros_exact.py`:
+`velocity_split.py` + `exact_split_checks.py` + `orbit_zeros_exact.py`
++ `static_kernel_exact.py`:
 degree ≤ 2 exact for all classes; $m\equiv0$ exactly for C3 and C16 (the
-aligned-derivative-pairing proposition); statics filter: only C3 $=I_1$ is
+aligned-derivative-pairing proposition); the span-level static kernel of
+result 3 (ranks 18/17/17 for the generic, static and joint $(s,k)$ maps
+over $\mathbb{Q}$); statics filter: only C3 $=I_1$ is
 pointwise proportional to the record static density on the 3×3 sector (001's
 $N_1$ nullspace identity re-measured zero); channel validation: the 001
 clock counterexample reproduces $\omega^2(4,4,2,2,2,4)$ bit-for-bit, the 005
@@ -281,6 +294,9 @@ the committed JSONs via `make_figures.py`.
 | velocity splits, statics filter, leaks, channels | `velocity_split.py` → `results/velocity_split.json`; `exact_split_checks.py` |
 | reduced quartic well + caustic (E3) | `e3_reduced_legendre.py` → `results/e3_reduced_legendre.json` |
 | matrix-cap orbit zeros (exact) | `orbit_zeros_exact.py` → `results/orbit_zeros_exact.json` |
+| span-level static kernel (T1′) | `static_kernel_exact.py` → `results/static_kernel_exact.json` |
+| artifact-only headline assertions | `verify_artifacts.py` |
+| deep-bracket demonstration (×14) | `e5_deep_bracket.py` → `results/e5_deep_bracket.json`, `results/deep14_om*.npz` |
 | lattice port + validations | `lattice_grid_defs.py` (gate: 004 oracle; statics identity; U-vs-eigen) |
 | per-cell integrals, γ choice, ranking | `pre_e4.py` → `results/pre_e4.json` |
 | ladders, controls, extensions | `e4_ladders.py` → `results/e4_cells.json` |
