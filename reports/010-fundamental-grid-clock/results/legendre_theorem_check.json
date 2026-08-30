@@ -1,0 +1,36 @@
+{
+ "part_a": true,
+ "part_b": {
+  "I1_all_eta": {
+   "m_nonzero": false,
+   "s_nonzero": true,
+   "k_nonzero": true
+  },
+  "I3_mixed": {
+   "m_nonzero": true,
+   "s_nonzero": true,
+   "k_nonzero": true
+  },
+  "u_deriv_both": {
+   "m_nonzero": true,
+   "s_nonzero": true,
+   "k_nonzero": true
+  },
+  "u_matrix_both": {
+   "m_nonzero": false,
+   "s_nonzero": true,
+   "k_nonzero": true
+  },
+  "u_one_factor": {
+   "m_nonzero": true,
+   "s_nonzero": true,
+   "k_nonzero": true
+  },
+  "u_mixed_slots": {
+   "m_nonzero": true,
+   "s_nonzero": true,
+   "k_nonzero": true
+  }
+ },
+ "part_c": true
+}

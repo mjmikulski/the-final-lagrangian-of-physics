@@ -1,0 +1,6 @@
+{
+ "reduced_quartic_exact": true,
+ "unique_interior_well": true,
+ "caustic_identity": true,
+ "energy_over_fund_ratio": 3
+}

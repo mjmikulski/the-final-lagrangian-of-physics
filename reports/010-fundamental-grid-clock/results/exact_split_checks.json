@@ -1,0 +1,10 @@
+{
+ "T1_generic_no_pure_kinetic": true,
+ "m_zero_exact": [
+  "C3",
+  "C16"
+ ],
+ "degree_le_2_exact": true,
+ "n_static_samples": 20,
+ "n_generic_samples": 12
+}
