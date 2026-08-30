@@ -128,14 +128,36 @@ def dens_C10(F, U):
                         continue
                     Fm, sa = Fa
                     Fr, sb = Fb
-                    # cap indices raised: U^{m r} = eta^mm eta^rr U_{m r}
-                    pref = SV[m] * SV[r]
+                    # U is already the contravariant cap U^{m r}
+                    # (G_of returns G^{mu nu}); use it directly
                     inner = np.einsum('...ab,ac,bd,...cd->...',
                                       Fm, ETA, ETA, Fr)
-                    acc = acc + sa * sb * pref * Ucap[..., m, r] * inner
+                    acc = acc + sa * sb * U[..., m, r] * inner
             tot = tot + w_out * 1.0 * acc
     return tot
 
+
+def _selftest():
+    rng = np.random.default_rng(7)
+    Ft = rng.normal(size=(4, 4, 4, 4))
+    Ft = Ft - Ft.transpose(1, 0, 2, 3)
+    Ft = Ft - Ft.transpose(0, 1, 3, 2)          # antisym in both pairs
+    v = np.array([0.31, -0.22, 0.17])
+    u = np.concatenate(([np.sqrt(1 + v @ v)], v))
+    Uc = np.einsum('m,r->mr', u, u)             # contravariant cap
+    ref = np.einsum('mr,ns,ag,bd,mnab,rsgd->', Uc,
+                    np.diag(SV), np.diag(SV), np.diag(SV), Ft, Ft)
+    Fdict = {}
+    for m in range(4):
+        for n in range(m + 1, 4):
+            Fdict[(m, n)] = Ft[m, n][None, None, None]
+    got = dens_C10(Fdict, Uc[None, None, None]).item()
+    assert abs(got - ref) / abs(ref) < 1e-12, (got, ref)
+
+
+_selftest()
+print('selftest: generic nonzero-U^{0i} contraction matches the '
+      'direct einsum')
 
 rows = []
 worst = 0.0

@@ -1,8 +1,10 @@
 # Appendix — independent route-2 verification of the deep-bracket energies
 
 *Added 2026-08-31 under METHOD §7 (new material extending the report;
-no conclusion changes). Closes the limitation stated in §5: "an
-independent route-2 energy verification on them remains open".*
+no conclusion changes; the merged README is left untouched per §7 —
+this appendix itself records that §5's stated limitation "an
+independent route-2 energy verification on them remains open" is
+hereby closed).*
 
 ## What is verified
 
@@ -38,7 +40,12 @@ The only calibration needed against the stack was a single overall
 multiplicity: a diagram with one antisymmetric pair capped by
 $uu^\top$ carries half the fully-$\eta$-paired class's conventional
 prefactor (the factor-4 of two free antisymmetric pairs becomes 2).
-The route-2 code documents this in place; no tunable parameters remain.
+The route-2 code documents this in place; no tunable parameters
+remain. The contraction itself is validated on a generic
+antisymmetric tensor with a boosted (nonzero $U^{0i}$) cap against a
+one-line direct einsum (built-in self-test, $10^{-12}$) — on the
+committed deep14 fields $U^{0i} = 0$, so this generic check is what
+distinguishes the upper-cap definition from sign-variant rewritings.
 
 ## Reproduction
 
