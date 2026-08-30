@@ -157,7 +157,7 @@ hence rotationally trivial.
 
 ![survival](results/fig_survival.png)
 
-## 4. Prescribed rotation: spontaneous, reversible, peripheral
+## 4. Prescribed rotation: spontaneous, peripheral, with a returning inertia scalar
 
 Round 1 objected that the single CB-start run could not distinguish
 selection from initialization; `centrifugal_branches.py` runs both
@@ -194,7 +194,8 @@ $\propto \rho^2$), i.e.\ at the periphery of the box. This is an
 orbital-lever mode, expected to migrate outward with box size (not
 tested here), **not** a stabilized core deformation. The
 first version's core-rotor headline is withdrawn; what survives is
-the mechanism (prescribed $J$ reshapes the field, reversibly) and
+the mechanism (prescribed $J$ reshapes the field, with the
+inertia scalar returning on the tested continuation) and
 the negative: **nothing tried in this report stabilizes a
 core-localized spin mode**.
 

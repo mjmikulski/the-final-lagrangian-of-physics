@@ -9,7 +9,10 @@ energy change < 1e-3 (max 16), with the final residual recorded.
 Branch comparison at each J: converged E_J values decide which branch
 is SELECTED (initialization independence <=> equal E_J and equal
 order parameter). Hysteresis: continue the CB-start J = 4 endpoint at
-J = 0 (same stopping rule) -- does the deformation melt back?
+J = 0 (same stopping rule) -- does the inertia SCALAR return? (this
+tests one scalar of one branch; configuration-space reversibility
+would need a field-distance comparison against a converged
+reference, which is not done here)
 Order parameter: the radial shell profile of the signed kinetic-density
 excess k[zeta](branch) - k[zeta](EQ-start J=0 endpoint), plus its
 centroid radius -- showing WHERE the selected deformation lives.

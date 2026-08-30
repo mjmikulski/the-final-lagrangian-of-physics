@@ -60,7 +60,8 @@ assert abs(tw["I_diff_raw"]) < 15.0, "frame twist collapse magnitude"
 assert tw["PR_excess"] > 300, "no core-localized excess remains"
 
 # (C) the two-branch record: spontaneity (EQ-start grows inertia),
-# reversibility (hysteresis melts back), and the PERIPHERAL order
+# the returning inertia scalar on the tested continuation, and the
+# PERIPHERAL order
 # parameter that withdrew the core-rotor headline
 cbj = json.load(open(os.path.join(R, "centrifugal_branches.json")))
 B = cbj["branches"]

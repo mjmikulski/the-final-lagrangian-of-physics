@@ -158,7 +158,7 @@ cx1.plot(Js, [B[f"EQ_J{j}"]["I"] for j in Js], color="#2166ac",
          label="EQ-start branch")
 cx1.plot(Js, [B[f"CB_J{j}"]["I"] for j in Js], color="#7b3294",
          marker="^", ms=6, lw=1.4, ls="--", label="CB-start branch")
-cx1.annotate("hysteresis:\n$J{=}4 \\to 0$ melts back",
+cx1.annotate("continuation $J{=}4 \\to 0$:\nthe inertia scalar returns",
              xy=(0.15, cbj["hysteresis"]["I"]),
              xytext=(1.35, 460), fontsize=8, color="0.3",
              arrowprops=dict(arrowstyle="->", color="0.4", lw=0.9))
@@ -167,7 +167,8 @@ cx1.plot([0.0], [cbj["hysteresis"]["I"]], marker="v", ms=7,
 cx1.set_xlabel(r"prescribed $J$  [lattice units]")
 cx1.set_ylabel(r"$I$ after minimization  [lattice units]")
 cx1.set_title("(a) both branches grow inertia spontaneously\n"
-              "and reversibly", fontsize=9.5)
+              "(qualitative record; no branch-selection claim)",
+              fontsize=9)
 cx1.legend(fontsize=8, framealpha=1.0, loc="upper left")
 cx1.grid(alpha=0.25)
 cx1.set_axisbelow(True)
