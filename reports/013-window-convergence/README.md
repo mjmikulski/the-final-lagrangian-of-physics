@@ -77,8 +77,8 @@ fields of report 008's merged energy-reading ladder (rungs
 |---|---|---|---|
 | value | +7.2·10⁻⁵ | +2.3·10⁻⁵ | +8.9·10⁻⁵ |
 
-The interior ordering E(0.2) > E(0.35) < E(0.5) (and E(0) above all)
-holds at **every one of the 24 recorded cycles**
+The interior ordering E(0.2) > E(0.35) < E(0.5), with E(0) also
+above the minimum, holds at **every one of the 24 recorded cycles**
 (`ordering_held_every_cycle: true` in the JSON). The same budget
 that dismantles the fundamental-reading candidate at ×14 and erodes
 it at ×10 leaves the energy-reading well's ordering untouched — the
