@@ -1,10 +1,11 @@
-# Report 013 — The window's candidate wells do not certify: the dilution drift outlasts a 24-cycle continuation
+# Report 013 — C10's candidate wells at ×10 and ×14 do not certify within a 24-cycle continuation
 
 *2026-08-31 · Maciej J. Mikulski (AI-assisted, see [METHOD](../../METHOD.md)) ·
-resolves, negatively on this budget, the sharp open question left by
-report 010: do the fixed-depth interior minima of the canonical
-Hamiltonian survive relaxation deepened to an observable-level
-criterion?*
+a budget-bounded negative on the deepest-probed corner of report
+010's open question: the C10 candidate wells at couplings ×10 and
+×14 do not certify under a 24-cycle observable-level continuation,
+and the drift shows no sign of saturating. The grammar-wide
+existence question stays open (scope in the Conclusion).*
 
 ## Notation (self-contained)
 
@@ -45,46 +46,70 @@ committed stack:
 | ×14 (+24 cycles) | −1.3·10⁻⁵ | −7.9·10⁻⁴ | −4.1·10⁻³ | top rung 0.28 | no |
 | ×10 (24 cycles) | +2.2·10⁻³ | +9.7·10⁻⁴ | −2.9·10⁻⁴ | top rung 0.28 | no |
 
-At ×14 the continuation dismantles the entire structure: d(0.2)
+At ×14 the continuation dismantles the candidate structure: d(0.2)
 turns negative within three continued cycles, d(0.28) deepens
 roughly linearly throughout (−1.6·10⁻³ at six cycles, −4.1·10⁻³ at
 twenty-four, still deepening at −1.4·10⁻⁴ per cycle at the end), and
-by cycle 14 even d(0.1) crosses zero: the sampled energies order
-monotonically toward high ω. At ×10 the interior holds against the
-near rungs for the whole run (d(0.1), d(0.2) stay positive and even
-grow), but the wide bracket never certifies: d(0.28) hovers just
-below zero for most of the run, makes one brief positive excursion
+d(0.1) crosses zero around cycle 14 and ends marginally negative
+(−1.3·10⁻⁵). The final sampled ladder is not monotone (E(0.1) dips
+just under E(0.15)); what is unambiguous is that both wide-bracket
+rungs sit far below the candidate minimum and keep descending. At ×10 the near-bracket structure
+survives the budget but never certifies: d(0.1) is positive
+throughout and grows; d(0.2) hugs zero for the first half (negative
+at seven of the first thirteen recorded levels, e.g. −8.5·10⁻⁵ at
+the start) before growing positive; and d(0.28) hovers just below
+zero for most of the run, makes one brief positive excursion
 (cycles 20–22), and ends negative and deepening — the top rung sits
-below the candidate minimum for essentially the entire budget, the
-same reversal the shallower ×10 probe of report 010 showed. Neither arm comes near
+below the candidate minimum for most of the budget, the same
+reversal the shallower ×10 probe of report 010 showed. Neither arm comes near
 the observable-level stopping rule.
 
 ![drift](results/fig_drift.png)
 
-**Conclusion.** On this lattice and budget the answer to report
-010's sharp open question is negative: inside the coupling window
-the dilution drift is slowed but never saturates, and the candidate
-interior minima of the canonical Hamiltonian do not certify at
-depth — at ×14 the well's neighborhood inverts entirely; at ×10 the
-failure begins later but proceeds identically. The contrast with the
-energy-functional clock of report 008 is sharp and protocol-matched:
-the boost-channel energy-reading bracket survived an identical
-24-cycle continuation with its ordering intact (merged record,
-report 009 §4), while the fundamental-reading wells of the grid do
-not. Within everything measured so far, a converged
-fundamental-reading clock on this stack requires either couplings
-and cells outside report 010's single-invariant grammar (its own
-closing hypothesis: a same-channel drive–brake pairing with a convex
-template) or a different stabilization mechanism; the
-energy-functional reading remains the only reading with a
-convergence-certified localized clock.
+## Contrast: the energy-reading boost bracket under the identical budget
+
+`boost_contrast.py` applies this report's exact deep protocol
+(24 L-BFGS(150) cycles per rung) to the persisted boost-bracket
+fields of report 008's merged energy-reading ladder (rungs
+{0, 0.2, 0.35, 0.5}, fresh ω = 0 endpoint):
+
+| final difference vs E(0.35) | d(0.0) | d(0.2) | d(0.5) |
+|---|---|---|---|
+| value | +7.2·10⁻⁵ | +2.3·10⁻⁵ | +8.9·10⁻⁵ |
+
+The interior ordering E(0.2) > E(0.35) < E(0.5) (and E(0) above all)
+holds at **every one of the 24 recorded cycles**
+(`ordering_held_every_cycle: true` in the JSON). The same budget
+that dismantles the fundamental-reading candidate at ×14 and erodes
+it at ×10 leaves the energy-reading well's ordering untouched — the
+like-for-like record the contrast claim rests on.
+
+**Conclusion, scoped to the evidence.** What this report
+establishes: **C10 at ×10 and ×14 does not certify within a
+24-cycle observable-level budget**, and the drift trends give no
+hint of saturation. What it does not establish (review round 1):
+the grammar-wide existence question of report 010 stays open — the
+sibling cells C13/C16/C19 and the ×20 regime are untested here, and
+because every recorded energy is only an upper bound on the relaxed
+infimum (the ×14 top rung ends at ‖g‖∞ = 0.52), even the two tested
+orderings are finite-depth statements, not statements about relaxed
+solutions. The protocol-matched contrast with the energy-reading
+boost clock of report 008 is supplied as a committed record in this
+report (`boost_contrast.py`, §Contrast below): the same 24-cycle
+continuation applied to 008's persisted boost bracket. Within
+everything measured so far, the energy-functional reading remains
+the only reading with a convergence-certified localized clock.
 
 ## Limitations
 
 - Two couplings (×10, ×14), one cell (C10), one rung set, 24-cycle
-  budget: the negative is a budget statement, not a nonexistence
-  theorem; a plateau beyond 24 cycles is not excluded (the ×14
-  trends give no hint of one).
+  budget: the negative is a budget statement about this corner, not
+  a nonexistence theorem for the window or the grammar; C13, C16,
+  C19 and the ×20 regime are untested, and a plateau beyond 24
+  cycles is not excluded (the ×14 trends give no hint of one).
+- Finite-depth energies bound the relaxed infima from above only;
+  orderings at nonzero residual can in principle reverse under
+  further relaxation in either direction.
 - The rung set is inherited from report 010; no rungs above 0.28
   were sampled, so where the drift would terminate is unknown
   (report 010's γ = 0 control dove at ω ≈ 0.8).
@@ -96,6 +121,7 @@ convergence-certified localized clock.
 | object | artifact |
 |---|---|
 | deep continuation, both arms, per-cycle records | `continue_window.py` → `results/window_deep.json` |
+| the protocol-matched boost contrast (008's bracket, same budget) | `boost_contrast.py` → `results/boost_contrast.json` |
 | digest: final differences, drifts, verdicts | `analysis.py` → `results/verdicts.json` |
 | final rung fields | `results/win_*_om*.npz` |
 | figure | `make_figures.py` |

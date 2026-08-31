@@ -3,9 +3,10 @@ set -euo pipefail
 cd "$(dirname "$0")"
 PY=${PYTHON:-python3}
 
-rm -f results/deep_ran.flag
+rm -f results/deep_ran.flag results/boost_ran.flag
 
 $PY continue_window.py
+$PY boost_contrast.py
 $PY analysis.py
 $PY make_figures.py
 
@@ -32,8 +33,13 @@ a10 = V["arms"]["x10_fresh"]
 assert a10["final_diffs"]["0.1"] > 0 and a10["final_diffs"]["0.2"] > 0
 assert a10["final_diffs"]["0.28"] < 0, "the wide bracket cracks"
 
+B = json.load(open(os.path.join(R, "boost_contrast.json")))
+assert B["ordering_held_every_cycle"] is True
+assert all(v > 0 for v in B["diffs_final"].values())
+
 assert os.path.getsize(os.path.join(R, "fig_drift.png")) > 10000
-ran = os.path.exists(os.path.join(R, "deep_ran.flag"))
+ran = all(os.path.exists(os.path.join(R, f)) for f in
+          ("deep_ran.flag", "boost_ran.flag"))
 print("REPRODUCED" if ran else "STRUCTURAL CHECKS PASS on committed "
       "artifacts (010 stack absent)")
 EOF

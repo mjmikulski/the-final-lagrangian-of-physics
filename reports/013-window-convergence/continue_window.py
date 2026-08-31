@@ -17,7 +17,7 @@ rung at the sixth cycle. Here the same functional (imported verbatim
 from report 010's committed stack) is continued:
 
   x14: from the PERSISTED sixth-cycle rung fields deep14_om*.npz,
-       +18 more L-BFGS(150) cycles per rung (24 total);
+       +24 more L-BFGS(150) cycles per rung (30 total);
   x10: fresh from the base profile, Adam 500 + up to 24 cycles;
   stopping rule per gamma arm: the two bracket DIFFERENCES
   E(0.1)-E(0.15) and E(0.2)-E(0.15) [and E(0.28)-E(0.15)] must each
