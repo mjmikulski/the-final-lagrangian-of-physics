@@ -52,7 +52,7 @@ def main():
         if os.path.exists(fn):
             vc = load(f'vacuum_condensation_{rt}')
             assert all(abs(r['E_relaxed']) < 1e-4 for r in vc.values()), 'vacuum did not return to E ~ 0'
-            print(f'artifact check: vacuum_condensation_{rt}: all {len(vc)} runs relax back to |E| < 1e-4 (no condensate)')
+            print(f'artifact check: vacuum_condensation_{rt}: all {len(vc)} noisy-vacuum runs relax back to |E| < 1e-4 (any cubic-order state lies below this resolution)')
         fn = f'results/restart_check_{rt}.json'
         if os.path.exists(fn):
             rc = load(f'restart_check_{rt}'); lt = load(f'lattice_linear_{rt}')

@@ -1,4 +1,4 @@
-# Report 014 — Linear-in-F terms with spectral coefficients: twelve pointwise generators, all dynamical, statics-only in the fundamental reading, inert on the canonical orbit
+# Report 014 — Linear-in-F terms with spectral coefficients: twelve pointwise generators, all dynamical, statics-only in the fundamental reading, even sector inert on the canonical orbit
 
 *2026-09-04 · Maciej J. Mikulski (AI-assisted, see [METHOD](../../METHOD.md)) ·
 closes the one order the program had not scanned: terms **linear** in the
@@ -73,8 +73,11 @@ change the far field. Results:
    remainder equals ±φ, a null term; exact over ℚ. The odd sector is
    nonzero there but parity-odd, so its integral vanishes on
    parity-symmetric configurations. **The Newton-sign question of 006 is
-   therefore not reopened by linear terms on the canonical ansatz.** On the
-   rank-rich dressing orbit all 38 classes are nonzero.
+   therefore not reopened by linear terms on its parity-symmetric
+   hedgehog configurations**; the odd sector is not pointwise inert on the
+   orbit (28 of 81 decorated ε-diagrams are nonzero there) and could act on
+   configurations without a parity symmetry. On the rank-rich dressing
+   orbit all 38 classes are nonzero.
 4. **Statics on the 3×3 sector.** With the vacuum frame only the three
    spatial classes F_{12}, F_{13}, F_{23} survive (the classes with a P_t
    cap vanish, all odd classes vanish); they are dynamical inside the
@@ -102,16 +105,18 @@ change the far field. Results:
    the relaxation finding those points.
 6. **Lattice λ-scan** (§4). The uniform vacuum is a saddle of the linear
    term at **cubic** order: along a generic compact frame twist of
-   amplitude t the linear integral is c₃t³ + O(t⁴) with |c₃| = 0.12–1.3
+   amplitude t the linear integral is c₃t³ + O(t⁴) with |c₃| = 0.0017–1.3
    (three random twists, all classes; the O(t²) part is the null total
    derivative, and an inversion-symmetric twist used in the first version
    of this test hid the cubic term), while the η energy is c₄t⁴ with
-   c₄ = 53–71. For a coupling λ the cubic–quartic model has its minimum at
-   t* = −3λc₃/(4c₄) = 10⁻⁶–10⁻⁴ with energy gain −λ⁴·27c₃⁴/(256c₄³) =
-   10⁻²³–10⁻¹⁵ — nonzero, sign-selected, and far below the resolution of a
-   relaxation (a noisy vacuum relaxes back to E ≈ 2·10⁻⁶ for λ = 0 and ±λ).
-   The linear term changes the vacuum in principle; at the couplings of the
-   scan it does not change it measurably. For the projector classes F_{ab} it acts as a
+   c₄ = 53–71, so configurations of both energy signs exist arbitrarily
+   close to the vacuum for every λ ≠ 0. Along each sampled ray the
+   cubic–quartic truncation has its minimum at t*(W) = −3λc₃/(4c₄) =
+   10⁻⁶–10⁻⁴ with energy −λ⁴·27c₃⁴/(256c₄³) = 10⁻²³–10⁻¹⁵; these are
+   ray-dependent trial estimates, not a condensate — no stationary
+   field-space solution is constructed, and the twist direction is not
+   optimized. A noisy vacuum relaxes back to E ≈ 2·10⁻⁶ for λ = 0 and ±λ,
+   consistent with any such state lying below that resolution. For the projector classes F_{ab} it acts as a
    sign-weighted reweighting of the existing static density: energy shifts
    follow the frozen values λ·∫dens (route A: within 1–8% at 5% weight and
    5–26% at 20%; route B F_{1Q}, F_{QQ}: within 1% and 3%), the far-field
@@ -214,13 +219,20 @@ linear integral is c₃t³ with c₃ = +0.2449 (F_{1Q}, seed 456), −0.140,
 −0.651 (other seeds) and |c₃| = 0.0017–1.3 across all classes, constant to
 five digits over t = 5·10⁻⁴…4·10⁻³; the η energy is c₄t⁴ with
 c₄ = 53.31–71.29 and no odd part. So for every λ ≠ 0 the uniform vacuum is
-a saddle at cubic order: the cubic–quartic model gives a minimum at
-t* = −3λc₃/(4c₄) (10⁻⁶–10⁻⁴ at the 5% couplings) with energy
-−λ⁴·27c₃⁴/(256c₄³) = 10⁻²³–10⁻¹⁵. A noisy vacuum (σ = 10⁻² spatial-block
-noise) relaxes back to E ≈ 2·10⁻⁶ for λ = 0 and ±λ
-(`vacuum_condensation.py`): the condensate exists but is unresolvable at
-these couplings. The linear term renormalizes the quartic twist stiffness
-at relative order λ·(∫ℓ/E_stat) ~ 10⁻⁴ here.
+a saddle at cubic order: configurations of both energy signs exist
+arbitrarily close to it. Along each sampled ray the cubic–quartic
+truncation has a radial minimum at t*(W) = −3λc₃/(4c₄) (10⁻⁶–10⁻⁴ at the
+5% couplings) with energy −λ⁴·27c₃⁴/(256c₄³) = 10⁻²³–10⁻¹⁵ (recorded in
+`results/twist_generic_*.json`). These numbers are trial estimates along
+three rays, stationary only in t, not in the transverse field directions
+(review round 3): whether a stationary condensate exists, and with what
+amplitude, would require optimizing the twist direction as well and
+demonstrating transverse stationarity, which is not done here. A noisy
+vacuum (σ = 10⁻² spatial-block noise) relaxes back to E ≈ 2·10⁻⁶ for
+λ = 0 and ±λ (`vacuum_condensation.py`), consistent with any such state
+lying below the resolution of the relaxation. The linear term
+renormalizes the quartic twist stiffness at relative order
+λ·(∫ℓ/E_stat) ~ 10⁻⁴ here.
 
 **Where the linear integral lives (`radial_profile.py`).** On the base
 profile about half of every linear integral — and half of the η static
@@ -261,8 +273,9 @@ within 3%); F_{1T} does not (18% and 36% off at ±5%, sign reversed at
 nothing (its integral stays 10⁻¹⁸, energy and tail unchanged). The difference from route A is the **gradient gate**: only
 the smallest couplings relax — F_{1Q} +5%, F_{QQ} −5%, F_{1T} −5% end with
 |∇E|∞ = 0.02–0.03 like the baseline — while the other nine runs stall with
-|∇E|∞ = 0.11–547 and an L-BFGS step that makes no progress (continuation
-change 0 to 10⁻⁷). What stalls them (`stall_diagnostics.py`, review rounds 1–2, computed
+|∇E|∞ = 0.11–547 and an L-BFGS step that makes little progress
+(continuation changes 0 to 1.3·10⁻⁴, i.e. ≤ 0.1% of the effect except for
+F_{1T} +20%, where the effect itself is −0.13). What stalls them (`stall_diagnostics.py`, review rounds 1–2, computed
 from the committed float32 copies of the endpoint states in
 `results/fields/`): at the site of maximal |∂E/∂M| of every stalled
 endpoint the **1–2 gap** (the eigenvalue-1 axis against the small-pair
@@ -309,10 +322,12 @@ reproducible endpoints; F_{1T} does not re-land (−1.3·10⁻² at +20%, i.e.
 descending, consistent with a core that is still reorganizing.
 
 **Answer to the plan's question.** The linear sector is real but does not
-open a new door: it cannot touch the clock (3a), it is inert on the
-canonical ansatz so the Newton-sign no-go of 006 stands there (3c), it
-destabilizes the vacuum only at cubic order with an unmeasurably small
-condensate (6), and on the electron it reweights what F² already builds. Its only structural novelty is negative — the spectral coefficients
+open a new door: it cannot touch the clock (3a), its even sector is inert on
+the canonical ansatz and its odd sector vanishes on the parity-symmetric
+configurations of 006, so the Newton-sign no-go stands there (3c), it
+makes the uniform vacuum a saddle only at cubic order, with any resulting
+state below the resolution of the relaxation (6), and on the electron it
+reweights what F² already builds. Its only structural novelty is negative — the spectral coefficients
 that make it dynamical are non-smooth where the eigenvalue-1 axis meets
 the small pair, the electron texture already sits 3·10⁻³ away from such
 points, and the energy minimization finds them. The one term with a
@@ -333,9 +348,11 @@ an author-gated choice.
   tails are quoted as protocol endpoints near 1–2 collisions, not as
   relaxed minima; whether the derivative is singular there or only its
   evaluation is not decided.
-- The vacuum condensate is inferred from the measured cubic and quartic
-  coefficients through a cubic–quartic model; it is not resolved by a
-  relaxation (its amplitude is 10⁻⁶–10⁻⁴). No regularization of the spectral coefficients (a gap
+- The vacuum instability is established (cubic term); a condensate is
+  not: the quoted t*, E* are ray-wise trial estimates from a cubic–quartic
+  truncation along three sampled twists, without transverse stationarity
+  or optimization of the twist direction, and nothing is resolved by a
+  relaxation. No regularization of the spectral coefficients (a gap
   floor, or a Riesz projection of the {1,2,3} cluster) is tried; whether
   the walls survive such a regularization is open.
 - The far-field exponent is a shell fit on r ∈ [8,16] of a 32³ box whose
