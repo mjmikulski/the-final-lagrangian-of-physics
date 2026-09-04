@@ -88,8 +88,21 @@ change the far field. Results:
    sector is therefore three-dimensional: {F_{1Q} = F_{12}+F_{13},
    F_{QQ} = 2F_{23}, F_{1T} = ½(λ_2−λ_3)(F_{12}−F_{13})}, and all three are
    run on the lattice (route B).
-6. **Lattice λ-scan** (§4): *to be completed from the committed run
-   records (routes A and B).*
+6. **Lattice λ-scan** (§4). On the η-relaxed electron the linear term
+   does not create a gradient condensate in the vacuum (the noisy vacuum
+   returns to E ≈ 10⁻⁶ for λ = 0 and ±λ; along an explicit twist wave the
+   linear integral scales as t⁴, like F², because its O(t²) part is the
+   null total derivative). On the texture it acts as a sign-weighted
+   reweighting of the existing static density: energy shifts equal the
+   frozen values λ·∫dens to a few percent, the far-field exponent moves
+   with the weight (0.007…0.99 across ±20%, class-dependent), the core's
+   eigenvalue-exchange structure survives (gaps 0.001–0.008 versus 0.0036),
+   and route A's branches pass all three gates (continuation ≤ 0.05% of the
+   effect, |∇E|∞ ≤ 0.1, spatial-block restarts within 0.3%). With the exact
+   spectral coefficients (route B) nine of twelve λ-runs stall on the
+   eigenvalue-crossing walls of the energy landscape (|∇E|∞ 0.1–547 at
+   gaps 0.002); only the gap-weighted class F_{1T} reorganizes the core
+   (at −20% weight: energy −2.65, the small splitting doubled).
 
 ## 1. Enumeration (`enumerate_linear.py`, `exact_linear.py`)
 
@@ -198,8 +211,45 @@ stays within 0.0012–0.0068 (baseline 0.0036) — the core structure survives.
 The participation ratio of the linear density is 15–20·10³ sites: the term
 is spread over the whole texture, not localized.
 
-*Route B records: to be filled from `results/lattice_linear_B.json` and
-`results/restart_check_B.json`.*
+**Route B (differentiable spectral coefficients), 14 runs.** The energy
+shifts again track the frozen values (5%: within 2%; 20%: within 5%), and
+the control class F_{tQ} does nothing (its integral stays 10⁻¹⁸, energy and
+tail unchanged). The difference from route A is the **gradient gate**: only
+the smallest couplings relax — F_{1Q} +5%, F_{QQ} −5%, F_{1T} −5% end with
+|∇E|∞ = 0.02–0.03 like the baseline — while the other nine runs stall with
+|∇E|∞ = 0.11–547 and an L-BFGS step that makes no progress (continuation
+change 0 to 10⁻⁷). The stalls coincide with small-pair gaps of
+0.0020–0.0025 on the free sites: the field is driven onto the eigenvalue
+crossing where the spectral coefficients are singular (g₂, g₃ ∝ 1/(λ₂−λ₁),
+1/(λ₃−λ₁); for T also the 2–3 gap enters the weight), and the
+minimization cannot proceed. This is the physical content of route B: with
+the exact spectral projectors as coefficients the energy landscape of the
+electron has non-smooth walls exactly where the texture exchanges its small
+eigenvalues, and a linear term of any appreciable weight pushes the
+relaxation into them. The gap-weighted class behaves differently from the
+other two: at −20% weight the relaxed field *grows* the 2–3 splitting
+(smallest gap 0.0036 → 0.0081, linear integral 6.1 → 31.4) and the energy
+drops by 2.65 (frozen value −0.98), the tail exponent moving to 0.61; at
++20% the run goes singular (|∇E|∞ = 547, tail 1.74, the integral changes
+sign). T rewards or penalizes biaxial splitting directly — the one linear
+term that reorganizes the core rather than reweighting the far field.
+Spatial-block restarts for route B (20% runs): F_{1Q} and F_{QQ} re-land
+within −3…−8·10⁻⁴ of the main energies (≤ 0.1% of the effect, tails within
+0.004) even though their main runs are stalled — the walls are
+reproducible endpoints; F_{1T} does not re-land (−1.3·10⁻² at +20%, i.e.
+10% of its effect, and −3.2·10⁻² at −20%, 1.2%): its branches keep
+descending, consistent with a core that is still reorganizing.
+
+**Answer to the plan's question.** The linear sector is real but does not
+open a new door: it cannot touch the clock (3a), it is inert on the
+canonical ansatz so the Newton-sign no-go of 006 stands there (3c), it does
+not change the vacuum (6), and on the electron it reweights what F² already
+builds. Its only structural novelty is negative — the spectral coefficients
+that make it dynamical are singular exactly where the electron core lives,
+and the energy minimization finds those singularities. The one term with a
+distinct action, the gap-weighted F_{1T}, acts on the biaxial splitting of
+the core; whether a term that rewards eigenvalue splitting is wanted is an
+author-gated choice.
 
 ## 5. What this report does not show
 
@@ -209,6 +259,13 @@ is spread over the whole texture, not localized.
 - The Newton-sign statement (3c) is for the canonical rank-1 ansatz; on the
   rank-rich electron the linear terms act through the lattice runs only,
   and no two-body lattice measurement is made here.
+- Route B's stalled branches are not stationary points; their energies and
+  tails are quoted as protocol endpoints on the singular walls, not as
+  relaxed minima. No regularization of the spectral coefficients (e.g. a
+  gap floor) is tried.
+- The far-field exponent is a shell fit on r ∈ [8,16] of a 32³ box whose
+  static density grows outward there (baseline slope +0.44); it measures
+  redistribution between shells, not an asymptotic power law.
 - Coefficients are restricted to spectral data of M (η, ε, projectors and
   smooth spectral scalars); the λ-scan runs constant multiples of the
   generators plus the gap-weighted T; no scan over general spectral-scalar

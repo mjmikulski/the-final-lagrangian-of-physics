@@ -61,7 +61,8 @@ def fig2():
             mk = markers.setdefault(cls, ['o', 's', '^', 'D', 'v'][len(markers)])
             w = r['lambda'] * lt['base_integrals'][cls] / lt['E_stat_base']
             ok = r['status'] == 'ok'
-            relaxed = ok and abs(r.get('continuation_dE', 1.0)) < 0.01 * max(abs(r['E_total'] - base['E_total']), 1e-12)
+            eff = abs(r['E_total'] - base['E_total'])
+            relaxed = ok and r.get('grad_inf_free', 1.0) <= 0.1 and (eff < 1e-9 or abs(r.get('continuation_dE', 1.0)) < 0.01 * eff)
             kw = dict(color=col, marker=mk, ms=6, ls='none', mfc=col if relaxed else 'none', mew=1.2)
             axes[0].plot(w, r['E_total'] - base['E_total'], **kw)
             if ok:
@@ -81,7 +82,7 @@ def fig2():
     axes[0].plot([], [], color='k', marker='x', ls='none', label='spatial-block perturbed restart')
     axes[0].axhline(0, color='k', lw=0.6)
     axes[0].set_xlabel('λ·∫dens / E_stat  (weight on the base profile)'); axes[0].set_ylabel('E_total − E_baseline')
-    axes[0].set_title('(a) relaxed total energy (filled = continuation gate passed)', fontsize=9)
+    axes[0].set_title('(a) total energy after the protocol (filled = relaxed: |∇E|∞ ≤ 0.1 and continuation gate)', fontsize=9)
     axes[1].set_xlabel('weight'); axes[1].set_ylabel('far-field exponent of the η density, r ∈ [8,16]')
     axes[1].set_title('(b) tail exponent (dotted: baseline)', fontsize=9)
     axes[2].set_xlabel('weight'); axes[2].set_ylabel('min gap of the small eigenvalue pair')
