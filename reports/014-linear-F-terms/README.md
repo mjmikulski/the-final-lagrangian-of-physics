@@ -84,25 +84,35 @@ change the far field. Results:
    P_2 − P_3 is singular at the crossing, but its gap-weighted version is
    not: with X = ηM (mixed) and λ̄ = ½tr(XQ), the tensor T = (X − λ̄)Q is a
    smooth function of M and equals ½(λ_2−λ_3)(P_2−P_3) in the local
-   eigenbasis (pointed out in review round 1). The crossing-safe static
-   sector is therefore three-dimensional: {F_{1Q} = F_{12}+F_{13},
-   F_{QQ} = 2F_{23}, F_{1T} = ½(λ_2−λ_3)(F_{12}−F_{13})}, and all three are
-   run on the lattice (route B).
+   eigenbasis (pointed out in review round 1). The static sector that is
+   smooth through the 2–3 crossing is therefore three-dimensional:
+   {F_{1Q} = F_{12}+F_{13}, F_{QQ} = 2F_{23}, F_{1T} = ½(λ_2−λ_3)(F_{12}−F_{13})},
+   and all three are run on the lattice (route B). All three remain
+   non-smooth where the eigenvalue-1 axis meets the small pair (a 1–2
+   collision); the electron's smallest 1–2 gap is 3·10⁻³, and §4 shows
+   the relaxation finding those points.
 6. **Lattice λ-scan** (§4). On the η-relaxed electron the linear term
    does not create a gradient condensate in the vacuum (the noisy vacuum
    returns to E ≈ 10⁻⁶ for λ = 0 and ±λ; along an explicit twist wave the
    linear integral scales as t⁴, like F², because its O(t²) part is the
-   null total derivative). On the texture it acts as a sign-weighted
-   reweighting of the existing static density: energy shifts equal the
-   frozen values λ·∫dens to a few percent, the far-field exponent moves
-   with the weight (0.007…0.99 across ±20%, class-dependent), the core's
-   eigenvalue-exchange structure survives (gaps 0.001–0.008 versus 0.0036),
-   and route A's branches pass all three gates (continuation ≤ 0.05% of the
-   effect, |∇E|∞ ≤ 0.1, spatial-block restarts within 0.3%). With the exact
-   spectral coefficients (route B) nine of twelve λ-runs stall on the
-   eigenvalue-crossing walls of the energy landscape (|∇E|∞ 0.1–547 at
-   gaps 0.002); only the gap-weighted class F_{1T} reorganizes the core
-   (at −20% weight: energy −2.65, the small splitting doubled).
+   null total derivative). For the projector classes F_{ab} it acts as a
+   sign-weighted reweighting of the existing static density: energy shifts
+   follow the frozen values λ·∫dens (route A: within 1–8% at 5% weight and
+   5–26% at 20%; route B F_{1Q}, F_{QQ}: within 1% and 3%), the far-field
+   exponent moves with the weight (0.007…0.99 across ±20%,
+   class-dependent), and the core's eigenvalue-exchange structure survives
+   (2–3 gaps 0.001–0.008 versus 0.0036). Route A: 12 of 13 branches pass
+   all three gates at the end of the protocol (continuation ≤ 0.05% of
+   the effect, |∇E|∞ ≤ 0.1, spatial-block restarts within 0.3%); the P1P3
+   −20% branch ends at |∇E|∞ = 0.105 and passes after one further
+   100-iteration cycle (0.042, energy −7·10⁻⁵, tail unchanged; §4). The gap-weighted class F_{1T} is **not** a small
+   reweighting: its shifts deviate from the frozen values by 18–170% and
+   change sign at +20%; at −20% weight it lowers the energy by 2.65 and
+   doubles the small splitting. With the exact spectral coefficients
+   (route B) nine of twelve λ-runs end with |∇E|∞ = 0.1–547 on 1–2
+   collisions (gaps 10⁻⁹ at the maximal-gradient sites), where P_1 and Q
+   are non-smooth and the computed derivative fails its finite-difference
+   check; only the three smallest-coupling runs relax.
 
 ## 1. Enumeration (`enumerate_linear.py`, `exact_linear.py`)
 
@@ -196,10 +206,15 @@ the relaxed field responds by moving energy between shells.
 **Route A (vacuum-pinned coefficients), 13 runs.** Baseline (λ = 0):
 E = 4.841063 after the protocol (the base profile relaxes further from
 4.8996), free-site |∇E|∞ = 0.016, tail exponent 0.441, small-pair gap
-0.0036. Every λ-run passes the gates: continuation changes 2–9·10⁻⁵
-(≤ 0.05% of the effect), |∇E|∞ 0.007–0.05 (one borderline 0.105 at P1P3,
-−20%), and the spatial-block restarts re-land within −0.2…−2.8·10⁻³ of the
-main energies (≤ 0.3% of the effect) with tails reproduced to ±0.004.
+0.0036. Twelve of the thirteen runs pass the gates at the end of the protocol:
+continuation changes 2–9·10⁻⁵ (≤ 0.05% of the effect), |∇E|∞ 0.007–0.05,
+and the spatial-block restarts re-land within −0.2…−2.8·10⁻³ of the main
+energies (≤ 0.3% of the effect) with tails reproduced to ±0.004. The
+P1P3 −20% run ends at |∇E|∞ = 0.105, outside the gate; one further
+100-iteration L-BFGS cycle (`continue_run.py`,
+`results/continuation_A_P1P3_f0.2_s-1.json`) brings it to 0.042 with the
+energy lower by 7·10⁻⁵ and the tail exponent unchanged (0.317), so its
+quoted diagnostics stand.
 The energy shifts follow the frozen value λ·∫dens: at 5% weight within 2%
 (e.g. P1P2: ±0.242 vs ±0.245), at 20% within 5–25% with a sign-selected
 backreaction — for λ < 0 the relaxed field grows the linear integral
@@ -211,22 +226,34 @@ stays within 0.0012–0.0068 (baseline 0.0036) — the core structure survives.
 The participation ratio of the linear density is 15–20·10³ sites: the term
 is spread over the whole texture, not localized.
 
-**Route B (differentiable spectral coefficients), 14 runs.** The energy
-shifts again track the frozen values (5%: within 2%; 20%: within 5%), and
-the control class F_{tQ} does nothing (its integral stays 10⁻¹⁸, energy and
-tail unchanged). The difference from route A is the **gradient gate**: only
+**Route B (differentiable spectral coefficients), 14 runs.** For F_{1Q}
+and F_{QQ} the energy shifts track the frozen values (5%: within 1%; 20%:
+within 3%); F_{1T} does not (18% and 36% off at ±5%, sign reversed at
++20%, 170% off at −20% — see below), and the control class F_{tQ} does
+nothing (its integral stays 10⁻¹⁸, energy and tail unchanged). The difference from route A is the **gradient gate**: only
 the smallest couplings relax — F_{1Q} +5%, F_{QQ} −5%, F_{1T} −5% end with
 |∇E|∞ = 0.02–0.03 like the baseline — while the other nine runs stall with
 |∇E|∞ = 0.11–547 and an L-BFGS step that makes no progress (continuation
-change 0 to 10⁻⁷). The stalls coincide with small-pair gaps of
-0.0020–0.0025 on the free sites: the field is driven onto the eigenvalue
-crossing where the spectral coefficients are singular (g₂, g₃ ∝ 1/(λ₂−λ₁),
-1/(λ₃−λ₁); for T also the 2–3 gap enters the weight), and the
-minimization cannot proceed. This is the physical content of route B: with
-the exact spectral projectors as coefficients the energy landscape of the
-electron has non-smooth walls exactly where the texture exchanges its small
-eigenvalues, and a linear term of any appreciable weight pushes the
-relaxation into them. The gap-weighted class behaves differently from the
+change 0 to 10⁻⁷). What stalls them (`stall_diagnostics.py`, review round
+1): at the site of maximal |∂E/∂M| of every stalled endpoint the **1–2
+gap** (the eigenvalue-1 axis against the small-pair cluster) is
+1.2·10⁻⁹–3·10⁻⁷ (eight runs) or 2.8·10⁻⁴ with a 4·10⁻⁸ collision elsewhere
+on the free sites (F_{1T} −20%), while the 2–3 gap there is 0.7–0.85; in the relaxed
+endpoints the smallest 1–2 gap on the free sites is 7·10⁻³ (baseline
+3.3·10⁻³). The 2–3 crossing is smooth for all three route-B classes (Q and
+T are Riesz projections of the cluster, analytic while the cluster is
+separated from λ_t and λ_1) and is not the cause; the only non-smooth
+points of P_1, Q and T are 1–2 collisions, and the relaxation drives the
+field onto them. At those endpoints the autograd derivative is no longer
+the derivative of the energy: the directional finite-difference check
+along the gradient direction, which agrees to 10⁻⁷ at every relaxed
+endpoint, disagrees by factors 10–10⁴ at every stalled one — the
+1/(λ₂−λ₁), 1/(λ₃−λ₁) factors are evaluated at gaps of 10⁻⁹. So the stalled
+runs end on a genuine non-smooth wall of the spectral-coefficient energy
+(a 1–2 collision), not at stationary points, and their energies and tails
+are protocol endpoints on that wall. The electron texture starts with a
+1–2 gap of 3·10⁻³, i.e. the wall is close to the base profile from the
+outset. The gap-weighted class behaves differently from the
 other two: at −20% weight the relaxed field *grows* the 2–3 splitting
 (smallest gap 0.0036 → 0.0081, linear integral 6.1 → 31.4) and the energy
 drops by 2.65 (frozen value −0.98), the tail exponent moving to 0.61; at
@@ -245,8 +272,9 @@ open a new door: it cannot touch the clock (3a), it is inert on the
 canonical ansatz so the Newton-sign no-go of 006 stands there (3c), it does
 not change the vacuum (6), and on the electron it reweights what F² already
 builds. Its only structural novelty is negative — the spectral coefficients
-that make it dynamical are singular exactly where the electron core lives,
-and the energy minimization finds those singularities. The one term with a
+that make it dynamical are non-smooth where the eigenvalue-1 axis meets
+the small pair, the electron texture already sits 3·10⁻³ away from such
+points, and the energy minimization finds them. The one term with a
 distinct action, the gap-weighted F_{1T}, acts on the biaxial splitting of
 the core; whether a term that rewards eigenvalue splitting is wanted is an
 author-gated choice.
@@ -260,9 +288,10 @@ author-gated choice.
   rank-rich electron the linear terms act through the lattice runs only,
   and no two-body lattice measurement is made here.
 - Route B's stalled branches are not stationary points; their energies and
-  tails are quoted as protocol endpoints on the singular walls, not as
-  relaxed minima. No regularization of the spectral coefficients (e.g. a
-  gap floor) is tried.
+  tails are quoted as protocol endpoints on the 1–2 collision walls, not
+  as relaxed minima. No regularization of the spectral coefficients (a gap
+  floor, or a Riesz projection of the {1,2,3} cluster) is tried; whether
+  the walls survive such a regularization is open.
 - The far-field exponent is a shell fit on r ∈ [8,16] of a 32³ box whose
   static density grows outward there (baseline slope +0.44); it measures
   redistribution between shells, not an asymptotic power law.
@@ -293,6 +322,7 @@ bash reproduce.sh            # CPU suites (~15 min); M5_RUN_LATTICE=1 for the GP
 | rank-rich orbit values; rank-1 orbit theorem | `orbit_linear_exact.py`, `orbit1_linear_exact.py` → `results/orbit_linear.json`, `results/orbit1_linear.json` |
 | static kernel signatures | `static_kernel_signs.py` → `results/static_kernel_signs.json` |
 | lattice λ-scan, routes A / B (differentiable spectral coefficients, gates) | `lattice_linear_v2.py A` / `B` → `results/lattice_linear_A.json`, `results/lattice_linear_B.json` |
+| spatial-block restarts; endpoint gaps and derivative checks; vacuum stability; twist scan; radial profile | `restart_check.py`, `stall_diagnostics.py`, `vacuum_condensation.py`, `twist_scan.py`, `radial_profile.py` → `results/restart_check_*.json`, `results/stall_diagnostics_B.json`, `results/vacuum_condensation_*.json`, `results/twist_scan_B.json`, `results/radial_profile_*.json` |
 | artifact-only assertions | `verify_artifacts.py` |
 | figures | `make_figures.py` → `results/fig_*.png` |
 

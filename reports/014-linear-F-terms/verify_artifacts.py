@@ -72,6 +72,19 @@ def main():
             assert 0.3 < fo['eta_static'] < 0.7
             print(f'artifact check: radial_profile_{rt}: outer-zone fraction eta_static {fo["eta_static"]:.2f}, '
                   + ', '.join(f'{k} {v:.2f}' for k, v in fo.items() if k not in ('eta_static',)))
+    if os.path.exists('results/stall_diagnostics_B.json'):
+        sd = load('stall_diagnostics_B')
+        stalled = {k: r for k, r in sd.items() if r['grad_inf_free'] > 0.1}
+        relaxed = {k: r for k, r in sd.items() if r['grad_inf_free'] <= 0.1}
+        assert all(r['gaps_at_argmax']['1-2'] < 1e-3 and r['gaps_min_free']['1-2'] < 1e-6 and r['gaps_at_argmax']['2-3'] > 0.5 for r in stalled.values())
+        assert all(r['directional']['rel_err']['1e-06'] > 1.0 for r in stalled.values())
+        assert all(r['directional']['rel_err']['1e-06'] < 1e-5 for r in relaxed.values())
+        print(f'artifact check: stall diagnostics: {len(stalled)} stalled endpoints all sit on 1-2 collisions (gap < 1e-3 at the '
+              f'max-gradient site, < 1e-6 somewhere on the free sites; 2-3 gap > 0.5 there) with a failed FD check; {len(relaxed)} relaxed endpoints pass FD to < 1e-5')
+    if os.path.exists('results/continuation_A_P1P3_f0.2_s-1.json'):
+        ct = load('continuation_A_P1P3_f0.2_s-1')
+        assert ct['history'][0]['g_inf'] > 0.1 and ct['passes_gate'] and ct['history'][-1]['g_inf'] <= 0.1
+        print(f"artifact check: continuation of A:P1P3 -20%: |grad|inf {ct['history'][0]['g_inf']:.3f} -> {ct['history'][-1]['g_inf']:.3f} (gate passed)")
     print('ARTIFACT CHECKS PASS (committed JSON consistency; not a GPU rerun)')
 
 if __name__ == '__main__':
