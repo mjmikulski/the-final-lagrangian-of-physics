@@ -1,0 +1,486 @@
+{
+ "n_diagrams": 675,
+ "n_zero": 424,
+ "n_classes": 38,
+ "class_sizes": [
+  24,
+  24,
+  24,
+  24,
+  24,
+  24,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  4,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  2,
+  1
+ ],
+ "rank_all": 12,
+ "rank_even": 6,
+ "rank_odd": 6,
+ "rank_spatial_3x3": 3,
+ "rank_static_generic": 12,
+ "reps": {
+  "L0": {
+   "label": "02-13[eta,eta]",
+   "diagram": [
+    "even",
+    "02-13",
+    0,
+    0
+   ],
+   "spatial_3x3": "alive"
+  },
+  "L1": {
+   "label": "02-13[eta,P0]",
+   "diagram": [
+    "even",
+    "02-13",
+    0,
+    1
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L2": {
+   "label": "02-13[eta,P1]",
+   "diagram": [
+    "even",
+    "02-13",
+    0,
+    2
+   ],
+   "spatial_3x3": "alive"
+  },
+  "L3": {
+   "label": "02-13[eta,P2]",
+   "diagram": [
+    "even",
+    "02-13",
+    0,
+    3
+   ],
+   "spatial_3x3": "alive"
+  },
+  "L4": {
+   "label": "02-13[eta,P3]",
+   "diagram": [
+    "even",
+    "02-13",
+    0,
+    4
+   ],
+   "spatial_3x3": "alive"
+  },
+  "L5": {
+   "label": "02-13[P0,P1]",
+   "diagram": [
+    "even",
+    "02-13",
+    1,
+    2
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L6": {
+   "label": "02-13[P0,P2]",
+   "diagram": [
+    "even",
+    "02-13",
+    1,
+    3
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L7": {
+   "label": "02-13[P0,P3]",
+   "diagram": [
+    "even",
+    "02-13",
+    1,
+    4
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L8": {
+   "label": "02-13[P1,P2]",
+   "diagram": [
+    "even",
+    "02-13",
+    2,
+    3
+   ],
+   "spatial_3x3": "alive"
+  },
+  "L9": {
+   "label": "02-13[P1,P3]",
+   "diagram": [
+    "even",
+    "02-13",
+    2,
+    4
+   ],
+   "spatial_3x3": "alive"
+  },
+  "L10": {
+   "label": "02-13[P2,P3]",
+   "diagram": [
+    "even",
+    "02-13",
+    3,
+    4
+   ],
+   "spatial_3x3": "alive"
+  },
+  "L11": {
+   "label": "eps[eta,eta,eta,eta]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    0,
+    0,
+    0
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L12": {
+   "label": "eps[eta,eta,eta,P0]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    0,
+    0,
+    1
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L13": {
+   "label": "eps[eta,eta,eta,P1]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    0,
+    0,
+    2
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L14": {
+   "label": "eps[eta,eta,eta,P2]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    0,
+    0,
+    3
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L15": {
+   "label": "eps[eta,eta,eta,P3]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    0,
+    0,
+    4
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L16": {
+   "label": "eps[eta,eta,P0,P1]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    0,
+    1,
+    2
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L17": {
+   "label": "eps[eta,eta,P0,P2]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    0,
+    1,
+    3
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L18": {
+   "label": "eps[eta,eta,P0,P3]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    0,
+    1,
+    4
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L19": {
+   "label": "eps[eta,eta,P1,P2]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    0,
+    2,
+    3
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L20": {
+   "label": "eps[eta,eta,P1,P3]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    0,
+    2,
+    4
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L21": {
+   "label": "eps[eta,eta,P2,P3]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    0,
+    3,
+    4
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L22": {
+   "label": "eps[eta,P0,eta,eta]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    1,
+    0,
+    0
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L23": {
+   "label": "eps[eta,P0,eta,P1]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    1,
+    0,
+    2
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L24": {
+   "label": "eps[eta,P0,eta,P2]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    1,
+    0,
+    3
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L25": {
+   "label": "eps[eta,P0,eta,P3]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    1,
+    0,
+    4
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L26": {
+   "label": "eps[eta,P1,eta,eta]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    2,
+    0,
+    0
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L27": {
+   "label": "eps[eta,P1,eta,P0]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    2,
+    0,
+    1
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L28": {
+   "label": "eps[eta,P1,eta,P2]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    2,
+    0,
+    3
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L29": {
+   "label": "eps[eta,P1,eta,P3]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    2,
+    0,
+    4
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L30": {
+   "label": "eps[eta,P2,eta,eta]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    3,
+    0,
+    0
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L31": {
+   "label": "eps[eta,P2,eta,P0]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    3,
+    0,
+    1
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L32": {
+   "label": "eps[eta,P2,eta,P1]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    3,
+    0,
+    2
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L33": {
+   "label": "eps[eta,P2,eta,P3]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    3,
+    0,
+    4
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L34": {
+   "label": "eps[eta,P3,eta,eta]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    4,
+    0,
+    0
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L35": {
+   "label": "eps[eta,P3,eta,P0]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    4,
+    0,
+    1
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L36": {
+   "label": "eps[eta,P3,eta,P1]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    4,
+    0,
+    2
+   ],
+   "spatial_3x3": "zero"
+  },
+  "L37": {
+   "label": "eps[eta,P3,eta,P2]",
+   "diagram": [
+    "odd",
+    null,
+    0,
+    4,
+    0,
+    3
+   ],
+   "spatial_3x3": "zero"
+  }
+ }
+}

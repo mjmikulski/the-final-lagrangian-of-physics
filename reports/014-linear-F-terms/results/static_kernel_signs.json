@@ -1,0 +1,44 @@
+{
+ "L0": {
+  "label": "02-13[eta,eta]",
+  "n_pos": 8,
+  "n_neg": 7,
+  "trace": 0.0
+ },
+ "L2": {
+  "label": "02-13[eta,P1]",
+  "n_pos": 5,
+  "n_neg": 5,
+  "trace": 0.0
+ },
+ "L3": {
+  "label": "02-13[eta,P2]",
+  "n_pos": 5,
+  "n_neg": 5,
+  "trace": 0.0
+ },
+ "L4": {
+  "label": "02-13[eta,P3]",
+  "n_pos": 5,
+  "n_neg": 5,
+  "trace": 0.0
+ },
+ "L8": {
+  "label": "02-13[P1,P2]",
+  "n_pos": 4,
+  "n_neg": 4,
+  "trace": 0.0
+ },
+ "L9": {
+  "label": "02-13[P1,P3]",
+  "n_pos": 4,
+  "n_neg": 4,
+  "trace": 0.0
+ },
+ "L10": {
+  "label": "02-13[P2,P3]",
+  "n_pos": 4,
+  "n_neg": 4,
+  "trace": 0.0
+ }
+}

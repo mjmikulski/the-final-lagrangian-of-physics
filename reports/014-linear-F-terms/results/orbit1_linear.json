@@ -1,0 +1,33 @@
+{
+ "even_with_Pt_cap_all_zero": true,
+ "nonzero_odd": [
+  "('odd', None, 0, 0, 0, 0)",
+  "('odd', None, 0, 0, 0, 2)",
+  "('odd', None, 0, 0, 2, 0)",
+  "('odd', None, 0, 0, 2, 2)",
+  "('odd', None, 0, 1, 0, 0)",
+  "('odd', None, 0, 1, 0, 2)",
+  "('odd', None, 0, 1, 2, 0)",
+  "('odd', None, 0, 1, 2, 2)",
+  "('odd', None, 0, 2, 0, 0)",
+  "('odd', None, 0, 2, 0, 2)",
+  "('odd', None, 0, 2, 2, 0)",
+  "('odd', None, 0, 2, 2, 2)",
+  "('odd', None, 1, 0, 0, 0)",
+  "('odd', None, 1, 0, 0, 2)",
+  "('odd', None, 1, 0, 2, 0)",
+  "('odd', None, 1, 0, 2, 2)",
+  "('odd', None, 1, 2, 0, 0)",
+  "('odd', None, 1, 2, 0, 2)",
+  "('odd', None, 1, 2, 2, 0)",
+  "('odd', None, 1, 2, 2, 2)",
+  "('odd', None, 2, 0, 0, 0)",
+  "('odd', None, 2, 0, 0, 2)",
+  "('odd', None, 2, 0, 2, 0)",
+  "('odd', None, 2, 0, 2, 2)",
+  "('odd', None, 2, 1, 0, 0)",
+  "('odd', None, 2, 1, 0, 2)",
+  "('odd', None, 2, 1, 2, 0)",
+  "('odd', None, 2, 1, 2, 2)"
+ ]
+}
