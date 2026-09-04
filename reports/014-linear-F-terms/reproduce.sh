@@ -9,6 +9,7 @@ cd "$(dirname "$0")"
 PY=${PYTHON:-python}
 echo "== L0: enumeration, float route =="; $PY enumerate_linear.py
 echo "== L0: exact route over Q =="; $PY exact_linear.py
+echo "== L0: exact classification (upper bound) =="; $PY exact_classification.py
 echo "== L0: Euler-Lagrange (null) test =="; $PY null_test_linear.py
 echo "== L1: rank-rich orbit values =="; $PY orbit_linear_exact.py
 echo "== L1: rank-1 orbit theorem =="; $PY orbit1_linear_exact.py

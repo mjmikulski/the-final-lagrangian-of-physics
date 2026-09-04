@@ -76,15 +76,26 @@ def main():
         sd = load('stall_diagnostics_B')
         stalled = {k: r for k, r in sd.items() if r['grad_inf_free'] > 0.1}
         relaxed = {k: r for k, r in sd.items() if r['grad_inf_free'] <= 0.1}
-        assert all(r['gaps_at_argmax']['1-2'] < 1e-3 and r['gaps_min_free']['1-2'] < 1e-6 and r['gaps_at_argmax']['2-3'] > 0.5 for r in stalled.values())
+        assert all(r['gaps_at_argmax']['1-2'] < 1e-6 and r['gaps_at_argmax']['2-3'] > 0.5 for r in stalled.values())
         assert all(r['directional']['rel_err']['1e-06'] > 1.0 for r in stalled.values())
         assert all(r['directional']['rel_err']['1e-06'] < 1e-5 for r in relaxed.values())
-        print(f'artifact check: stall diagnostics: {len(stalled)} stalled endpoints all sit on 1-2 collisions (gap < 1e-3 at the '
-              f'max-gradient site, < 1e-6 somewhere on the free sites; 2-3 gap > 0.5 there) with a failed FD check; {len(relaxed)} relaxed endpoints pass FD to < 1e-5')
+        print(f'artifact check: stall diagnostics: {len(stalled)} stalled endpoints all sit next to 1-2 collisions (gap < 1e-6 at the '
+              f'max-gradient site, 2-3 gap > 0.5 there) with a failed FD check; {len(relaxed)} relaxed endpoints pass FD to < 1e-5')
     if os.path.exists('results/continuation_A_P1P3_f0.2_s-1.json'):
         ct = load('continuation_A_P1P3_f0.2_s-1')
         assert ct['history'][0]['g_inf'] > 0.1 and ct['passes_gate'] and ct['history'][-1]['g_inf'] <= 0.1
         print(f"artifact check: continuation of A:P1P3 -20%: |grad|inf {ct['history'][0]['g_inf']:.3f} -> {ct['history'][-1]['g_inf']:.3f} (gate passed)")
+    ec = load('exact_classification')
+    assert (ec['n_diagrams'], ec['n_zero'], ec['n_classes'], ec['rank_all'], ec['rank_even'], ec['rank_odd']) == (675, 424, 38, 12, 6, 6)
+    print(f"artifact check: exact classification: expansion identities verified ({ec['identity_checks']} checks); classes and ranks exact")
+    for rt in ('A', 'B'):
+        fn = f'results/twist_generic_{rt}.json'
+        if os.path.exists(fn):
+            tg = load(f'twist_generic_{rt}')
+            c3 = [abs(v['0.001']['c3_lin']) for v in tg.values()]
+            c4 = [v['0.001']['c4_eta'] for v in tg.values()]
+            assert min(c3) > 1e-3 and max(c3) < 2 and min(c4) > 50 and max(c4) < 80
+            print(f'artifact check: twist_generic_{rt}: cubic coefficient |c3| = {min(c3):.4f}..{max(c3):.3f} (nonzero for every twist/class), c4 = {min(c4):.1f}..{max(c4):.1f}')
     print('ARTIFACT CHECKS PASS (committed JSON consistency; not a GPU rerun)')
 
 if __name__ == '__main__':

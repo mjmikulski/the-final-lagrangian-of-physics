@@ -6,7 +6,7 @@ directional finite-difference check of the full derivative at the endpoint
 along the gradient direction (eps = 1e-5, 1e-6). Also for the F1Q/FQQ/F1T
 classes the min 1-2 gap, since the only singular denominators in metrics_B
 are 1/(l2 - l1) and 1/(l3 - l1) (Q and T are smooth through the 2-3
-crossing, Riesz). Usage: python stall_diagnostics.py B
+crossing, Riesz). Usage: python stall_diagnostics.py B  (reads the committed float32 endpoint fields in results/fields/)
 """
 import json, os, sys
 import numpy as np, torch
@@ -22,7 +22,7 @@ for tag, r in res.items():
     a, b = r['class']; lam = r['lambda']
     fn = os.path.join(L.FIELDS, f'{ROUTE}_{tag}.npz')
     if not os.path.exists(fn):
-        continue
+        raise SystemExit(f'endpoint field missing: {fn} (committed float32 copies live in results/fields/)')
     Mr = torch.tensor(np.load(fn)['M'], dtype=DT, device=DEV)
     Mf = field(Mr)
     x = torch.einsum('ab,...bc->...ac', ETA, Mf).cpu()

@@ -8,7 +8,10 @@ import importlib
 L = importlib.import_module('lattice_linear_v2')
 from lattice_grid_defs import DEV, DT, FREE, field
 res = json.load(open(L.RESULTS)); r = res[TAG]; a, b = r['class']; lam = r['lambda']
-M_raw = torch.tensor(np.load(os.path.join(L.FIELDS, f'{ROUTE}_{TAG}.npz'))['M'], dtype=DT, device=DEV).requires_grad_(True)
+fn = os.path.join(L.FIELDS, f'{ROUTE}_{TAG}.npz')
+if not os.path.exists(fn):
+    raise SystemExit(f'endpoint field missing: {fn}')
+M_raw = torch.tensor(np.load(fn)['M'], dtype=DT, device=DEV).requires_grad_(True)
 hist = [{'E': L.E_of(M_raw.detach(), lam, a, b).item(), 'g_inf': L.grad_inf_free(M_raw, lam, a, b)}]
 print('start', hist[0], flush=True)
 for cyc in range(4):

@@ -31,12 +31,21 @@ below the record kinetic term −½I₁ ~ (∂M)⁴, so they are the minimal
 extension of the "everything from F" grammar and the only one that can
 change the far field. Results:
 
-1. **Twelve pointwise generators.** With projector decorations the 675
-   diagrams (50 even, 625 with ε) reduce to 38 proportionality classes and
-   rank **12 over ℚ: 6 even + 6 odd** — the rank of the family over constant
-   scalars on the simple-spectrum stratum. The even generators are
-   F_{ab} ≡ P_a^{μα}P_b^{νβ}F_{μναβ}, a < b (the diagonal F_{aa} vanishes by
-   antisymmetry); φ = Σ_{a<b} 2F_{ab}. **Scope (review round 1):** with
+1. **Twelve pointwise generators, exactly.** With projector decorations
+   the 675 diagrams (50 even, 625 with ε) reduce to 38 proportionality
+   classes and rank **12 over ℚ: 6 even + 6 odd** — the rank of the family
+   over constant scalars on the simple-spectrum stratum. Upper bound by
+   tensor algebra (`exact_classification.py`): expanding every metric slot
+   with η = Σ_a P_a, each even diagram is an integer combination of the six
+   F_{ab} ≡ P_a^{μα}P_b^{νβ}F_{μναβ}, a < b (F_{aa} = 0 by antisymmetry,
+   F_{ab} = F_{ba}), and each odd diagram, because ε of four frame vectors
+   is ± det E unless two coincide, is an integer combination of the six
+   frame components of F with all four indices distinct; these expansion
+   identities are verified exactly for all 675 diagrams at six random
+   rational (frame, field) points, and the classes and ranks are then read
+   off the integer coefficient vectors. Lower bound: exact rank 12 of the
+   evaluation matrix at sixteen rational points (`exact_linear.py`). Hence
+   exactly 12. φ = Σ_{a<b} 2F_{ab}. **Scope (review round 1):** with
    general smooth spectral scalar functions of M as coefficients the family
    is a rank-12 *module* over those scalars, not a twelve-dimensional space;
    "complete" below means: every linear-in-F term with coefficients built
@@ -91,11 +100,18 @@ change the far field. Results:
    non-smooth where the eigenvalue-1 axis meets the small pair (a 1–2
    collision); the electron's smallest 1–2 gap is 3·10⁻³, and §4 shows
    the relaxation finding those points.
-6. **Lattice λ-scan** (§4). On the η-relaxed electron the linear term
-   does not create a gradient condensate in the vacuum (the noisy vacuum
-   returns to E ≈ 10⁻⁶ for λ = 0 and ±λ; along an explicit twist wave the
-   linear integral scales as t⁴, like F², because its O(t²) part is the
-   null total derivative). For the projector classes F_{ab} it acts as a
+6. **Lattice λ-scan** (§4). The uniform vacuum is a saddle of the linear
+   term at **cubic** order: along a generic compact frame twist of
+   amplitude t the linear integral is c₃t³ + O(t⁴) with |c₃| = 0.12–1.3
+   (three random twists, all classes; the O(t²) part is the null total
+   derivative, and an inversion-symmetric twist used in the first version
+   of this test hid the cubic term), while the η energy is c₄t⁴ with
+   c₄ = 53–71. For a coupling λ the cubic–quartic model has its minimum at
+   t* = −3λc₃/(4c₄) = 10⁻⁶–10⁻⁴ with energy gain −λ⁴·27c₃⁴/(256c₄³) =
+   10⁻²³–10⁻¹⁵ — nonzero, sign-selected, and far below the resolution of a
+   relaxation (a noisy vacuum relaxes back to E ≈ 2·10⁻⁶ for λ = 0 and ±λ).
+   The linear term changes the vacuum in principle; at the couplings of the
+   scan it does not change it measurably. For the projector classes F_{ab} it acts as a
    sign-weighted reweighting of the existing static density: energy shifts
    follow the frozen values λ·∫dens (route A: within 1–8% at 5% weight and
    5–26% at 20%; route B F_{1Q}, F_{QQ}: within 1% and 3%), the far-field
@@ -109,10 +125,13 @@ change the far field. Results:
    reweighting: its shifts deviate from the frozen values by 18–170% and
    change sign at +20%; at −20% weight it lowers the energy by 2.65 and
    doubles the small splitting. With the exact spectral coefficients
-   (route B) nine of twelve λ-runs end with |∇E|∞ = 0.1–547 on 1–2
-   collisions (gaps 10⁻⁹ at the maximal-gradient sites), where P_1 and Q
-   are non-smooth and the computed derivative fails its finite-difference
-   check; only the three smallest-coupling runs relax.
+   (route B) nine of twelve λ-runs end with |∇E|∞ = 0.1–547 very near 1–2
+   collisions (gaps 10⁻⁹–10⁻⁷ at the maximal-gradient sites, where P_1 and
+   Q are non-smooth) and the optimizer makes no progress; only the three
+   smallest-coupling runs relax. The gap-weighted class F_{1T} is the one
+   term that acts on the core, along a trajectory that is not stationary
+   (−20%: energy −2.65, the small splitting doubled, |∇E|∞ = 0.13, restart
+   still descending).
 
 ## 1. Enumeration (`enumerate_linear.py`, `exact_linear.py`)
 
@@ -178,21 +197,30 @@ Base integrals: F_{1Q} 134.9, F_{QQ} 266.1 (E_stat 4.90) — the linear
 densities are two orders larger than the F² density, as their lower
 gradient order implies.
 
-**Vacuum stability (`vacuum_condensation.py`, `twist_scan.py`).** A
-pointwise argument suggests that a linear term destabilizes the uniform
-vacuum: along a frame-twist direction a of amplitude t the density is
-λq(a)t² + p(a)t⁴ with q indefinite on the rotational tangents of the vacuum
-manifold (signature (+2, −2, 0×5) for each spatial class), so for either
-sign of λ some twist lowers the energy at small t. The lattice says
-otherwise, and the reason is the null theorem: along an explicit twist wave
-both the η static energy and the linear integral scale as t⁴ (ratio 39 for
-t = 0.002 → 0.005), because at leading order the spectral coefficients are
-the vacuum constants and the O(t²) part of the density is a total
-derivative; the dynamical content is (δcoefficient ~ t) × F (~t²) and
-integrates at O(t⁴). Consistently, a noisy vacuum (σ = 10⁻² spatial-block
-noise) relaxes back to E ≈ 2·10⁻⁶ for λ = 0 and for ±λ at the 5% setting:
-no gradient condensate. The linear term renormalizes the quartic twist
-stiffness at relative order λ·(∫ℓ/E_stat) ~ 10⁻⁴ here.
+**Vacuum stability (`twist_scan_generic.py`, `vacuum_condensation.py`,
+`twist_scan.py`).** Along a frame-twist direction a of amplitude t the
+pointwise density is λq(a)t² + p(a)t⁴ with q indefinite on the rotational
+tangents of the vacuum manifold (signature (+2, −2, 0×5) for each spatial
+class); but the O(t²) part of the density has constant (vacuum) spectral
+coefficients and is therefore the null total derivative of report 005 —
+it integrates to zero. The first version of this test used a twist linear
+in x times a radial window, which is inversion-odd; for it the linear
+integral scales as t⁴ (`twist_scan.py`, ratio 39 for t = 0.002 → 0.005),
+and that was over-read as a general statement. Review round 2 pointed out
+that the generic next term is cubic: δC = O(t) times F = O(t²). Generic
+compact twists (three random smoothed rotation fields, zero on the shell,
+both signs of t; `twist_scan_generic.py`) confirm it: the odd part of the
+linear integral is c₃t³ with c₃ = +0.2449 (F_{1Q}, seed 456), −0.140,
+−0.651 (other seeds) and |c₃| = 0.0017–1.3 across all classes, constant to
+five digits over t = 5·10⁻⁴…4·10⁻³; the η energy is c₄t⁴ with
+c₄ = 53.31–71.29 and no odd part. So for every λ ≠ 0 the uniform vacuum is
+a saddle at cubic order: the cubic–quartic model gives a minimum at
+t* = −3λc₃/(4c₄) (10⁻⁶–10⁻⁴ at the 5% couplings) with energy
+−λ⁴·27c₃⁴/(256c₄³) = 10⁻²³–10⁻¹⁵. A noisy vacuum (σ = 10⁻² spatial-block
+noise) relaxes back to E ≈ 2·10⁻⁶ for λ = 0 and ±λ
+(`vacuum_condensation.py`): the condensate exists but is unresolvable at
+these couplings. The linear term renormalizes the quartic twist stiffness
+at relative order λ·(∫ℓ/E_stat) ~ 10⁻⁴ here.
 
 **Where the linear integral lives (`radial_profile.py`).** On the base
 profile about half of every linear integral — and half of the η static
@@ -215,9 +243,9 @@ P1P3 −20% run ends at |∇E|∞ = 0.105, outside the gate; one further
 `results/continuation_A_P1P3_f0.2_s-1.json`) brings it to 0.042 with the
 energy lower by 7·10⁻⁵ and the tail exponent unchanged (0.317), so its
 quoted diagnostics stand.
-The energy shifts follow the frozen value λ·∫dens: at 5% weight within 2%
-(e.g. P1P2: ±0.242 vs ±0.245), at 20% within 5–25% with a sign-selected
-backreaction — for λ < 0 the relaxed field grows the linear integral
+The energy shifts follow the frozen value λ·∫dens: at 5% weight within
+1–8% (P1P2 ±0.242…0.249 vs ±0.245; P2P3 −5%: −0.264), at 20% within 5–26%
+with a sign-selected backreaction — for λ < 0 the relaxed field grows the linear integral
 (P2P3: 125 → 189, ΔE = −1.23 vs −0.98 frozen), for λ > 0 it shrinks it
 (125 → 91, ΔE = +0.85 vs +0.98). The far-field exponent moves with the
 weight, class-dependently: P1P2 0.675 → 0.185 and P2P3 0.007 → 0.988 across
@@ -234,32 +262,45 @@ nothing (its integral stays 10⁻¹⁸, energy and tail unchanged). The differen
 the smallest couplings relax — F_{1Q} +5%, F_{QQ} −5%, F_{1T} −5% end with
 |∇E|∞ = 0.02–0.03 like the baseline — while the other nine runs stall with
 |∇E|∞ = 0.11–547 and an L-BFGS step that makes no progress (continuation
-change 0 to 10⁻⁷). What stalls them (`stall_diagnostics.py`, review round
-1): at the site of maximal |∂E/∂M| of every stalled endpoint the **1–2
-gap** (the eigenvalue-1 axis against the small-pair cluster) is
-1.2·10⁻⁹–3·10⁻⁷ (eight runs) or 2.8·10⁻⁴ with a 4·10⁻⁸ collision elsewhere
-on the free sites (F_{1T} −20%), while the 2–3 gap there is 0.7–0.85; in the relaxed
-endpoints the smallest 1–2 gap on the free sites is 7·10⁻³ (baseline
-3.3·10⁻³). The 2–3 crossing is smooth for all three route-B classes (Q and
-T are Riesz projections of the cluster, analytic while the cluster is
-separated from λ_t and λ_1) and is not the cause; the only non-smooth
-points of P_1, Q and T are 1–2 collisions, and the relaxation drives the
-field onto them. At those endpoints the autograd derivative is no longer
-the derivative of the energy: the directional finite-difference check
-along the gradient direction, which agrees to 10⁻⁷ at every relaxed
-endpoint, disagrees by factors 10–10⁴ at every stalled one — the
-1/(λ₂−λ₁), 1/(λ₃−λ₁) factors are evaluated at gaps of 10⁻⁹. So the stalled
-runs end on a genuine non-smooth wall of the spectral-coefficient energy
-(a 1–2 collision), not at stationary points, and their energies and tails
-are protocol endpoints on that wall. The electron texture starts with a
-1–2 gap of 3·10⁻³, i.e. the wall is close to the base profile from the
-outset. The gap-weighted class behaves differently from the
-other two: at −20% weight the relaxed field *grows* the 2–3 splitting
-(smallest gap 0.0036 → 0.0081, linear integral 6.1 → 31.4) and the energy
-drops by 2.65 (frozen value −0.98), the tail exponent moving to 0.61; at
-+20% the run goes singular (|∇E|∞ = 547, tail 1.74, the integral changes
-sign). T rewards or penalizes biaxial splitting directly — the one linear
-term that reorganizes the core rather than reweighting the far field.
+change 0 to 10⁻⁷). What stalls them (`stall_diagnostics.py`, review rounds 1–2, computed
+from the committed float32 copies of the endpoint states in
+`results/fields/`): at the site of maximal |∂E/∂M| of every stalled
+endpoint the **1–2 gap** (the eigenvalue-1 axis against the small-pair
+cluster) is 6.6·10⁻⁹–2.9·10⁻⁷, while the 2–3 gap there is 0.7–1.1; in the
+relaxed endpoints the smallest 1–2 gap on the free sites is
+1.6·10⁻⁴–7·10⁻³ (baseline 3.3·10⁻³). The 2–3 crossing is smooth for all
+three route-B classes (Q and T are Riesz projections of the cluster,
+analytic while the cluster is separated from λ_t and λ_1) and is not the
+cause; the only non-smooth points of P_1, Q and T are 1–2 collisions, and
+the relaxation drives the field onto their neighbourhood. The gradient
+there is ill-conditioned: recomputed from the float32 copies (a relative
+perturbation of 10⁻⁷) the stalled endpoints' |∇E|∞ read 0.75–10⁴ against
+0.11–547 at the end of the float64 runs, while the relaxed endpoints'
+values are unchanged (0.019–0.033). A directional finite-difference check
+along the gradient direction agrees with autograd to 10⁻⁹ at every relaxed
+endpoint and disagrees by factors 2–2000 at every stalled one; with steps
+of 10⁻⁶–10⁻⁵ and gaps of 10⁻⁹ the secant crosses the eigenvalue-ordering
+surface, so this does not show that the derivative at the endpoint is wrong
+(review round 2) — a within-chamber test would need steps below the gap,
+beyond double precision at energies of order 5. What the data support is
+the weaker statement: the stalled runs end very near 1–2 collisions, where
+P_1 and Q are non-smooth, the optimizer makes no progress there, and
+whether the within-stratum derivative diverges or only the evaluation of
+1/(λ₂−λ₁) loses precision is not decided. Their energies and tails are
+protocol endpoints near that surface, not stationary points. The electron
+texture starts with a 1–2 gap of 3.3·10⁻³, i.e. that surface is close to
+the base profile from the outset.
+The gap-weighted class behaves differently from the
+other two: at −20% weight the optimization trajectory *grows* the 2–3
+splitting (smallest gap 0.0036 → 0.0081, linear integral 6.1 → 31.4) and
+lowers the energy by 2.65 (frozen value −0.98), the tail exponent moving
+to 0.61 — but this endpoint has |∇E|∞ = 0.128, fails the gate, and its
+spatial-block restart descends by a further 0.032, so it is a
+non-stationary trend along the trajectory, not a relaxed core; at +20% the
+run ends near a collision with |∇E|∞ = 547, tail 1.74 and the integral
+changed in sign. T rewards or penalizes biaxial splitting directly — the
+one linear term that acts on the core rather than reweighting the far
+field, and the one whose endpoints are least converged.
 Spatial-block restarts for route B (20% runs): F_{1Q} and F_{QQ} re-land
 within −3…−8·10⁻⁴ of the main energies (≤ 0.1% of the effect, tails within
 0.004) even though their main runs are stalled — the walls are
@@ -269,15 +310,16 @@ descending, consistent with a core that is still reorganizing.
 
 **Answer to the plan's question.** The linear sector is real but does not
 open a new door: it cannot touch the clock (3a), it is inert on the
-canonical ansatz so the Newton-sign no-go of 006 stands there (3c), it does
-not change the vacuum (6), and on the electron it reweights what F² already
-builds. Its only structural novelty is negative — the spectral coefficients
+canonical ansatz so the Newton-sign no-go of 006 stands there (3c), it
+destabilizes the vacuum only at cubic order with an unmeasurably small
+condensate (6), and on the electron it reweights what F² already builds. Its only structural novelty is negative — the spectral coefficients
 that make it dynamical are non-smooth where the eigenvalue-1 axis meets
 the small pair, the electron texture already sits 3·10⁻³ away from such
 points, and the energy minimization finds them. The one term with a
 distinct action, the gap-weighted F_{1T}, acts on the biaxial splitting of
-the core; whether a term that rewards eigenvalue splitting is wanted is an
-author-gated choice.
+the core along a trajectory that does not reach a stationary point within
+the protocol; whether a term that rewards eigenvalue splitting is wanted is
+an author-gated choice.
 
 ## 5. What this report does not show
 
@@ -288,8 +330,12 @@ author-gated choice.
   rank-rich electron the linear terms act through the lattice runs only,
   and no two-body lattice measurement is made here.
 - Route B's stalled branches are not stationary points; their energies and
-  tails are quoted as protocol endpoints on the 1–2 collision walls, not
-  as relaxed minima. No regularization of the spectral coefficients (a gap
+  tails are quoted as protocol endpoints near 1–2 collisions, not as
+  relaxed minima; whether the derivative is singular there or only its
+  evaluation is not decided.
+- The vacuum condensate is inferred from the measured cubic and quartic
+  coefficients through a cubic–quartic model; it is not resolved by a
+  relaxation (its amplitude is 10⁻⁶–10⁻⁴). No regularization of the spectral coefficients (a gap
   floor, or a Riesz projection of the {1,2,3} cluster) is tried; whether
   the walls survive such a regularization is open.
 - The far-field exponent is a shell fit on r ∈ [8,16] of a 32³ box whose
@@ -322,7 +368,9 @@ bash reproduce.sh            # CPU suites (~15 min); M5_RUN_LATTICE=1 for the GP
 | rank-rich orbit values; rank-1 orbit theorem | `orbit_linear_exact.py`, `orbit1_linear_exact.py` → `results/orbit_linear.json`, `results/orbit1_linear.json` |
 | static kernel signatures | `static_kernel_signs.py` → `results/static_kernel_signs.json` |
 | lattice λ-scan, routes A / B (differentiable spectral coefficients, gates) | `lattice_linear_v2.py A` / `B` → `results/lattice_linear_A.json`, `results/lattice_linear_B.json` |
-| spatial-block restarts; endpoint gaps and derivative checks; vacuum stability; twist scan; radial profile | `restart_check.py`, `stall_diagnostics.py`, `vacuum_condensation.py`, `twist_scan.py`, `radial_profile.py` → `results/restart_check_*.json`, `results/stall_diagnostics_B.json`, `results/vacuum_condensation_*.json`, `results/twist_scan_B.json`, `results/radial_profile_*.json` |
+| exact classification (upper bound) | `exact_classification.py` → `results/exact_classification.json` |
+| spatial-block restarts; endpoint gaps and derivative checks; continuation; vacuum stability; twist scans; radial profile | `restart_check.py`, `stall_diagnostics.py`, `continue_run.py`, `vacuum_condensation.py`, `twist_scan_generic.py`, `twist_scan.py`, `radial_profile.py` → `results/restart_check_*.json`, `results/stall_diagnostics_B.json`, `results/continuation_*.json`, `results/vacuum_condensation_*.json`, `results/twist_generic_*.json`, `results/twist_scan_B.json`, `results/radial_profile_*.json` |
+| endpoint states used by the diagnostics (float32 copies; the diagnostics JSON is computed from these copies) | `results/fields/*.npz` (route B endpoints, the P1P3 −20% endpoint and its continuation) |
 | artifact-only assertions | `verify_artifacts.py` |
 | figures | `make_figures.py` → `results/fig_*.png` |
 

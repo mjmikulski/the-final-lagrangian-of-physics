@@ -1,0 +1,27 @@
+{
+ "n_diagrams": 675,
+ "n_zero": 424,
+ "n_classes": 38,
+ "rank_all": 12,
+ "rank_even": 6,
+ "rank_odd": 6,
+ "identity_checks": 4050,
+ "generators": {
+  "even": [
+   "F_01",
+   "F_02",
+   "F_03",
+   "F_12",
+   "F_13",
+   "F_23"
+  ],
+  "odd": [
+   "G_0123",
+   "G_0213",
+   "G_0312",
+   "G_1203",
+   "G_1302",
+   "G_2301"
+  ]
+ }
+}
