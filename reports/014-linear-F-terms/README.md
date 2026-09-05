@@ -66,10 +66,10 @@ change the far field. Results:
    the Legendre energy ladder of 010**. Their velocity-linear part
    a_i(q)q̇^i drops out of that energy but not out of the equations of
    motion: it is a gyroscopic (magnetic-like) term whose curvature
-   ∂_ia_j − ∂_ja_i is nonzero for the decorated classes (review round 5
-   measured 6.8·10⁻⁵ for the η–P₁ class on a reduced two-mode model), so
-   it changes the symplectic dynamics; its effect on a clock is not
-   studied here. (b) Because F is antisymmetric in (μν), every
+   ∂_ia_j − ∂_ja_i need not vanish — review round 5 measured 6.8·10⁻⁵ for
+   the η–P₁ class on a reduced two-mode model (one class, one model; the
+   other classes are not tested) — and where it does not, it changes the
+   symplectic dynamics; its effect on a clock is not studied here. (b) Because F is antisymmetric in (μν), every
    nonzero linear class pairs a derivative index with a matrix index — the
    whole sector exists only under the diagonal-Lorentz-action assumption of
    001 §1 (author-gated). (c) On the rank-1 canonical orbit of report 006
@@ -109,14 +109,21 @@ change the far field. Results:
    non-smooth where the eigenvalue-1 axis meets the small pair (a 1–2
    collision); the electron's smallest 1–2 gap is 3·10⁻³, and §4 shows
    the relaxation finding those points.
-6. **Lattice λ-scan** (§4). The uniform vacuum is a saddle of the linear
-   term at **cubic** order: along a generic compact frame twist of
-   amplitude t the linear integral is c₃t³ + O(t⁴) with |c₃| = 0.0017–1.3
-   (three random twists, all classes; the O(t²) part is the null total
+6. **Lattice λ-scan** (§4). For each of the individually scanned
+   spatial classes (P1P2, P1P3, P2P3; F_{1Q}, F_{QQ}, F_{1T}) the uniform
+   vacuum is a saddle at **cubic** order: along a generic compact frame
+   twist of amplitude t the linear integral is c₃t³ + O(t⁴) with
+   |c₃| = 0.0017–1.3 (three random twists; the O(t²) part is the null total
    derivative, and an inversion-symmetric twist used in the first version
    of this test hid the cubic term), while the η energy is c₄t⁴ with
    c₄ = 53–71, so configurations of both energy signs exist arbitrarily
-   close to the vacuum for every λ ≠ 0. Along each sampled ray the
+   close to the vacuum for every λ ≠ 0 in those directions. This is not a
+   statement about every member of the rank-12 module: the module contains
+   null combinations — on the spatial sector φ = 2(F_{12}+F_{13}+F_{23}),
+   i.e. F_{1Q} + ½F_{QQ} = ½φ — whose cubic coefficient vanishes (the
+   artifacts cancel to 4·10⁻¹³), and the kernel of the cubic form over the
+   module is not classified; the parity-odd and P_0-capped generators are
+   not twist-scanned. Along each sampled ray the
    cubic–quartic truncation has its minimum at t*(W) = −3λc₃/(4c₄) =
    10⁻⁶–10⁻⁴ with energy −λ⁴·27c₃⁴/(256c₄³) = 10⁻²³–10⁻¹⁵; these are
    ray-dependent trial estimates, not a condensate — no stationary
@@ -137,11 +144,13 @@ change the far field. Results:
    reweighting: its shifts deviate from the frozen values by 18–170% and
    change sign at +20%; at −20% weight it lowers the energy by 2.65 and
    doubles the small splitting. With the exact spectral coefficients
-   (route B) nine of twelve λ-runs end with |∇E|∞ = 0.1–547 very near 1–2
-   collisions (gaps 10⁻⁹–10⁻⁷ at the maximal-gradient sites, where P_1 and
-   Q are non-smooth); a same-chamber finite difference confirms those
-   gradients to 10⁻⁴–10⁻², and the optimizer makes little progress
-   against them; only the three smallest-coupling runs relax. The gap-weighted class F_{1T} is the one
+   (route B) nine of twelve λ-runs end with |∇E|∞ = 0.1–547 and little
+   optimizer progress; eight of them sit very near 1–2 collisions (gaps
+   10⁻⁹–10⁻⁷ at their maximal-gradient sites, where P_1 and Q are
+   non-smooth), the ninth (F_{1T} −20%) has a 3·10⁻⁴ gap at its
+   maximal-gradient site and its stall mechanism is not established; a
+   same-chamber finite difference confirms the endpoint gradients to
+   better than 2·10⁻²; only the three smallest-coupling runs relax. The gap-weighted class F_{1T} is the one
    term that acts on the core, along a trajectory that is not stationary
    (−20%: energy −2.65, the small splitting doubled, |∇E|∞ = 0.13, restart
    still descending).
@@ -226,9 +235,15 @@ both signs of t; `twist_scan_generic.py`) confirm it: the odd part of the
 linear integral is c₃t³ with c₃ = +0.2449 (F_{1Q}, seed 456), −0.140,
 −0.651 (other seeds) and |c₃| = 0.0017–1.3 across all classes, constant to
 five digits over t = 5·10⁻⁴…4·10⁻³; the η energy is c₄t⁴ with
-c₄ = 53.31–71.29 and no odd part. So for every λ ≠ 0 the uniform vacuum is
-a saddle at cubic order: configurations of both energy signs exist
-arbitrarily close to it. Along each sampled ray the cubic–quartic
+c₄ = 53.31–71.29 and no odd part. So for each scanned class and every
+λ ≠ 0 the uniform vacuum is a saddle at cubic order along that class's
+coupling direction: configurations of both energy signs exist arbitrarily
+close to it. The scanned classes are not the whole module: null
+combinations such as φ = 2(F_{12}+F_{13}+F_{23}) on the spatial sector
+(equivalently F_{1Q} + ½F_{QQ} = ½φ) have no cubic term — the measured
+c₃ of the three route-A classes and of F_{1Q}, ½F_{QQ} cancel to 4·10⁻¹³
+in every seed (review round 6) — and the cubic form's kernel over the
+module is not classified here. Along each sampled ray the cubic–quartic
 truncation has a radial minimum at t*(W) = −3λc₃/(4c₄) (10⁻⁶–10⁻⁴ at the
 5% couplings) with energy −λ⁴·27c₃⁴/(256c₄³) = 10⁻²³–10⁻¹⁵ (recorded in
 `results/twist_generic_*.json`). These numbers are trial estimates along
@@ -295,7 +310,10 @@ from the committed original float64 endpoint states in
 stalled endpoints the **1–2 gap** (the eigenvalue-1 axis against the
 small-pair cluster) is 1.2·10⁻⁹–3.2·10⁻⁷, while the 2–3 gap there is
 0.7–0.85; the ninth (F_{1T} −20%) has 2.8·10⁻⁴ at that site and a
-3.7·10⁻⁸ collision elsewhere on the free sites; in the relaxed endpoints
+3.7·10⁻⁸ collision seven cells away, outside the stencil neighbourhood of
+its maximal gradient — for it the collision is not shown to be what
+stops the optimizer, and its further descent on restart (0.032) is also
+consistent with ordinary incomplete convergence; in the relaxed endpoints
 the smallest 1–2 gap on the free sites is 1.6·10⁻⁴–7·10⁻³ (baseline
 3.3·10⁻³). The 2–3 crossing is smooth for all
 three route-B classes (Q and T are Riesz projections of the cluster,
@@ -314,15 +332,17 @@ crosses the eigenvalue-ordering surface (review round 2). A same-chamber
 step, h = (min 1–2 gap)/100 along the normalized gradient direction —
 each site then moves by at most h and Weyl's bound keeps the gap above
 0.98 of its value on the whole secant (review round 4) — agrees with
-autograd to 1.1·10⁻⁴–1.1·10⁻² at the nine stalled endpoints (h down to
-1.2·10⁻¹¹; the agreement degrades as h shrinks) and to 10⁻⁶–10⁻⁵ at the
+autograd to better than 2·10⁻² at the nine stalled endpoints (h down to
+1.2·10⁻¹¹, where the centered difference subtracts nearly equal energies
+of order 5 and the last digits depend on eigensolver details — a rerun
+reproduces the bound, not the individual values) and to 10⁻⁶–10⁻⁵ at the
 relaxed ones: the large endpoint gradients are genuine derivatives of the
 discretized energy at these simple-spectrum points, of the size the
 projector derivative formula predicts (its norm grows like the inverse
 gap). What remains open is only their precise asymptotics as the gap
-closes. So the stalled runs end very near 1–2 collisions, where P_1 and Q
-are non-smooth and the gradient is huge, and the optimizer makes little
-progress there; their energies and tails are protocol endpoints near that
+closes. So eight of the stalled runs end very near 1–2 collisions, where P_1
+and Q are non-smooth and the gradient is huge, and the optimizer makes
+little progress there (the ninth is the F_{1T} −20% case above); their energies and tails are protocol endpoints near that
 surface, not stationary points. The electron
 texture starts with a 1–2 gap of 3.3·10⁻³, i.e. that surface is close to
 the base profile from the outset.
@@ -349,10 +369,11 @@ open a new door in what was tested: it adds no drive or brake to the
 fixed-velocity energy that the 010 ladder reads (3a) — a gyroscopic term
 remains for dynamics, unstudied —, its even sector is inert on
 the canonical ansatz and its odd sector vanishes on the parity-symmetric
-configurations of 006, so the Newton-sign no-go stands there (3c), it
-makes the uniform vacuum a saddle at cubic order, with the three sampled
-trial estimates far below the resolution of a relaxation and no global
-bound (6), and on the electron it reweights what F² already builds. Its only structural novelty is negative — the spectral coefficients
+configurations of 006, so the Newton-sign no-go stands there (3c), each
+scanned non-null class makes the uniform vacuum a saddle at cubic order,
+with the three sampled trial estimates far below the resolution of a
+relaxation and no global bound (6), and on the electron it reweights what
+F² already builds. Its only structural novelty is negative — the spectral coefficients
 that make it dynamical are non-smooth where the eigenvalue-1 axis meets
 the small pair, the electron texture already sits 3·10⁻³ away from such
 points, and the energy minimization finds them. The one term with a
