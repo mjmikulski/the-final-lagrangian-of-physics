@@ -327,8 +327,15 @@ while leaving the relaxed endpoints' values unchanged — which is why the
 original float64 endpoints are the ones committed and diagnosed. A directional finite-difference check
 along the gradient direction with fixed steps 10⁻⁶–10⁻⁵ agrees with
 autograd to 10⁻⁹ at every relaxed endpoint and disagrees by factors
-2–2000 at every stalled one, because with gaps of 10⁻⁹ such a secant
-crosses the eigenvalue-ordering surface (review round 2). A same-chamber
+2–2000 at every stalled one: with gaps of 10⁻⁹ such steps exceed the
+gap-controlled scale on which the spectral projectors are linear and
+sample their rapid rotation instead (review rounds 2 and 7). They need
+not cross a degeneracy — a double eigenvalue of a real symmetric matrix
+has codimension two, so a generic line gives an avoided crossing; for
+the F_{1Q} −5% endpoint the gap along the ±10⁻⁶ secant stays above
+1.6·10⁻⁹ while the fixed-step secant still returns 0.03 against an
+autograd value of 28.3 — and the disagreement alone does not establish
+a crossing in any direction. A same-chamber
 step, h = (min 1–2 gap)/100 along the normalized gradient direction —
 each site then moves by at most h and Weyl's bound keeps the gap above
 0.98 of its value on the whole secant (review round 4) — agrees with
