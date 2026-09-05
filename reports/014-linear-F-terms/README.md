@@ -325,9 +325,10 @@ endpoints (a relative perturbation of 10⁻⁷, tried in an earlier revision)
 changed the stalled endpoints' |∇E|∞ by up to five orders of magnitude
 while leaving the relaxed endpoints' values unchanged — which is why the
 original float64 endpoints are the ones committed and diagnosed. A directional finite-difference check
-along the gradient direction with fixed steps 10⁻⁶–10⁻⁵ agrees with
-autograd to 10⁻⁹ at every relaxed endpoint and disagrees by factors
-2–2000 at every stalled one: with gaps of 10⁻⁹ such steps exceed the
+along the gradient direction with fixed steps agrees with autograd at
+every relaxed endpoint to better than 3·10⁻⁷ (h = 10⁻⁶) and 3·10⁻⁵
+(h = 10⁻⁵) — the F_{1T} −5% endpoint is the worst, the others are at
+10⁻⁹–10⁻⁷ — and disagrees by factors 2–2000 at every stalled one: with gaps of 10⁻⁹ such steps exceed the
 gap-controlled scale on which the spectral projectors are linear and
 sample their rapid rotation instead (review rounds 2 and 7). They need
 not cross a degeneracy — a double eigenvalue of a real symmetric matrix
