@@ -3,10 +3,11 @@
 Uniform vacuum M_vac on the 004 lattice, plus small spatial-block noise on the
 free sites, relaxed under E_lambda = e_static(eta) + lambda H^3 sum dens for
 lambda = 0 (control: must return to E = 0) and lambda of both signs at the 5%
-setting of the electron scan. Pointwise theorem: along a vacuum-manifold twist
-direction a, e(t) = lambda q(a) t^2 + p(a) t^4 with q indefinite, so for any
-lambda != 0 the uniform vacuum is a saddle and the ground state carries a
-gradient condensate (E < 0, extensive). Usage: python vacuum_condensation.py A|B
+setting of the electron scan. The pointwise O(t^2) part of the
+density has vacuum (constant) coefficients and is a null total derivative
+(review round 2); the generic instability is cubic (twist_scan_generic.py)
+with ray-wise trial amplitudes 1e-6..1e-4, far below what this relaxation
+resolves -- so this test bounds only the basin of the noisy relaxation. Usage: python vacuum_condensation.py A|B
 """
 import json, os, sys, time
 import numpy as np

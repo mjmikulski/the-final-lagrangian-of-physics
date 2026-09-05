@@ -52,7 +52,7 @@ def main():
         if os.path.exists(fn):
             vc = load(f'vacuum_condensation_{rt}')
             assert all(abs(r['E_relaxed']) < 1e-4 for r in vc.values()), 'vacuum did not return to E ~ 0'
-            print(f'artifact check: vacuum_condensation_{rt}: all {len(vc)} noisy-vacuum runs relax back to |E| < 1e-4 (any cubic-order state lies below this resolution)')
+            print(f'artifact check: vacuum_condensation_{rt}: all {len(vc)} noisy-vacuum runs relax back to |E| < 1e-4 (the three-ray cubic estimates lie below this resolution; no statement about unsampled directions)')
         fn = f'results/restart_check_{rt}.json'
         if os.path.exists(fn):
             rc = load(f'restart_check_{rt}'); lt = load(f'lattice_linear_{rt}')
@@ -79,8 +79,9 @@ def main():
         assert all(r['gaps_at_argmax']['1-2'] < 1e-6 and r['gaps_at_argmax']['2-3'] > 0.5 for r in stalled.values())
         assert all(r['directional']['rel_err']['1e-06'] > 1.0 for r in stalled.values())
         assert all(r['directional']['rel_err']['1e-06'] < 1e-5 for r in relaxed.values())
+        assert all(r['directional']['rel_err']['same_chamber'] < 1e-3 for r in sd.values()), 'same-chamber FD must validate every endpoint gradient'
         print(f'artifact check: stall diagnostics: {len(stalled)} stalled endpoints all sit next to 1-2 collisions (gap < 1e-6 at the '
-              f'max-gradient site, 2-3 gap > 0.5 there) with a failed FD check; {len(relaxed)} relaxed endpoints pass FD to < 1e-5')
+              f'max-gradient site, 2-3 gap > 0.5 there) where fixed-step FD fails but the same-chamber FD validates the gradient to < 1e-3; {len(relaxed)} relaxed endpoints pass FD to < 1e-5')
     if os.path.exists('results/continuation_A_P1P3_f0.2_s-1.json'):
         ct = load('continuation_A_P1P3_f0.2_s-1')
         assert ct['history'][0]['g_inf'] > 0.1 and ct['passes_gate'] and ct['history'][-1]['g_inf'] <= 0.1

@@ -114,26 +114,28 @@ change the far field. Results:
    cubic–quartic truncation has its minimum at t*(W) = −3λc₃/(4c₄) =
    10⁻⁶–10⁻⁴ with energy −λ⁴·27c₃⁴/(256c₄³) = 10⁻²³–10⁻¹⁵; these are
    ray-dependent trial estimates, not a condensate — no stationary
-   field-space solution is constructed, and the twist direction is not
-   optimized. A noisy vacuum relaxes back to E ≈ 2·10⁻⁶ for λ = 0 and ±λ,
-   consistent with any such state lying below that resolution. For the projector classes F_{ab} it acts as a
+   field-space solution is constructed, the twist direction is not
+   optimized, and three rays give no bound on the ratio c₃⁴/c₄³ over all
+   directions. A noisy vacuum relaxes back to E ≈ 2·10⁻⁶ for λ = 0 and
+   ±λ, a statement about that optimization's basin only. For the projector classes F_{ab} it acts as a
    sign-weighted reweighting of the existing static density: energy shifts
    follow the frozen values λ·∫dens (route A: within 1–8% at 5% weight and
    5–26% at 20%; route B F_{1Q}, F_{QQ}: within 1% and 3%), the far-field
    exponent moves with the weight (0.007…0.99 across ±20%,
    class-dependent), and the core's eigenvalue-exchange structure survives
-   (2–3 gaps 0.001–0.008 versus 0.0036). Route A: 12 of 13 branches pass
-   all three gates at the end of the protocol (continuation ≤ 0.05% of
-   the effect, |∇E|∞ ≤ 0.1, spatial-block restarts within 0.3%); the P1P3
-   −20% branch ends at |∇E|∞ = 0.105 and passes after one further
+   (2–3 gaps 0.001–0.008 versus 0.0036). Route A (a baseline and twelve coupling branches): eleven branches
+   pass all three gates at the end of the protocol (continuation ≤ 0.05%
+   of the effect, |∇E|∞ ≤ 0.1, spatial-block restarts within 0.3%); the
+   P1P3 −20% branch ends at |∇E|∞ = 0.105 and passes after one further
    100-iteration cycle (0.042, energy −7·10⁻⁵, tail unchanged; §4). The gap-weighted class F_{1T} is **not** a small
    reweighting: its shifts deviate from the frozen values by 18–170% and
    change sign at +20%; at −20% weight it lowers the energy by 2.65 and
    doubles the small splitting. With the exact spectral coefficients
    (route B) nine of twelve λ-runs end with |∇E|∞ = 0.1–547 very near 1–2
    collisions (gaps 10⁻⁹–10⁻⁷ at the maximal-gradient sites, where P_1 and
-   Q are non-smooth) and the optimizer makes no progress; only the three
-   smallest-coupling runs relax. The gap-weighted class F_{1T} is the one
+   Q are non-smooth); a same-chamber finite difference confirms those
+   gradients to 10⁻⁴, and the optimizer makes little progress against
+   them; only the three smallest-coupling runs relax. The gap-weighted class F_{1T} is the one
    term that acts on the core, along a trajectory that is not stationary
    (−20%: energy −2.65, the small splitting doubled, |∇E|∞ = 0.13, restart
    still descending).
@@ -229,24 +231,30 @@ three rays, stationary only in t, not in the transverse field directions
 amplitude, would require optimizing the twist direction as well and
 demonstrating transverse stationarity, which is not done here. A noisy
 vacuum (σ = 10⁻² spatial-block noise) relaxes back to E ≈ 2·10⁻⁶ for
-λ = 0 and ±λ (`vacuum_condensation.py`), consistent with any such state
-lying below the resolution of the relaxation. The linear term
+λ = 0 and ±λ (`vacuum_condensation.py`); this bounds only the basin that
+optimization explores, and the three-ray estimates lie below that
+resolution — no statement about directions not sampled follows. The linear term
 renormalizes the quartic twist stiffness at relative order
 λ·(∫ℓ/E_stat) ~ 10⁻⁴ here.
 
 **Where the linear integral lives (`radial_profile.py`).** On the base
-profile about half of every linear integral — and half of the η static
-energy itself — sits at r > 20, next to the pinned shell (a property of the
+profile about half of the linear integral of the projector classes (route
+A: 0.46–0.59; F_{1Q} 0.47, F_{QQ} 0.55) — and half of the η static energy
+itself (0.50) — sits at r > 20, next to the pinned shell; the gap-weighted
+F_{1T} is different (0.25, it lives in the core region), and F_{tQ}
+integrates to zero (a property of the
 32³ box of report 004: the tail-fit shells r ∈ [8,16] carry a density that
 grows outward, slope +0.44); the linear densities track the static density
 within a factor 2 across shells. The energy shifts of the λ-runs are
 therefore sign-weighted reweightings of the existing static density, and
 the relaxed field responds by moving energy between shells.
 
-**Route A (vacuum-pinned coefficients), 13 runs.** Baseline (λ = 0):
+**Route A (vacuum-pinned coefficients), 13 runs: a baseline and twelve
+coupling branches.** Baseline (λ = 0):
 E = 4.841063 after the protocol (the base profile relaxes further from
 4.8996), free-site |∇E|∞ = 0.016, tail exponent 0.441, small-pair gap
-0.0036. Twelve of the thirteen runs pass the gates at the end of the protocol:
+0.0036. Eleven of the twelve coupling branches pass the gates at the end of the
+protocol:
 continuation changes 2–9·10⁻⁵ (≤ 0.05% of the effect), |∇E|∞ 0.007–0.05,
 and the spatial-block restarts re-land within −0.2…−2.8·10⁻³ of the main
 energies (≤ 0.3% of the effect) with tails reproduced to ±0.004. The
@@ -286,21 +294,26 @@ three route-B classes (Q and T are Riesz projections of the cluster,
 analytic while the cluster is separated from λ_t and λ_1) and is not the
 cause; the only non-smooth points of P_1, Q and T are 1–2 collisions, and
 the relaxation drives the field onto their neighbourhood. The gradient
-there is ill-conditioned: recomputed from the float32 copies (a relative
-perturbation of 10⁻⁷) the stalled endpoints' |∇E|∞ read 0.75–10⁴ against
-0.11–547 at the end of the float64 runs, while the relaxed endpoints'
-values are unchanged (0.019–0.033). A directional finite-difference check
-along the gradient direction agrees with autograd to 10⁻⁹ at every relaxed
-endpoint and disagrees by factors 2–2000 at every stalled one; with steps
-of 10⁻⁶–10⁻⁵ and gaps of 10⁻⁹ the secant crosses the eigenvalue-ordering
-surface, so this does not show that the derivative at the endpoint is wrong
-(review round 2) — a within-chamber test would need steps below the gap,
-beyond double precision at energies of order 5. What the data support is
-the weaker statement: the stalled runs end very near 1–2 collisions, where
-P_1 and Q are non-smooth, the optimizer makes no progress there, and
-whether the within-stratum derivative diverges or only the evaluation of
-1/(λ₂−λ₁) loses precision is not decided. Their energies and tails are
-protocol endpoints near that surface, not stationary points. The electron
+there is extremely sensitive to the state: recomputed from the float32
+copies (a relative perturbation of 10⁻⁷) the stalled endpoints' |∇E|∞
+read 0.75–10⁴ against 0.11–547 at the end of the float64 runs, while the
+relaxed endpoints' values are unchanged (0.019–0.033). A directional finite-difference check
+along the gradient direction with fixed steps 10⁻⁶–10⁻⁵ agrees with
+autograd to 10⁻⁹ at every relaxed endpoint and disagrees by factors
+2–2000 at every stalled one, because with gaps of 10⁻⁹ such a secant
+crosses the eigenvalue-ordering surface (review round 2). A same-chamber
+step, h = (min 1–2 gap)/100 along the normalized gradient direction —
+each site then moves by at most h and Weyl's bound keeps the gap above
+0.98 of its value on the whole secant (review round 4) — agrees with
+autograd to 7·10⁻⁵–1.1·10⁻⁴ at every stalled endpoint (and to 10⁻⁹ at the
+relaxed ones): the large endpoint gradients are genuine derivatives of the
+discretized energy at these simple-spectrum points, of the size the
+projector derivative formula predicts (its norm grows like the inverse
+gap). What remains open is only their precise asymptotics as the gap
+closes. So the stalled runs end very near 1–2 collisions, where P_1 and Q
+are non-smooth and the gradient is huge, and the optimizer makes little
+progress there; their energies and tails are protocol endpoints near that
+surface, not stationary points. The electron
 texture starts with a 1–2 gap of 3.3·10⁻³, i.e. that surface is close to
 the base profile from the outset.
 The gap-weighted class behaves differently from the
@@ -325,9 +338,9 @@ descending, consistent with a core that is still reorganizing.
 open a new door: it cannot touch the clock (3a), its even sector is inert on
 the canonical ansatz and its odd sector vanishes on the parity-symmetric
 configurations of 006, so the Newton-sign no-go stands there (3c), it
-makes the uniform vacuum a saddle only at cubic order, with any resulting
-state below the resolution of the relaxation (6), and on the electron it
-reweights what F² already builds. Its only structural novelty is negative — the spectral coefficients
+makes the uniform vacuum a saddle at cubic order, with the three sampled
+trial estimates far below the resolution of a relaxation and no global
+bound (6), and on the electron it reweights what F² already builds. Its only structural novelty is negative — the spectral coefficients
 that make it dynamical are non-smooth where the eigenvalue-1 axis meets
 the small pair, the electron texture already sits 3·10⁻³ away from such
 points, and the energy minimization finds them. The one term with a
@@ -346,8 +359,9 @@ an author-gated choice.
   and no two-body lattice measurement is made here.
 - Route B's stalled branches are not stationary points; their energies and
   tails are quoted as protocol endpoints near 1–2 collisions, not as
-  relaxed minima; whether the derivative is singular there or only its
-  evaluation is not decided.
+  relaxed minima; their gradients are validated by a same-chamber finite
+  difference, but the asymptotics of the gradient as the gap closes are
+  not measured.
 - The vacuum instability is established (cubic term); a condensate is
   not: the quoted t*, E* are ray-wise trial estimates from a cubic–quartic
   truncation along three sampled twists, without transverse stationarity

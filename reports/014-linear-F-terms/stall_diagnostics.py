@@ -40,15 +40,20 @@ for tag, r in res.items():
     for eps in (1e-5, 1e-6):
         Ep = L.E_of(Mr + eps * V, lam, a, b).item(); Em = L.E_of(Mr - eps * V, lam, a, b).item()
         fd[str(eps)] = (Ep - Em) / (2 * eps)
+    # same-chamber step (review round 4): h = min 1-2 gap / 100; ||V||_F = 1 so
+    # each site moves by at most h and Weyl's bound keeps g12 >= 0.98 g12 along the secant
+    h = float(g_12[Fm].min()) / 100.0
+    Ep = L.E_of(Mr + h * V, lam, a, b).item(); Em = L.E_of(Mr - h * V, lam, a, b).item()
+    fd['same_chamber'] = (Ep - Em) / (2 * h); fd['same_chamber_h'] = h
     entry = {'grad_inf_free': float(gabs.max()), 'argmax_site': [int(s) for s in site],
              'gaps_at_argmax': {'t-1': float(g_t1[site]), '1-2': float(g_12[site]), '2-3': float(g_23[site])},
              'gaps_min_free': {'t-1': float(g_t1[Fm].min()), '1-2': float(g_12[Fm].min()), '2-3': float(g_23[Fm].min())},
              'site_of_min_12_gap': [int(s) for s in np.unravel_index(int((g_12 + (~Fm) * 1e9).argmin()), g_12.shape)],
-             'directional': {'autograd': auto, 'fd': fd, 'rel_err': {k: abs(auto - v) / max(abs(v), 1e-30) for k, v in fd.items()}},
+             'directional': {'autograd': auto, 'fd': fd, 'rel_err': {k: abs(auto - v) / max(abs(v), 1e-30) for k, v in fd.items() if k != 'same_chamber_h'}},
              'status_main': r['status'], 'grad_inf_recorded': r.get('grad_inf_free')}
     out[tag] = entry
     print(f"[{tag:16s}] |g|inf {entry['grad_inf_free']:.2e} at {site}: gaps t-1 {entry['gaps_at_argmax']['t-1']:.3f} "
           f"1-2 {entry['gaps_at_argmax']['1-2']:.2e} 2-3 {entry['gaps_at_argmax']['2-3']:.2e} | min free: 1-2 {entry['gaps_min_free']['1-2']:.2e} "
-          f"2-3 {entry['gaps_min_free']['2-3']:.2e} | FD rel err {entry['directional']['rel_err']['1e-05']:.1e} / {entry['directional']['rel_err']['1e-06']:.1e}", flush=True)
+          f"2-3 {entry['gaps_min_free']['2-3']:.2e} | FD rel err {entry['directional']['rel_err']['1e-05']:.1e} / {entry['directional']['rel_err']['1e-06']:.1e} | same-chamber h {h:.1e}: {entry['directional']['rel_err']['same_chamber']:.1e}", flush=True)
 json.dump(out, open(f'results/stall_diagnostics_{ROUTE}.json', 'w'), indent=1)
 print('stall diagnostics complete', flush=True)
