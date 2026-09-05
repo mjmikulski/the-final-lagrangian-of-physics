@@ -1,4 +1,4 @@
-# Report 014 — Linear-in-F terms with spectral coefficients: twelve pointwise generators, all dynamical, statics-only in the fundamental reading, even sector inert on the canonical orbit
+# Report 014 — Linear-in-F terms with spectral coefficients: twelve pointwise generators, all dynamical, no drive or brake in the fundamental reading, even sector inert on the canonical orbit
 
 *2026-09-04 · Maciej J. Mikulski (AI-assisted, see [METHOD](../../METHOD.md)) ·
 closes the one order the program had not scanned: terms **linear** in the
@@ -60,10 +60,16 @@ change the far field. Results:
    reproduced by the instrument and does not extend to field-dependent
    coefficients.
 3. **Structure theorems.** (a) Every linear class has velocity degree ≤ 1,
-   so in the fundamental reading (the Legendre theorem of report 010) it
-   contributes only its static part, with flipped sign, and a gyroscopic
-   term: **linear terms cannot supply a clock drive or brake**; their arena
-   is the static sector. (b) Because F is antisymmetric in (μν), every
+   so in the fundamental reading (the Legendre theorem of report 010) its
+   contribution to the fixed-velocity energy is its static part with
+   flipped sign — **linear terms add no direct drive (ω²) or brake (ω⁴) to
+   the Legendre energy ladder of 010**. Their velocity-linear part
+   a_i(q)q̇^i drops out of that energy but not out of the equations of
+   motion: it is a gyroscopic (magnetic-like) term whose curvature
+   ∂_ia_j − ∂_ja_i is nonzero for the decorated classes (review round 5
+   measured 6.8·10⁻⁵ for the η–P₁ class on a reduced two-mode model), so
+   it changes the symplectic dynamics; its effect on a clock is not
+   studied here. (b) Because F is antisymmetric in (μν), every
    nonzero linear class pairs a derivative index with a matrix index — the
    whole sector exists only under the diagonal-Lorentz-action assumption of
    001 §1 (author-gated). (c) On the rank-1 canonical orbit of report 006
@@ -134,8 +140,8 @@ change the far field. Results:
    (route B) nine of twelve λ-runs end with |∇E|∞ = 0.1–547 very near 1–2
    collisions (gaps 10⁻⁹–10⁻⁷ at the maximal-gradient sites, where P_1 and
    Q are non-smooth); a same-chamber finite difference confirms those
-   gradients to 10⁻⁴, and the optimizer makes little progress against
-   them; only the three smallest-coupling runs relax. The gap-weighted class F_{1T} is the one
+   gradients to 10⁻⁴–10⁻², and the optimizer makes little progress
+   against them; only the three smallest-coupling runs relax. The gap-weighted class F_{1T} is the one
    term that acts on the core, along a trajectory that is not stationary
    (−20%: energy −2.65, the small splitting doubled, |∇E|∞ = 0.13, restart
    still descending).
@@ -283,21 +289,24 @@ the smallest couplings relax — F_{1Q} +5%, F_{QQ} −5%, F_{1T} −5% end with
 |∇E|∞ = 0.02–0.03 like the baseline — while the other nine runs stall with
 |∇E|∞ = 0.11–547 and an L-BFGS step that makes little progress
 (continuation changes 0 to 1.3·10⁻⁴, i.e. ≤ 0.1% of the effect except for
-F_{1T} +20%, where the effect itself is −0.13). What stalls them (`stall_diagnostics.py`, review rounds 1–2, computed
-from the committed float32 copies of the endpoint states in
-`results/fields/`): at the site of maximal |∂E/∂M| of every stalled
-endpoint the **1–2 gap** (the eigenvalue-1 axis against the small-pair
-cluster) is 6.6·10⁻⁹–2.9·10⁻⁷, while the 2–3 gap there is 0.7–1.1; in the
-relaxed endpoints the smallest 1–2 gap on the free sites is
-1.6·10⁻⁴–7·10⁻³ (baseline 3.3·10⁻³). The 2–3 crossing is smooth for all
+F_{1T} +20%, where the effect itself is −0.13). What stalls them (`stall_diagnostics.py`, review rounds 1–5, computed
+from the committed original float64 endpoint states in
+`results/fields/`): at the site of maximal |∂E/∂M| of eight of the nine
+stalled endpoints the **1–2 gap** (the eigenvalue-1 axis against the
+small-pair cluster) is 1.2·10⁻⁹–3.2·10⁻⁷, while the 2–3 gap there is
+0.7–0.85; the ninth (F_{1T} −20%) has 2.8·10⁻⁴ at that site and a
+3.7·10⁻⁸ collision elsewhere on the free sites; in the relaxed endpoints
+the smallest 1–2 gap on the free sites is 1.6·10⁻⁴–7·10⁻³ (baseline
+3.3·10⁻³). The 2–3 crossing is smooth for all
 three route-B classes (Q and T are Riesz projections of the cluster,
 analytic while the cluster is separated from λ_t and λ_1) and is not the
 cause; the only non-smooth points of P_1, Q and T are 1–2 collisions, and
 the relaxation drives the field onto their neighbourhood. The gradient
-there is extremely sensitive to the state: recomputed from the float32
-copies (a relative perturbation of 10⁻⁷) the stalled endpoints' |∇E|∞
-read 0.75–10⁴ against 0.11–547 at the end of the float64 runs, while the
-relaxed endpoints' values are unchanged (0.019–0.033). A directional finite-difference check
+there is extremely sensitive to the state: a float32 rounding of the
+endpoints (a relative perturbation of 10⁻⁷, tried in an earlier revision)
+changed the stalled endpoints' |∇E|∞ by up to five orders of magnitude
+while leaving the relaxed endpoints' values unchanged — which is why the
+original float64 endpoints are the ones committed and diagnosed. A directional finite-difference check
 along the gradient direction with fixed steps 10⁻⁶–10⁻⁵ agrees with
 autograd to 10⁻⁹ at every relaxed endpoint and disagrees by factors
 2–2000 at every stalled one, because with gaps of 10⁻⁹ such a secant
@@ -305,8 +314,9 @@ crosses the eigenvalue-ordering surface (review round 2). A same-chamber
 step, h = (min 1–2 gap)/100 along the normalized gradient direction —
 each site then moves by at most h and Weyl's bound keeps the gap above
 0.98 of its value on the whole secant (review round 4) — agrees with
-autograd to 7·10⁻⁵–1.1·10⁻⁴ at every stalled endpoint (and to 10⁻⁹ at the
-relaxed ones): the large endpoint gradients are genuine derivatives of the
+autograd to 1.1·10⁻⁴–1.1·10⁻² at the nine stalled endpoints (h down to
+1.2·10⁻¹¹; the agreement degrades as h shrinks) and to 10⁻⁶–10⁻⁵ at the
+relaxed ones: the large endpoint gradients are genuine derivatives of the
 discretized energy at these simple-spectrum points, of the size the
 projector derivative formula predicts (its norm grows like the inverse
 gap). What remains open is only their precise asymptotics as the gap
@@ -335,7 +345,9 @@ reproducible endpoints; F_{1T} does not re-land (−1.3·10⁻² at +20%, i.e.
 descending, consistent with a core that is still reorganizing.
 
 **Answer to the plan's question.** The linear sector is real but does not
-open a new door: it cannot touch the clock (3a), its even sector is inert on
+open a new door in what was tested: it adds no drive or brake to the
+fixed-velocity energy that the 010 ladder reads (3a) — a gyroscopic term
+remains for dynamics, unstudied —, its even sector is inert on
 the canonical ansatz and its odd sector vanishes on the parity-symmetric
 configurations of 006, so the Newton-sign no-go stands there (3c), it
 makes the uniform vacuum a saddle at cubic order, with the three sampled
@@ -351,9 +363,12 @@ an author-gated choice.
 
 ## 5. What this report does not show
 
-- No dynamics and nothing about the clock: by result 3(a) the sector is
-  static-only in the fundamental reading; the gyroscopic part is recorded,
-  not studied.
+- No dynamics: by result 3(a) the sector adds no drive or brake to the
+  fixed-velocity Legendre energy, which is the only clock diagnostic used
+  here; the gyroscopic (velocity-linear) part enters the equations of
+  motion through its curvature and could affect a clock through the
+  symplectic structure — it is recorded, not studied, and "nothing for the
+  clock" is not claimed.
 - The Newton-sign statement (3c) is for the canonical rank-1 ansatz; on the
   rank-rich electron the linear terms act through the lattice runs only,
   and no two-body lattice measurement is made here.
@@ -401,7 +416,7 @@ bash reproduce.sh            # CPU suites (~15 min); M5_RUN_LATTICE=1 for the GP
 | lattice λ-scan, routes A / B (differentiable spectral coefficients, gates) | `lattice_linear_v2.py A` / `B` → `results/lattice_linear_A.json`, `results/lattice_linear_B.json` |
 | exact classification (upper bound) | `exact_classification.py` → `results/exact_classification.json` |
 | spatial-block restarts; endpoint gaps and derivative checks; continuation; vacuum stability; twist scans; radial profile | `restart_check.py`, `stall_diagnostics.py`, `continue_run.py`, `vacuum_condensation.py`, `twist_scan_generic.py`, `twist_scan.py`, `radial_profile.py` → `results/restart_check_*.json`, `results/stall_diagnostics_B.json`, `results/continuation_*.json`, `results/vacuum_condensation_*.json`, `results/twist_generic_*.json`, `results/twist_scan_B.json`, `results/radial_profile_*.json` |
-| endpoint states used by the diagnostics (float32 copies; the diagnostics JSON is computed from these copies) | `results/fields/*.npz` (route B endpoints, the P1P3 −20% endpoint and its continuation) |
+| endpoint states used by the diagnostics (the original float64 optimization endpoints, 16 files, 25 MB) | `results/fields/*.npz` (route B endpoints, the P1P3 −20% endpoint and its continuation) |
 | artifact-only assertions | `verify_artifacts.py` |
 | figures | `make_figures.py` → `results/fig_*.png` |
 
