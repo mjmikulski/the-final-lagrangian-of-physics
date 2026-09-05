@@ -318,7 +318,9 @@ the smallest 1–2 gap on the free sites is 1.6·10⁻⁴–7·10⁻³ (baseline
 3.3·10⁻³). The 2–3 crossing is smooth for all
 three route-B classes (Q and T are Riesz projections of the cluster,
 analytic while the cluster is separated from λ_t and λ_1) and is not the
-cause; the only non-smooth points of P_1, Q and T are 1–2 collisions, and
+cause; within the explored region — the top gap λ_t − λ_1 stays above 6.95 on
+every recorded endpoint — the only non-smooth points of P_1, Q and T are
+1–2 collisions (globally P_1 is also non-smooth where λ_t meets λ_1), and
 the relaxation drives the field onto their neighbourhood. The gradient
 there is extremely sensitive to the state: a float32 rounding of the
 endpoints (a relative perturbation of 10⁻⁷, tried in an earlier revision)
@@ -326,7 +328,7 @@ changed the stalled endpoints' |∇E|∞ by up to five orders of magnitude
 while leaving the relaxed endpoints' values unchanged — which is why the
 original float64 endpoints are the ones committed and diagnosed. A directional finite-difference check
 along the gradient direction with fixed steps agrees with autograd at
-every relaxed endpoint to better than 3·10⁻⁷ (h = 10⁻⁶) and 3·10⁻⁵
+every relaxed endpoint to better than 3·10⁻⁷ (h = 10⁻⁶) and 3.1·10⁻⁵
 (h = 10⁻⁵) — the F_{1T} −5% endpoint is the worst, the others are at
 10⁻⁹–10⁻⁷ — and disagrees by factors 2–2000 at every stalled one: with gaps of 10⁻⁹ such steps exceed the
 gap-controlled scale on which the spectral projectors are linear and
