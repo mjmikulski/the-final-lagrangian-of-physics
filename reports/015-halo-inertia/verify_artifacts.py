@@ -1,4 +1,4 @@
-"""Assertions on the committed records of report 016 (structure, not floating-point tails)."""
+"""Assertions on the committed records of report 015 (structure, not floating-point tails)."""
 import json
 import math
 

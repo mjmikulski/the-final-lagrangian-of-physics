@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Report 016: regenerate the committed records and assert their structure.
+# Report 015: regenerate the committed records and assert their structure.
 # CPU only (minutes): the symbolic halo formulas, the exterior reduction, the tilt measurement on the committed
 # hedgehog fields, and the re-evaluation of the committed rotating branch. Finding the rotating states
 # themselves needs a GPU (run_spinning.py, hours); set M5_RUN_GPU=1 to redo it.
