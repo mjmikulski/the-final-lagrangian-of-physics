@@ -80,10 +80,13 @@ Conventions of the development repository `new-duda-lagrangian`
    bounded by 2Δ² inside, and the charge intact; hence
    E ≤ (8π/3)Δ²R³ → 0. Checked symbolically and by integrating the
    model's own density: E(R) ∝ R^3.00, E(0.1) = 0.003
-   (`screened_infimum.py`). The spline minimiser stops at 1 because it
-   cannot resolve a wall thinner than its knot spacing; the physical
-   statement is that with the time sector free the charged
-   configuration has no finite mass at all.
+   (`screened_infimum.py`). The spline minimiser stops near 1 with
+   gradient norms of order 10 (that the knot spacing is what stops it is
+   an interpretation, not a result); the statement that survives is
+   that with the time sector free the charged configuration has zero
+   energy infimum at fixed charge, which excludes a positive global
+   minimum and says nothing about stationary or locally minimal
+   branches.
 3. **Why: the null-direction hedgehog.** At m = Δ the operator is
    N = const − Δ ℓℓᵀη with ℓ = (1, x̂) null, ℓℓᵀη nilpotent and
    traceless; then [∂ᵢN, ∂ⱼN] ≡ 0 and tr(∂ᵢN ∂ⱼN) ≡ 0, so F and every
@@ -110,22 +113,26 @@ Conventions of the development repository `new-duda-lagrangian`
    stays the global minimum up to a coupling between 0.1 and 0.3, above
    which the minimiser returns to the frozen hedgehog: on the lattice to
    27.288 (the frozen value to the digits shown) at c = 0.3 and 3,
-   without a box to the frozen 33.3 within 0.1% (figure below). At
+   without a box to the frozen 33.3 within 0.1% (figure below; its
+   left panel plots the recovered fraction of the energy difference
+   between the uncured minimiser endpoint and the frozen hedgehog). At
    c = 0.1 a partially tilted core survives (lattice 26.7 against the
-   frozen 27.3, radial 29.3 against 33.3) with the Coulomb tail back
-   within 30%; at c = 0.03 the tilt extends beyond the box (half-value
+   frozen 27.3, radial 29.3 against 33.3) with the far-field density
+   back near the Coulomb law up to a residual excess toward the box
+   boundary; at c = 0.03 the tilt extends beyond the box (half-value
    radius 12 in the radial problem against the box half-size 6), and
    the lattice restores less of the mass than the radial problem (0.41
    against 0.55 of the screened energy).
 5. **The sector K_u opens.** Around the vacuum the base model has no
    linear dynamics at all (all ten kinetic eigenvalues zero); with K_u
    the three tilt components M₀ᵢ propagate at unit speed with a positive
-   kinetic form, while the charge director still does not propagate. On
-   the hedgehog background the kinetic form stays positive and every
-   characteristic speed is below 1 (r = 0.5–4), with and without K_u;
-   two kinetic eigenvalues remain exactly zero everywhere, so the system
-   is constrained, and the polarization count and constraint structure
-   are not settled here (`tilt_sector.py`).
+   kinetic form, while the charge director still does not propagate. At
+   the sampled hedgehog points (r = 0.5–4 on the z axis, propagation
+   along z) the kinetic form is positive semidefinite with two null
+   directions, with and without K_u, and the reported z-direction
+   speeds are below 1; the system is constrained, and the polarization
+   count and constraint structure are not settled here
+   (`tilt_sector.py`).
 
 ![screening](results/fig_screening.png)
 
