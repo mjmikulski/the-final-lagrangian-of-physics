@@ -55,7 +55,9 @@ Conventions of the development repository `new-duda-lagrangian`
    E₀ = 100 the energy falls from 27.29 to 22.0 with the tilt
    amplitude m saturating at 0.96 ≈ Δ, a melted core, and a far field
    held above the Coulomb law only by the boundary
-   (`field_diagnostics.py`); the E₀ dependence is weak:
+   (`field_diagnostics.py`; the minimisation from the frozen field,
+   redone for this report, lands on the committed endpoint to six
+   digits); the E₀ dependence is weak:
 
    | E₀ | 10 | 100 | 1000 |
    |---|---|---|---|
@@ -93,11 +95,14 @@ Conventions of the development repository `new-duda-lagrangian`
    and turns positive at c ≈ 0.013 (local threshold); the tilted state
    stays the global minimum up to a coupling between 0.1 and 0.3, above
    which the minimiser returns to the frozen hedgehog: on the lattice to
-   27.288 (the frozen value to the digits shown) at c = 0.3 and 1,
+   27.288 (the frozen value to the digits shown) at c = 0.3 and 3,
    without a box to the frozen 33.3 within 0.1% (figure below). At
    c = 0.1 a partially tilted core survives (lattice 26.7 against the
    frozen 27.3, radial 29.3 against 33.3) with the Coulomb tail back
-   within 30%.
+   within 30%; at c = 0.03 the tilt extends beyond the box (half-value
+   radius 12 in the radial problem against the box half-size 6), and
+   the lattice restores less of the mass than the radial problem (0.41
+   against 0.55 of the screened energy).
 5. **The sector K_u opens.** Around the vacuum the base model has no
    linear dynamics at all (all ten kinetic eigenvalues zero); with K_u
    the three tilt components M₀ᵢ propagate at unit speed with a positive
@@ -158,8 +163,9 @@ same unstable direction is a one-run check that is not made here.
 (gradient and Rayleigh quotients vs E₀ and c), `tilt_sector.py`
 (kinetic forms and speeds), `field_diagnostics.py` (energies, K_u,
 profiles and far-field ratios of the committed lattice endpoints in
-`results/fields/`: frozen; time sector free at E₀ = 10, 100, 1000; with
-K_u at c = 0.03, 0.1, 0.3, 1), `radial_screened.py` (frozen and
+`results/fields/`: frozen; time sector free at E₀ = 10, 100, 1000 and
+the E₀ = 100 minimisation redone here; with K_u at c = 0.03, 0.1, 0.3,
+3), `radial_screened.py` (frozen and
 screened masses at 240 and 480 knots, the coupling scan) — each writes
 the JSON of the same name in `results/`; `make_figures.py` draws the
 two figures from those JSONs and `verify_artifacts.py` asserts the

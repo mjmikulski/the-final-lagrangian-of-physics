@@ -14,7 +14,7 @@ if [ -n "$M5_RUN_GPU" ]; then
   $PY unfrozen_test.py 100 0.05 results/fields/static_base_n32.pt E0_100
   $PY unfrozen_test.py 10 0.05 results/fields/static_base_n32.pt E0_10
   $PY unfrozen_test.py 1000 0.05 results/fields/static_base_n32.pt E0_1000
-  for c in 0.03 0.1 0.3 1.0; do
+  for c in 0.03 0.1 0.3 3.0; do
     $PY run_static.py --n 32 --box 12 --unfreeze --tilt $c --init results/fields/static_unfrozen_E0_100.pt --iters 1200 --rounds 1 --tag tilt$c
   done
 fi
