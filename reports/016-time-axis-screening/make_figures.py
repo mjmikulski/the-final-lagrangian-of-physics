@@ -39,11 +39,11 @@ def fig_screening():
     r, dens = np.array(pf['r']), np.array(pf['density']); m = (r > 0.02) & (dens > 0)
     ax[1].loglog(r[m], dens[m], color='k', lw=1.6, label=f'time axis frozen: mass {rad["frozen"]["E"]:.1f} (model units)')
     r, dens = np.array(ps['r']), np.array(ps['density']); m = (r > 0.02) & (dens > 0)
-    ax[1].loglog(r[m], dens[m], color='C3', lw=0.9, alpha=0.85, label=f'time axis free: mass {rad["screened"]["E"]:.1f} (model units);\ntail below $10^{{-3}}$ is solver noise')
+    ax[1].loglog(r[m], dens[m], color='C3', lw=0.9, alpha=0.85, label=f'time axis free: minimiser endpoint, energy {rad["screened"]["E"]:.1f}\n(an upper bound; the infimum is 0); tail below $10^{{-3}}$ is solver noise')
     rr = np.logspace(0.3, 2.5, 50)
     ax[1].loglog(rr, 16 * math.pi * Delta ** 4 / rr ** 2, '-', color='0.75', lw=5, zorder=0, label='Coulomb law $16\\pi\\Delta^4/r^2$ (the frozen tail lies on it)')
     ax[1].set(xlabel='r (model units)', ylabel='energy per unit radius $4\\pi r^2\\,\\mathcal{H}$ (model units)', xlim=(2e-2, 300), ylim=(1e-8, 1e2),
-              title='energy per unit radius ($E_0 = 100$): with the time axis\nfree the Coulomb tail is gone')
+              title='energy per unit radius ($E_0 = 100$): with the time axis\nfree the Coulomb tail is gone and the core can shrink at no cost')
     ax[1].legend(fontsize=8, loc='lower left')
     # (c) lattice tilt profiles
     for name, col, ls, mk, lab in (('static_unfrozen_E0_10.pt', 'C0', '--', 's', '$E_0 = 10$'), ('static_unfrozen_E0_100.pt', 'C3', '-', 'o', '$E_0 = 100$'),

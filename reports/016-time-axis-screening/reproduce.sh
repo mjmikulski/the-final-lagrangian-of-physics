@@ -8,6 +8,7 @@ cd "$(dirname "$0")"
 PY=${PYTHON:-python}
 export CUDA_VISIBLE_DEVICES=${M5_RUN_GPU:+0}
 $PY prop4_check.py
+$PY screened_infimum.py
 $PY null_probe.py
 $PY tilt_sector.py
 if [ -n "$M5_RUN_GPU" ]; then
