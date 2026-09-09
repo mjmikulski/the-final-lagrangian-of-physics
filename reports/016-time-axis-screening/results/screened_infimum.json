@@ -1,0 +1,30 @@
+{
+ "F_zero_symbolic": true,
+ "charpoly_ok": true,
+ "exterior_spectrum_exact": true,
+ "a_star": 0.9802941176470588,
+ "rows": [
+  {
+   "R": 1.0,
+   "E": 2.7986055612101266,
+   "bound": 8.210866559422282,
+   "quartic_max": 6.821873912970253e-30,
+   "potential_outside_max": 1.8177358825287382e-27
+  },
+  {
+   "R": 0.3,
+   "E": 0.0755623501526734,
+   "bound": 0.22169339710440158,
+   "quartic_max": 6.765720969141291e-28,
+   "potential_outside_max": 1.8177358825287382e-27
+  },
+  {
+   "R": 0.1,
+   "E": 0.002798605561210127,
+   "bound": 0.008210866559422283,
+   "quartic_max": 6.505460602956417e-26,
+   "potential_outside_max": 1.8177358825287382e-27
+  }
+ ],
+ "exponent": 3.0000000000000036
+}

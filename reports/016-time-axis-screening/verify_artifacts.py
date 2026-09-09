@@ -41,8 +41,11 @@ assert all(cure[i][1] < cure[i + 1][1] for i in range(len(cure) - 1)), 'energy r
 assert abs(cure[-1][1] - frozen['E']) < 1e-4, 'at the largest coupling the minimiser returns to the frozen hedgehog'
 rad2 = json.load(open('results/radial_E0_100_nk240.json'))
 rad = {'frozen': rad2['frozen'], 'screened': json.load(open('results/radial_E0_100_nk480.json'))['screened']}
-assert abs(rad['frozen']['E'] - 33.3) < 0.3 and rad['screened']['E'] < 0.05 * rad['frozen']['E'], '1D: screened mass a few percent of the frozen one'
-assert abs(rad2['screened']['E'] - rad['screened']['E']) < 0.1, 'screened mass converged in the knots'
+assert abs(rad['frozen']['E'] - 33.3) < 0.3 and rad['screened']['E'] < 0.05 * rad['frozen']['E'], '1D: the attained screened endpoint is a few percent of the frozen mass'
+inf = json.load(open('results/screened_infimum.json'))
+assert inf['F_zero_symbolic'] and inf['charpoly_ok'] and inf['exterior_spectrum_exact'], 'zero-infimum family: F = 0 and exact exterior spectrum'
+assert abs(inf['exponent'] - 3) < 0.1 and min(q['E'] for q in inf['rows']) < 0.01, 'zero-infimum family: E ~ R^3 down to 0.003'
+assert rad2['screened']['E'] > rad['screened']['E'] - 0.05, '1D: the endpoint does not rise with the knots (upper bound tightening)'
 import glob, re
 scan = sorted((float(re.search(r'tilt([0-9.]+)\.json', f).group(1)), json.load(open(f))['screened']['E']) for f in glob.glob('results/radial_E0_100_nk240_tilt*.json'))
 assert all(scan[i + 1][1] > scan[i][1] - 0.02 for i in range(len(scan) - 1)), '1D: mass rises with c (flat within 0.02 once restored)'

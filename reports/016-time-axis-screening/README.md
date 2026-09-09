@@ -3,9 +3,11 @@
 *2026-09-10 · Maciej J. Mikulski (AI-assisted, see [METHOD](../../METHOD.md)) ·
 the static electron of reports 004–013 was relaxed with its time sector
 frozen; this report lets the time sector move and finds that the
-hedgehog is not a minimum there: the far field sheds its Coulomb
-energy by tilting the time axis toward the light cone, and of the
-terms tried only one that sees the eigenframe prevents it.*
+hedgehog is not a minimum there: by tilting the time axis toward the
+light cone the charged configuration sheds not only its Coulomb energy
+but, without a box, all of its energy — the infimum at fixed charge is
+zero — and of the terms tried only one that sees the eigenframe
+prevents it.*
 
 ## Notation (self-contained)
 
@@ -64,13 +66,24 @@ Conventions of the development repository `new-duda-lagrangian`
    | energy in box 12 (frozen: 27.29) | 20.4 | 22.0 | 22.1 |
    | maximal tilt amplitude m | 0.95 | 0.96 | 0.96 |
 
-   Without a box the radial problem gives a frozen mass of 33.3 and a
-   screened mass of about 1 (1.1 with 240 knots, 1.05 with 480), three
-   percent of the frozen value: a melted core of radius 0.6 wrapped in
-   a thin wall where χ jumps to its screening value, outside of which
-   the energy density vanishes (`radial_screened.py`, figure below).
-   The wall is thinner than the knot spacing, so the screened mass is
-   known to about 10%, not better.
+   Without a box the radial problem gives a frozen mass of 33.3, while
+   the minimisation with the boost free ends at 1.1 (240 knots) and
+   1.05 (480 knots): a melted core of radius 0.6 wrapped in a thin wall
+   where χ jumps to its screening value, outside of which the energy
+   density vanishes (`radial_screened.py`, figure below). These
+   endpoints are upper bounds, not a mass: **the infimum is zero**
+   (review round 1). The family N = C − a(r) ℓℓᵀη with ℓ = (1, x̂) null,
+   C = diag(E₀+Δ, E₂, E₂, E₂) and a(r) rising smoothly from 0 at
+   r ≤ R/2 to a* = (E₁−E₂)(E₀−E₂)/(E₀+E₁−2E₂) at r ≥ R has F ≡ 0
+   everywhere (the derivatives of N commute for any profile), the
+   exact vacuum spectrum (E₀, E₁, E₂, E₂) outside r = R, a potential
+   bounded by 2Δ² inside, and the charge intact; hence
+   E ≤ (8π/3)Δ²R³ → 0. Checked symbolically and by integrating the
+   model's own density: E(R) ∝ R^3.00, E(0.1) = 0.003
+   (`screened_infimum.py`). The spline minimiser stops at 1 because it
+   cannot resolve a wall thinner than its knot spacing; the physical
+   statement is that with the time sector free the charged
+   configuration has no finite mass at all.
 3. **Why: the null-direction hedgehog.** At m = Δ the operator is
    N = const − Δ ℓℓᵀη with ℓ = (1, x̂) null, ℓℓᵀη nilpotent and
    traceless; then [∂ᵢN, ∂ⱼN] ≡ 0 and tr(∂ᵢN ∂ⱼN) ≡ 0, so F and every
@@ -91,7 +104,8 @@ Conventions of the development repository `new-duda-lagrangian`
    on the screened state it costs 2 sinh²χ (e₀−e₂)²/r², so its integral
    grows with the box while the Coulomb energy it saves is finite, and
    the break-even coupling at radius r is c* = 2Δ²/r² (accurate to 2%
-   over r = 1–30). The stiffness of the radial tilt is −0.00086 + 0.066c
+   over r = 1–30). In particular K_u excludes the zero-infimum family of
+   result 2, whose tilt persists to infinity. The stiffness of the radial tilt is −0.00086 + 0.066c
    and turns positive at c ≈ 0.013 (local threshold); the tilted state
    stays the global minimum up to a coupling between 0.1 and 0.3, above
    which the minimiser returns to the frozen hedgehog: on the lattice to
@@ -122,9 +136,10 @@ Conventions of the development repository `new-duda-lagrangian`
 Every lattice static in that line was computed in the frozen sector,
 and the boost tangents used for the clock were frozen dressings of
 such statics. The present result says that with the δ_M norm the
-frozen electron is a saddle of the full energy, and that the
-instability does not go away with the hierarchy E₀ → ∞ (the tilt
-angle is Δ/E₀, the component M₀ᵢ stays of order Δ). The mechanism is
+frozen electron is a saddle of the full energy, that the charged
+configuration has zero energy infimum once the time sector is free,
+and that neither goes away with the hierarchy E₀ → ∞ (the tilt angle
+is Δ/E₀, the component M₀ᵢ stays of order Δ). The mechanism is
 convention-free (a Kerr–Schild-type deformation along a null direction
 makes the curvature vanish), but nothing here is measured at
 (g, δ) = (8, 0.3), and whether the 32³ hedgehog of report 004 has the
@@ -133,15 +148,17 @@ same unstable direction is a one-run check that is not made here.
 ## What this report does not show
 
 - Boxes larger than 12 are not regenerated here; the development
-  repository records screened energies of 17.25 (box 18) and 13.9
-  (box 24), monotone toward the radial value 0.96, and the cure
-  returning to the frozen value at box 18 as well. E₀ = 3 and 30 are
+  repository records the cure returning to the frozen value at box 18
+  as well. E₀ = 3 and 30 are
   likewise not included (development records: 16.0 and 21.6).
-- The radial problems end with gradient norms of order 1–10 on the
-  spline coefficients (the wall at r ≈ 0.6 is thinner than the knot
-  spacing there); the screened mass moved from 1.13 to 1.05 between 240
-  and 480 knots and the development repository's runs of the same code
-  gave 0.99 and 0.96, so it is quoted as "about 1".
+- The radial minimisations with the boost free end with gradient norms
+  of order 10 on the spline coefficients and are quoted only as
+  attained upper bounds (1.1 and 1.05; the development repository's
+  runs of the same code gave 0.99 and 0.96); the infimum is zero and
+  is not attained by any smooth configuration of finite core size. The
+  lattice energies in a box (22.0 at box 12) are set by the frozen
+  Dirichlet boundary and the spacing, and the development repository's
+  box scan (17.25 at box 18, 13.9 at box 24) falls accordingly.
 - K_u is a candidate, not a derived term: nothing selects it beyond
   the requirement of seeing the frame, and the list of probed
   invariants is finite; whether the model's author wants a term that
@@ -165,8 +182,9 @@ same unstable direction is a one-run check that is not made here.
 profiles and far-field ratios of the committed lattice endpoints in
 `results/fields/`: frozen; time sector free at E₀ = 10, 100, 1000 and
 the E₀ = 100 minimisation redone here; with K_u at c = 0.03, 0.1, 0.3,
-3), `radial_screened.py` (frozen and
-screened masses at 240 and 480 knots, the coupling scan) — each writes
+3), `radial_screened.py` (frozen mass and
+screened upper bounds at 240 and 480 knots, the coupling scan),
+`screened_infimum.py` (the zero-infimum family) — each writes
 the JSON of the same name in `results/`; `make_figures.py` draws the
 two figures from those JSONs and `verify_artifacts.py` asserts the
 structure.
