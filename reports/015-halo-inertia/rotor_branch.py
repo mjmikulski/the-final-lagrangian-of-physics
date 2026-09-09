@@ -43,13 +43,15 @@ for pt in br:
           f"inertia 2a = {2 * a:.1f} ({2 * a / (2 * a0):.0f} x rigid), E/Omega = {row['E_over_Omega']:.0f} (2J = {2 * J}), |grad| {pt['grad']:.1e}", flush=True)
 # the halo-tilt alternative in the same box: a tilt that spans the box radius R costs c_E delta^2 / R and carries the
 # inertia c_I delta^2 R (halo_check.py); at fixed J the optimal angle gives E_tilt = J sqrt(2 c_E / c_I) / R = J / R.
-# The box branch beats it unless R > J / E_kin, which is the crossover radius quoted in the report.
+# Equating it with the total excess E - E_static of the box configuration gives an order-of-magnitude crossover radius.
 import math
 Delta = base['E'][1] - base['E'][2]
 cE, cI = 32 * math.pi / 3 * Delta ** 4, 64 * math.pi / 3 * Delta ** 4
 Rbox = base['box'] / 2
 for row in rows:
     row['tilt_estimate_in_box'] = row['J'] * math.sqrt(2 * cE / cI) / Rbox
-    row['crossover_radius'] = row['J'] * math.sqrt(2 * cE / cI) / row['E_kin']
-    print(f"J = {row['J']:5.1f}: halo-tilt estimate in this box {row['tilt_estimate_in_box']:.2f} vs branch kinetic {row['E_kin']:.4f}; tilt wins beyond R = {row['crossover_radius']:.0f}")
+    row['crossover_radius'] = row['J'] * math.sqrt(2 * cE / cI) / row['E_above_static']
+    row['E_over_2JOmega'] = row['E_over_Omega'] / (2 * row['J'])
+    print(f"J = {row['J']:5.1f}: halo-tilt estimate in this box {row['tilt_estimate_in_box']:.2f} vs total excess of the configuration {row['E_above_static']:.4f}; "
+          f"order-of-magnitude crossover R = {row['crossover_radius']:.0f}; E/(2 J Omega) = {row['E_over_2JOmega']:.0f}")
 json.dump(dict(E_static=E0, rigid_inertia=2 * a0, box=base['box'], n=base['n'], rows=rows), open('results/rotor_branch.json', 'w'), indent=1)
