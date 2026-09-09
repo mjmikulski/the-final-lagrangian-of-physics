@@ -1,0 +1,10 @@
+{
+ "energy_per_unit_radius": "16*pi*Delta**4*(2*deltap**2*r**2 + 3)/(3*r**2)",
+ "cost_coefficient_over_Delta4": "32*pi/3",
+ "cost_coefficient_numeric": 33.51032163829113,
+ "inertia_coefficient_over_Delta4": "64*pi/3",
+ "inertia_coefficient_numeric": 67.02064327658226,
+ "coulomb_term_over_Delta4": "16*pi/r**2",
+ "cost_is_32pi_over_3": true,
+ "inertia_is_64pi_over_3": true
+}
