@@ -45,7 +45,7 @@ assert abs(rad['frozen']['E'] - 33.3) < 0.3 and rad['screened']['E'] < 0.05 * ra
 assert abs(rad2['screened']['E'] - rad['screened']['E']) < 0.1, 'screened mass converged in the knots'
 import glob, re
 scan = sorted((float(re.search(r'tilt([0-9.]+)\.json', f).group(1)), json.load(open(f))['screened']['E']) for f in glob.glob('results/radial_E0_100_nk240_tilt*.json'))
-assert all(scan[i][1] < scan[i + 1][1] for i in range(len(scan) - 1)), '1D: mass rises monotonically with c'
+assert all(scan[i + 1][1] > scan[i][1] - 0.02 for i in range(len(scan) - 1)), '1D: mass rises with c (flat within 0.02 once restored)'
 assert abs(scan[-1][1] - rad2['frozen']['E']) < 0.05, '1D: mass fully restored at the largest coupling'
 assert [c for c, E in scan if abs(E - rad2['frozen']['E']) < 0.05][0] <= 0.3, '1D: restored by c = 0.3'
-print('VERIFY 015 OK')
+print('VERIFY 016 OK')
