@@ -73,7 +73,7 @@ def fig_rotor():
     ax[2].loglog(J, EO, 'o-', color='k', label='$E(J)/\\Omega$ of the configurations (total energy)')
     ax[2].loglog(J, 2 * J, '--', color='C5', lw=1.4, label='clock condition $E/\\Omega = 2J$')
     ax[2].set(xlabel='angular momentum J (model units)', ylabel='$E/\\Omega$ and $2J$ (model units)', ylim=(1, 1e4),
-              title='the clock condition is not met anywhere\non this branch: $E/\\Omega$ moves away from $2J$')
+              title='the clock condition is not met at any sampled J:\n$E/\\Omega$ stays two to three orders of magnitude above $2J$')
     for a in ax:
         a.grid(alpha=0.3, which='both'); a.margins(x=0.12, y=0.12)
         a.legend(fontsize=8, loc='upper center', bbox_to_anchor=(0.5, -0.18), ncol=1, frameon=False)
