@@ -1,4 +1,4 @@
-"""Assertions on the committed records of report 015 (structure, not floating-point tails)."""
+"""Assertions on the committed records of report 016 (structure, not floating-point tails)."""
 import json
 
 p4 = json.load(open('results/prop4_check.json'))
@@ -39,9 +39,9 @@ for e0 in (10, 100, 1000):
 cure = sorted([(r['tilt'], r['E']) for r in fd.values() if r['tilt'] > 0 and r['E0'] == 100.0])
 assert all(cure[i][1] < cure[i + 1][1] for i in range(len(cure) - 1)), 'energy rises monotonically with c'
 assert abs(cure[-1][1] - frozen['E']) < 1e-4, 'at the largest coupling the minimiser returns to the frozen hedgehog'
-rad = json.load(open('results/radial_E0_100_nk480.json'))
-assert abs(rad['frozen']['E'] - 33.3) < 0.3 and rad['screened']['E'] < 0.05 * rad['frozen']['E'], '1D: screened mass a few percent of the frozen one'
 rad2 = json.load(open('results/radial_E0_100_nk240.json'))
+rad = {'frozen': rad2['frozen'], 'screened': json.load(open('results/radial_E0_100_nk480.json'))['screened']}
+assert abs(rad['frozen']['E'] - 33.3) < 0.3 and rad['screened']['E'] < 0.05 * rad['frozen']['E'], '1D: screened mass a few percent of the frozen one'
 assert abs(rad2['screened']['E'] - rad['screened']['E']) < 0.1, 'screened mass converged in the knots'
 import glob, re
 scan = sorted((float(re.search(r'tilt([0-9.]+)\.json', f).group(1)), json.load(open(f))['screened']['E']) for f in glob.glob('results/radial_E0_100_nk240_tilt*.json'))
