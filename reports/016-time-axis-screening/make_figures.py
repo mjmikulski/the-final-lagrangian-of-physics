@@ -83,10 +83,10 @@ def fig_cure():
     ax[0].semilogx(c1, (E1d - Es) / (Ef - Es), 'o-', color='k', label='radial problem, no box (r up to 300)')
     ax[0].semilogx(cl, (El - Es_lat) / (Ef_lat - Es_lat), 's', color='C3', ms=11, mfc='none', mew=1.8, label='lattice, box 12')
     ax[0].axhline(1, color='k', ls='--', lw=1, label='frozen hedgehog (mass fully restored)')
-    ax[0].axhline(0, color='C3', ls=':', lw=1.2, label='no term: fully screened')
+    ax[0].axhline(0, color='C3', ls=':', lw=1.2, label='no term: uncured minimiser endpoint (its energy, not the zero infimum)')
     ax[0].axvspan(0.1, 0.3, color='0.85', label='full restoration reached between c = 0.1 and 0.3')
-    ax[0].set(xlabel='coupling c of the frame term $K_u$', ylabel='restored fraction of the Coulomb energy\n$(E(c) - E_{screened})/(E_{frozen} - E_{screened})$',
-              ylim=(-0.05, 1.1), title='the frame term restores the mass: lattice checks fall on the\nradial curve where the tilt fits in the box (c ≥ 0.1)')
+    ax[0].set(xlabel='coupling c of the frame term $K_u$', ylabel='recovered fraction of the endpoint energy difference\n$(E(c) - E_{end}(0))/(E_{frozen} - E_{end}(0))$',
+              ylim=(-0.05, 1.1), title='the frame term brings the energy back to the frozen value:\nlattice checks fall on the radial curve where the tilt fits in the box')
     ax[0].legend(fontsize=8, loc='lower right')
     cs = np.array([s[0] for s in stiff]); ks = np.array([s[1] for s in stiff])
     ax[1].plot(cs, ks, 'o', color='C2', ms=7, label='Rayleigh quotient of the full Hessian\nalong the radial tilt $M_{0i}\\propto x_i f(r)$')
