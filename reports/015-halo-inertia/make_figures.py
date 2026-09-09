@@ -22,27 +22,29 @@ def load(name):
 def fig_halo():
     fig, ax = plt.subplots(1, 2, figsize=(11.5, 4.8))
     marks = {1.0: 'o', 2.0: 's', 3.0: '^'}
+    SLOPES = [load(n)['slope_inertia_exact'] for n in ('halo_scaling_n48_box18.json', 'halo_scaling_n32_box12.json') if os.path.exists(os.path.join(R, n))]
+    CSLOPES = [load(n)['slope_cost'] for n in ('halo_scaling_n48_box18.json', 'halo_scaling_n32_box12.json') if os.path.exists(os.path.join(R, n))]
     for name, col, lab in (('halo_scaling_n48_box18.json', 'C0', 'box 18, n = 48'), ('halo_scaling_n32_box12.json', 'C1', 'box 12, n = 32')):
         if not os.path.exists(os.path.join(R, name)):
             continue
         d = load(name)
         for row in d['rows']:
             ax[0].loglog(row['x_cost'], row['cost'], marks[row['L']], color=col, ms=6)
-            ax[1].loglog(row['x_inertia'], row['inertia_excess'], marks[row['L']], color=col, ms=6)
+            ax[1].loglog(row['x_inertia_exact'], row['inertia_excess'], marks[row['L']], color=col, ms=6)
         ax[0].plot([], [], 'o', color=col, label=f'{lab}: measured, prefactor {d["slope_cost"]:.0f}')
-        ax[1].plot([], [], 'o', color=col, label=f'{lab}: measured, prefactor {d["slope_inertia"]:.0f}')
+        ax[1].plot([], [], 'o', color=col, label=f'{lab}: measured, prefactor {d["slope_inertia_exact"]:.0f}')
     d = load('halo_scaling_n48_box18.json')
     xc = np.logspace(-4.2, -0.8, 10)
-    xi = np.logspace(-4.4, -0.5, 10)
+    xi = np.logspace(-4.4, -0.3, 10)
     ax[0].loglog(xc, d['predicted_cost'] * xc, 'k-', lw=1.2, label=f'exact exterior formula, prefactor $(32\\pi/3)\\Delta^4$ = {d["predicted_cost"]:.1f} (no fit)')
     ax[1].loglog(xi, d['predicted_inertia'] * xi, 'k-', lw=1.2, label=f'exact exterior formula, prefactor $(64\\pi/3)\\Delta^4$ = {d["predicted_inertia"]:.1f} (no fit)')
     for L, m in marks.items():
         ax[0].plot([], [], m, color='0.4', label=f'twist zone thickness L = {L:g}')
         ax[1].plot([], [], m, color='0.4', label=f'twist zone thickness L = {L:g}')
     ax[0].set(xlabel="$\\alpha^2\\int s'(r)^2\\,dr$   (tilt angle $\\alpha$, radial profile $s$; model units)", ylabel='static energy cost of the tilt (model units)',
-              title='cost of tilting the halo against the radial derivative\nof the twist angle: exact prefactor 32.2, measured 22 to 25')
-    ax[1].set(xlabel='$\\alpha^2\\int s(r)^2\\,dr$   (tilted length; model units)', ylabel='inertia gained for rotation about z (model units)',
-              title='inertia of the tilted halo grows linearly with the tilted\nlength: exact prefactor 64.4, measured 72 to 78')
+              title='cost of tilting the halo against the radial derivative\nof the twist angle: exact prefactor 32.2, measured ' + f'{min(CSLOPES):.0f} to {max(CSLOPES):.0f}')
+    ax[1].set(xlabel="$\\int 4\\sin^2(\\theta/2)\\,(1 + r^2\\theta'^2/2)\\,dr$,  $\\theta = \\alpha s(r)$   (model units)", ylabel='inertia gained for rotation about z (model units)',
+              title='inertia of the tilted halo against the exact exterior integral:\nprefactor 64.4 exact, measured ' + f'{min(SLOPES):.0f} to {max(SLOPES):.0f}')
     for a in ax:
         a.legend(fontsize=7.5, loc='lower right'); a.grid(alpha=0.3, which='both')
     fig.suptitle('The halo mechanism on the relaxed lattice hedgehog: internal tilt of the exterior by an angle $\\alpha\\,s(r)$ '

@@ -9,6 +9,7 @@ PY=${PYTHON:-python}
 export CUDA_VISIBLE_DEVICES=${M5_RUN_GPU:+0}
 $PY halo_check.py
 $PY exterior_check.py
+$PY halo_inertia_check.py
 $PY halo_scaling.py --static results/fields/static_base_n48.pt --tag n48_box18
 $PY halo_scaling.py --static results/fields/static_base_n32.pt --tag n32_box12
 if [ -n "$M5_RUN_GPU" ]; then
