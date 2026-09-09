@@ -1,4 +1,4 @@
-"""Figures of report 015 from the committed JSON records (no lattice or GPU work needed).
+"""Figures of report 016 from the committed JSON records (no lattice or GPU work needed).
 
 fig_screening.png : the electron with the time sector free -- 1D profiles, the energy density, the lattice tilt
 fig_cure.png      : the frame term K_u against its coupling -- restored mass (1D and lattice), the two thresholds
@@ -24,7 +24,7 @@ def load(name):
 
 
 def fig_screening():
-    rad = load('radial_E0_100_nk480.json')
+    rad = {'frozen': load('radial_E0_100_nk240.json')['frozen'], 'screened': load('radial_E0_100_nk480.json')['screened']}
     fd = {row['file']: row for row in load('field_diagnostics.json')}
     fig, ax = plt.subplots(1, 3, figsize=(14, 4.4))
     # (a) 1D profiles

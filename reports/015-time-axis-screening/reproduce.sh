@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Report 015: regenerate the committed records and assert their structure.
+# Report 016: regenerate the committed records and assert their structure.
 # CPU suite (minutes for the symbolic and lattice-diagnostic legs; the radial problems take up to an hour each,
 # run in parallel below). The lattice minimisations that produced the committed endpoint fields
 # (results/fields/*.pt) need a GPU (about an hour each at n = 32); set M5_RUN_GPU=1 to redo them.
