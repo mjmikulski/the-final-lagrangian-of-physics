@@ -39,13 +39,13 @@ def fig_halo():
     for L, m in marks.items():
         ax[0].plot([], [], m, color='0.4', label=f'twist zone thickness L = {L:g}')
         ax[1].plot([], [], m, color='0.4', label=f'twist zone thickness L = {L:g}')
-    ax[0].set(xlabel="$\\delta^2\\int s'(r)^2\\,dr$   (tilt angle $\\delta$, radial profile $s$)", ylabel='static energy cost of the tilt (model units)',
+    ax[0].set(xlabel="$\\alpha^2\\int s'(r)^2\\,dr$   (tilt angle $\\alpha$, radial profile $s$)", ylabel='static energy cost of the tilt (model units)',
               title='cost of tilting the halo against the radial derivative\nof the twist angle: exact slope 32.2, measured 22 to 25')
-    ax[1].set(xlabel='$\\delta^2\\int s(r)^2\\,dr$   (tilted length)', ylabel='inertia gained for rotation about z (model units)',
+    ax[1].set(xlabel='$\\alpha^2\\int s(r)^2\\,dr$   (tilted length)', ylabel='inertia gained for rotation about z (model units)',
               title='inertia of the tilted halo grows linearly with the tilted\nlength: exact slope 64.4, measured 72 to 78')
     for a in ax:
         a.legend(fontsize=7.5, loc='upper left'); a.grid(alpha=0.3, which='both')
-    fig.suptitle('The halo mechanism on the relaxed lattice hedgehog: internal tilt of the exterior by an angle $\\delta\\,s(r)$ '
+    fig.suptitle('The halo mechanism on the relaxed lattice hedgehog: internal tilt of the exterior by an angle $\\alpha\\,s(r)$ '
                  '($E_0 = 100$, $\\Delta = 0.99$)', fontsize=11)
     fig.tight_layout()
     fig.savefig(os.path.join(R, 'fig_halo.png'), dpi=150)
