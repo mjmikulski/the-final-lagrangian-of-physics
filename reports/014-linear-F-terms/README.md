@@ -79,10 +79,17 @@ n = 32).
    to within 30%, the relaxed field pulling it back toward zero; the
    far-field exponent moves with the weight, and the core's
    eigenvalue-exchange gap narrows but does not close (figure 3). The
-   E₀ = 100 route says the same in its own conventions: the static
-   electron sector leaves a one-parameter family X = c X_a, and a scan
-   over c changes the mass smoothly without changing any static verdict
-   for |c| ≤ 0.5 (figure 4).
+   E₀ = 100 route says the same in its own conventions. There the
+   static frozen-time sector keeps three structures, F₁₂, F₁₃, F₂₃
+   (rank 3 at a generic static field); with the degenerate vacuum pair
+   E₂ = E₃ only F₁₂ + F₁₃ and F₂₃ are defined as functions of M, and
+   their constant-coefficient sum is a boundary term, so the
+   **constant-coefficient** subfamily is X = c X_a with X_a = F₁₂ + F₁₃.
+   A scan over c changes the mass smoothly without changing any static
+   verdict for |c| ≤ 0.5 (figure 4). Contractions whose weights are
+   functions of the eigenvalues, such as F(ηMη, η) = Σ(m_a + m_b)F_ab,
+   are dynamically independent of X_a and are not covered by this scan
+   (review round 1).
 5. **The uniform vacuum is a saddle at cubic order.** Along a generic
    compact frame twist M = R M_vac Rᵀ, R = exp(tW(x)), the O(t²) part of
    a linear term integrates to zero (it is the null term with vacuum
@@ -113,11 +120,11 @@ but it opens no door that the program was looking for: it cannot touch
 the clock ladder of 010, it leaves the Newton no-go of 006 in place on
 its configurations, on the electron it reweights the existing static
 density, and its price is a vacuum that is no longer a minimum. The
-only structural novelty is negative: the spectral coefficients that
-make these terms dynamical are non-smooth where eigenvalues collide,
-and on the electron texture the smallest gap between the eigenvalue-1
-axis and the small pair is 3·10⁻³, a third of a percent of the
-eigenvalue.
+only structural novelty is negative: the individual projectors that
+make these terms dynamical are non-smooth where eigenvalues collide
+(symmetric combinations of them, polynomials in M, are not), and on the
+electron texture the smallest gap between the eigenvalue-1 axis and the
+small pair is 3·10⁻³, a third of a percent of the eigenvalue.
 
 ## What this report does not show
 
@@ -133,9 +140,10 @@ eigenvalue.
 - The vacuum instability is established; a condensate is not. The ray
   estimates are not stationary in the transverse directions and three
   twists give no bound over all directions.
-- Coefficients are restricted to η, ε and the spectral data of M; the
-  scan runs constant multiples of the generators; no scan over general
-  spectral-scalar weights. Single lattice, single spacing in each
+- Coefficients are restricted to η, ε and the spectral data of M; both
+  scans run constant multiples of their generators; no scan over
+  general spectral-scalar weights (polynomials in M included), which
+  are dynamically independent of the constant-coefficient family. Single lattice, single spacing in each
   route; the far-field exponent is a shell fit on a 32³ box.
 - Author-gated: the diagonal Lorentz action; whether a term that rewards
   eigenvalue splitting is wanted at all.

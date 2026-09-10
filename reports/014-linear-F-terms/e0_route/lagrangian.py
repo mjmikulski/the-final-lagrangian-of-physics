@@ -138,8 +138,9 @@ def time_tilt(N, dN, e, dMet):
 def x_term(N, e, F, X):
     """X = c_a X_a + c_b X_b in the frozen sector (Task 4): X_a = F_{ij,ab} P_1^{ia} Q^{jb}, X_b = F_{ij,ab} Q^{ia} Q^{jb}
     with P_1 the projector on the charge direction and Q = 1 - P_1 (summed over all i, j; F antisymmetric).
-    These are the only two structures of a scalar linear in F that survive for static fields with the
-    time-like sector at its vacuum; their constant-coefficient sum is a total derivative."""
+    With constant coefficients and the degenerate vacuum pair these are the two structures that survive for
+    static fields with the time-like sector at its vacuum; their constant-coefficient sum is a total derivative.
+    Contractions with eigenvalue-dependent weights (powers of M) are independent of them and not scanned here."""
     if isinstance(X, dict):
         X = (X.get('xa', 0.0), X.get('xb', 0.0))
     if X is None or not (X[0] or X[1]):
