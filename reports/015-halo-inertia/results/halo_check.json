@@ -1,0 +1,13 @@
+{
+ "energy_per_unit_radius": "16*pi*Delta**4*(2*deltap**2*r**2 + 3)/(3*r**2)",
+ "cost_coefficient_over_Delta4": "32*pi/3",
+ "cost_coefficient_numeric": 33.51032163829113,
+ "cost_is_32pi_over_3": true,
+ "inertia_exact_per_unit_radius": "-64*pi*Delta**4*(deltap**2*r**2 + 2)*(cos(delta) - 1)/3",
+ "inertia_closed_form": "(64 pi/3) Delta^4 4 sin^2(delta/2) (1 + r^2 deltap^2 / 2)",
+ "inertia_closed_form_verified": true,
+ "inertia_leading_coefficient_over_Delta4": "64*pi/3",
+ "inertia_leading_numeric": 67.02064327658226,
+ "inertia_leading_is_64pi_over_3": true,
+ "inertia_angular_only": "-128*pi*Delta**4*(cos(delta) - 1)/3"
+}
