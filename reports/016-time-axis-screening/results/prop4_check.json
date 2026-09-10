@@ -1,0 +1,27 @@
+{
+ "F_at_m_Delta_max_entry": "0",
+ "trace_dNdN_at_m_Delta_max": "0",
+ "F_at_m_0_max_entry_numeric": 0.222547580795019,
+ "l_null": "0",
+ "P_squared_zero": true,
+ "P_traceless": "0",
+ "N_plus_Delta_P_is_constant_diag": "Matrix([[Delta + E0, 0, 0, 0], [0, E2, 0, 0], [0, 0, E2, 0], [0, 0, 0, E2]])",
+ "eigenvalues_tilted": [
+  99.99009900980195,
+  1.0099009901980494,
+  0.010000000000000026,
+  0.009999999999999985
+ ],
+ "eigenvalue_shift_from_vacuum": [
+  -0.00990099019804802,
+  0.009900990198049353,
+  2.6020852139652106e-17,
+  -1.5612511283791264e-17
+ ],
+ "farfield_frozen": "4*(e1 - e2)**4/r**4",
+ "farfield_at_screening_rapidity": "0",
+ "Ku_general": "2*S**2*(e0 - e2)**2/r**2",
+ "Ku_at_screening_rapidity": "2*(e0 - e2)**2*(e1 - e2)**2/(r**2*((e0 - e2)**2 - (e1 - e2)**2))",
+ "c_star": "2*((e0 - e2)**2 - (e1 - e2)**2)*(e1**2 - 2*e1*e2 + e2**2)**2/(r**2*(e0 - e2)**2*(e1 - e2)**2)",
+ "c_star_leading": "2*Delta**2/r**2"
+}
