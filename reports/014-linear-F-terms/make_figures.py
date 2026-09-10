@@ -144,11 +144,11 @@ def fig_electron_scan():
     ww = np.linspace(-0.22, 0.22, 10)
     ax[0].plot(ww, ww * lt['E_stat_base'], 'k--', lw=1, label='frozen value λ·∫dens (no relaxation)')
     ax[0].set(xlabel='weight λ·∫dens / E_static on the base profile', ylabel='E(λ) − E(0) (model units)',
-              title='(a) the energy shift follows the frozen value;\nthe relaxed field pulls it back toward zero')
+              title='(a) the energy shift follows the frozen value; relaxation\nlowers the energy relative to the frozen configuration')
     ax[1].axhline(base['tail_eta'], color='k', ls=':', lw=1, label='baseline (λ = 0)')
     ax[1].set(xlabel='weight λ·∫dens / E_static', ylabel='far-field exponent of the η density (shells r = 8–16)', title='(b) the far-field exponent moves with the weight,\nclass-dependently')
     ax[2].axhline(1e3 * base['small_gap_min'], color='k', ls=':', lw=1, label='baseline (λ = 0)')
-    ax[2].set(xlabel='weight λ·∫dens / E_static', ylabel='smallest gap of the small eigenvalue pair (×10⁻³)', title="(c) the core's eigenvalue-exchange gap narrows\nbut does not close")
+    ax[2].set(xlabel='weight λ·∫dens / E_static', ylabel='smallest gap between the two lowest eigenvalues (×10⁻³)', title='(c) the gap between the two lowest eigenvalues varies\nbut stays nonzero in the sampled runs')
     h = [Line2D([], [], color='C0', marker=MARK[c], ls='none', label=f'class {CLASS_LABEL[c]}') for c in MARK]
     ax[0].legend(handles=h + [Line2D([], [], color='k', ls='--', label='frozen value'), Line2D([], [], color='k', marker='x', ls='none', label='perturbed restart (20% runs)')], fontsize=8, loc='upper left', title='classes offset slightly in x', title_fontsize=7)
     for a in ax[1:]:
@@ -167,13 +167,13 @@ def fig_e0_scan():
     fig, ax = plt.subplots(1, 2, figsize=(11.5, 5.6))
     ax[0].plot(c[ok], E[ok], 'o-', color='C0', label='total energy E (converged)')
     for cc in c[~ok]:
-        ax[0].annotate('c = %g:\nno converged\nsolution' % cc, xy=(cc, 0), xytext=(cc, 28), ha='center', fontsize=8, arrowprops=dict(arrowstyle='->', lw=0.8))
+        ax[0].annotate('c = %g:\nno converged\nsolution obtained' % cc, xy=(cc, 0), xytext=(cc, 28), ha='center', fontsize=8, arrowprops=dict(arrowstyle='->', lw=0.8))
     ax[0].set_xlim(-1.15, 1.15)
     ax[0].plot(c[ok], [r['E4'] for r in rows if r['grad'] < 1e-4], 's--', color='C2', ms=4, label='quartic gradient term')
     ax[0].plot(c[ok], [r['EV'] for r in rows if r['grad'] < 1e-4], '^--', color='C1', ms=4, label='potential')
     ax[0].plot(c[ok], [r['E2'] for r in rows if r['grad'] < 1e-4], 'v--', color='C4', ms=4, label='−c ∫X_a (the linear term)')
     ax[0].axhline(0, color='k', lw=0.6)
-    ax[0].set(xlabel='coupling c of X = c X_a', ylabel='energy in box 12 (model units)', title='(a) for |c| ≤ 0.5 the mass changes smoothly and stays\npositive; at c = ±1 the minimisation finds no solution')
+    ax[0].set(xlabel='coupling c of X = c X_a', ylabel='energy in box 12 (model units)', title='(a) for |c| ≤ 0.5 the mass changes smoothly and stays\npositive; at c = ±1 no converged solution was obtained')
     ax[0].legend(fontsize=8, loc='upper center', bbox_to_anchor=(0.5, -0.18), ncol=2, frameon=False)
     for i, sh in enumerate(('inner', 'middle', 'outer')):
         ax[1].plot(c[ok], [r['tail_ratio'][i] for r in rows if r['grad'] < 1e-4], 'o-', ms=4, label=f'{sh} of the three outer shells')
@@ -182,7 +182,7 @@ def fig_e0_scan():
     ax[1].legend(fontsize=8)
     for a in ax:
         a.grid(alpha=0.3)
-    fig.suptitle('Second route, E₀ = 100 conventions: the constant-coefficient family of the electron sector is X = c X_a (n = 32, box 12)', fontsize=11)
+    fig.suptitle('Second route, E₀ = 100 conventions: the constant-coefficient P₁,Q subfamily of the static electron sector, X = c X_a (n = 32, box 12)', fontsize=11)
     fig.tight_layout()
     fig.savefig(os.path.join(R, 'fig_e0_scan.png'), dpi=150)
 

@@ -48,9 +48,11 @@ n = 32).
    scalars; φ = Σ_{a<b} 2F_ab. Second route: an independent
    enumeration in the E₀ = 100 conventions (145 candidates built from
    η, ε, powers of M, δ_M and the eigenprojectors) finds every candidate
-   in the span of the same twelve frame structures to 10⁻¹¹, with two
-   null ones (the constant-coefficient φ and χ) and four identically
-   zero (`e0_route/candidates.py`).
+   in the span of the same twelve frame structures to below 10⁻⁸, with
+   two null ones (the constant-coefficient φ and χ) and four
+   identically zero (`e0_route/candidates.py`; this classification runs
+   at a non-degenerate spectrum (100, 1, 0.01, 0), the scan of result 4
+   at the degenerate pair E₂ = E₃).
 2. **Every decorated class is dynamical.** An autograd Euler–Lagrange
    test with the projectors' full M-dependence gives |EL|/scale between
    0.15 and 0.9 for all 36 decorated classes, while φ and χ come out
@@ -76,25 +78,28 @@ n = 32).
    F² statics. On the η-relaxed electron, with vacuum-pinned projectors,
    each class is scanned at weights of ±5% and ±20% of the static
    energy (13 runs). The energy shift follows the frozen value λ·∫dens
-   to within 30%, the relaxed field pulling it back toward zero; the
-   far-field exponent moves with the weight, and the core's
-   eigenvalue-exchange gap narrows but does not close (figure 3). The
+   to within 30%, the relaxed field lowering the energy relative to the
+   frozen trial configuration (so a negative shift can grow in
+   magnitude); the far-field exponent moves with the weight, and the
+   smallest gap between the two lowest eigenvalues varies but stays
+   nonzero in the sampled runs (figure 3). The
    E₀ = 100 route says the same in its own conventions. There the
    static frozen-time sector keeps three structures, F₁₂, F₁₃, F₂₃
    (rank 3 at a generic static field); with the degenerate vacuum pair
    E₂ = E₃ only F₁₂ + F₁₃ and F₂₃ are defined as functions of M, and
-   their constant-coefficient sum is a boundary term, so the
-   **constant-coefficient** subfamily is X = c X_a with X_a = F₁₂ + F₁₃.
-   A scan over c changes the mass smoothly without changing any static
-   verdict for |c| ≤ 0.5 (figure 4). Contractions whose weights are
-   functions of the eigenvalues, such as F(ηMη, η) = Σ(m_a + m_b)F_ab,
-   are dynamically independent of X_a and are not covered by this scan
-   (review round 1).
+   their constant-coefficient sum is a boundary term, so the selected
+   **constant-coefficient P₁, Q subfamily**, regular at the small-pair
+   degeneracy, is X = c X_a with X_a = F₁₂ + F₁₃. A scan over c changes
+   the mass smoothly without changing any static verdict for |c| ≤ 0.5
+   (figure 4). Contractions whose weights are functions of the
+   eigenvalues can supply dynamically independent terms (for example
+   F(ηMη, η) = Σ(m_a + m_b)F_ab, review round 1) and are not covered by
+   this scan.
 5. **The uniform vacuum is a saddle at cubic order.** Along a generic
    compact frame twist M = R M_vac Rᵀ, R = exp(tW(x)), the O(t²) part of
    a linear term integrates to zero (it is the null term with vacuum
    coefficients), but the next order does not: the odd part of the
-   linear integral is c₃t³ with c₃ constant to five digits over
+   linear integral is c₃t³ with c₃ stable over the tested amplitudes
    t = 5·10⁻⁴–4·10⁻³ and |c₃| between 0.1 and 1.2 over three random
    twists and the three classes, while the η energy is c₄t⁴ with
    c₄ = 53–71. So, along the three twists tested, for every λ ≠ 0 configurations
@@ -102,8 +107,10 @@ n = 32).
    (figure 2). Null combinations are exempt: c₃ of
    F₁₂ + F₁₃ + F₂₃ = φ/2 cancels to 10⁻⁵ in every twist. Whether the
    instability ends in a condensate is not resolved: the cubic–quartic
-   truncation along a ray has its minimum at t* = −3λc₃/(4c₄) ≈ 10⁻⁵ with
-   an energy of order 10⁻²⁰, far below anything a relaxation resolves.
+   truncation along a ray has its minimum at t* = −3λc₃/(4c₄), for the
+   illustrated F₁₂ twist (seed 456) at the 5% coupling t* ≈ 10⁻⁵ with an
+   energy of order 10⁻²⁰ (10⁻¹⁵ on another recorded ray), far below
+   anything a relaxation resolves.
 
 ![family](results/fig_family.png)
 
@@ -141,9 +148,10 @@ small pair is 3·10⁻³, a third of a percent of the eigenvalue.
   estimates are not stationary in the transverse directions and three
   twists give no bound over all directions.
 - Coefficients are restricted to η, ε and the spectral data of M; both
-  scans run constant multiples of their generators; no scan over
-  general spectral-scalar weights (polynomials in M included), which
-  are dynamically independent of the constant-coefficient family. Single lattice, single spacing in each
+  scans run constant multiples of their generators (the E₀ = 100 scan
+  the selected constant-coefficient P₁, Q subfamily); no scan over
+  general spectral-scalar weights, polynomials in M included, which can
+  supply dynamically independent terms. Single lattice, single spacing in each
   route; the far-field exponent is a shell fit on a 32³ box.
 - Author-gated: the diagonal Lorentz action; whether a term that rewards
   eigenvalue splitting is wanted at all.
