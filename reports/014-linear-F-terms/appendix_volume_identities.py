@@ -83,6 +83,45 @@ for trial in range(5):
     phi_basis = sum(2 * Fab[(a, b)] for (a, b) in Fab)
     dec.append({'L2_minus_basis': L2 - float(L2_basis), 'L2': L2, 'phi_minus_basis': phi - float(phi_basis)})
 worst = max(max(abs(d['L2_minus_basis']) / max(1.0, abs(d['L2'])), abs(d['phi_minus_basis'])) for d in dec)
+
+
+def R_G(A_cov, G_cov):
+    """The double mixed trace of discussion #186 (comment 18275474): R_G = sum G_cd (d_mu M^{nu c} d_nu M^{mu d}
+    - d_mu M^{mu c} d_nu M^{nu d}), indices raised with eta; A_cov[mu] = d_mu M covariant, G_cov covariant."""
+    Aup = torch.einsum('n,c,mnc->mnc', s, s, A_cov)                       # d_mu M^{nu c}
+    t1 = torch.einsum('cd,mnc,nmd->', G_cov, Aup, Aup)
+    div = torch.einsum('mmc->c', Aup)                                    # d_mu M^{mu c}
+    t2 = torch.einsum('cd,c,d->', G_cov, div, div)
+    return float(t1 - t2)
+
+
+# R_G with G = adj(N) eta is NOT L2 (review round 1): fit it in the even F_ab basis by least squares.
+# For G = eta the double mixed trace is -phi (in the module); for G != eta its eta pairs a derivative index with
+# a matrix index, so it is not a contraction of F at all and falls outside the report's grammar.
+ev = torch.tensor([100.0, 1.0, 0.01, 0.0])
+w = torch.tensor([float(torch.prod(ev[[c for c in range(4) if c != a]])) for a in range(4)])
+rg = {}
+for label, G_cov in (('eta', ETA.clone()), ('adj_eta', torch.diag(w) @ ETA)):
+    rows, rhs, rhs_L2 = [], [], []
+    for trial in range(40):
+        A = torch.stack([(lambda S: S + S.T)(torch.randn(4, 4)) for _ in range(4)])
+        AN = torch.einsum('ab,mbc->mac', ETA, A)
+        Fab, phi, Phi = frame_components(AN)
+        rows.append([Fab[k] for k in sorted(Fab)])
+        rhs.append(R_G(A, G_cov))
+        rhs_L2.append(float(torch.einsum('n,n,nn->', s, w, Phi)))
+    X, y = np.array(rows), np.array(rhs)
+    coef = np.linalg.lstsq(X, y, rcond=None)[0]
+    rg[label] = {'basis_order': [f'F_{a}{b}' for (a, b) in sorted(Fab)], 'fit_coefficients': coef.tolist(),
+                 'fit_residual_relative': float(np.abs(X @ coef - y).max() / np.abs(y).max()),
+                 'L2_vs_R_G_relative': float(np.abs(np.array(rhs_L2) - y).max() / np.abs(y).max())}
+assert rg['eta']['fit_residual_relative'] < 1e-10 and np.allclose(rg['eta']['fit_coefficients'], -2.0), rg['eta']
+assert rg['adj_eta']['fit_residual_relative'] > 0.1 and rg['adj_eta']['L2_vs_R_G_relative'] > 0.1, rg['adj_eta']
+rg['statement'] = ('R_eta = -phi (in the module); R_G with G = adj(N) eta is neither L2 nor any combination of the '
+                   'six even generators: it is not a contraction of F (its eta pairs a derivative slot with a matrix slot).')
+out['R_G'] = rg
+print(f"R_G: G = eta -> -phi exactly (residual {rg['eta']['fit_residual_relative']:.1e}); G = adj eta -> outside the F_ab span "
+      f"(fit residual {rg['adj_eta']['fit_residual_relative']:.2f}, differs from L2 by {rg['adj_eta']['L2_vs_R_G_relative']:.2f} relative)")
 assert worst < 1e-10, worst
 out['decomposition'] = {'trials': dec, 'worst_relative': worst,
                         'statement': 'L2 = sum_{a<b} (w_a + w_b) F_ab, w_a = prod_{c!=a} e_c; L1 = sqrt(e3) sum_{a<b} 2 F_ab'}

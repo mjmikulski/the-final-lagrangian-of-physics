@@ -19,6 +19,7 @@ Writes results/k1_vacuum.json.
 """
 import json
 import os
+import sys
 
 import numpy as np
 import torch
@@ -49,10 +50,10 @@ def e3_adj(N):
 def static_terms(dN):
     """dN[..., 3, 4, 4] = spatial derivatives of the mixed N (derivative index i = 1..3 stored at i-1).
     Returns (F.F static, phi, Phi[..., 4, 4]) with F_ij = [d_i N, d_j N] mixed, Frobenius norm (delta_M = 1
-    in the vacuum frame). phi = sum_{i,j} eta^{ii} eta^{jj} F_{ij ij} pairs the derivative index with the SAME
+    in the vacuum frame), F.F normalised as in lagrangian.py (sum over ordered pairs; asserted below). phi = sum_{i,j} eta^{ii} eta^{jj} F_{ij ij} pairs the derivative index with the SAME
     spatial matrix slot; Phi_{nu b} = sum_i (F_{i nu})^i_b."""
     F = torch.einsum('...iab,...jbc->...ijac', dN, dN) - torch.einsum('...jab,...ibc->...ijac', dN, dN)
-    FF = 0.5 * torch.einsum('...ijab,...ijab->...', F, F)          # 2 sum_{i<j} |F_ij|^2 = 1/2 sum_{i,j}
+    FF = torch.einsum('...ijab,...ijab->...', F, F)                # the model's F.F: sum_{i,j} = 2 sum_{i<j} |F_ij|^2
     Fcov = torch.einsum('a,...ijab->...ijab', S, F)                 # lower the first matrix index with eta
     phi = torch.einsum('...ijij->...', Fcov[..., :, :, 1:, 1:])      # slots (alpha, beta) = (i, j), eta^{ii}eta^{jj} = +1
     Phi = torch.einsum('...ijib->...jb', F[..., :, :, 1:, :])        # Phi_{j b} = sum_i (F_ij)^i_b, rows j = 1..3
@@ -113,8 +114,19 @@ def twist_integrals(n, t, W, N_vac):
             'phi_abs': float(phi.abs().mean() * vol)}
 
 
-import sys
 ONLY_B = '--only-B' in sys.argv
+# normalisation check against the model code (e0_route/lagrangian.py): static energy density = -kin = F.F
+sys.path.insert(0, os.path.join(HERE, 'e0_route'))
+from lagrangian import terms as _model_terms
+_M = ETA @ torch.diag(torch.tensor([100.0, 1.0, 0.01, 0.0]))
+for _ in range(3):
+    _A = torch.zeros(4, 4, 4)
+    for i in range(1, 4):
+        _S = torch.randn(4, 4); _A[i] = _S + _S.T
+    _kin, _, _ = _model_terms(_M[None], _A[None], (100.0, 1.0, 0.01, 0.0), frozen=False)
+    _FF, _, _ = static_terms(torch.einsum('ab,ibc->iac', ETA, _A[1:]))
+    assert abs(float(-_kin[0]) - float(_FF)) < 1e-9 * float(_FF), (float(-_kin[0]), float(_FF))
+print('normalisation: F.F of this script == -kin of lagrangian.py on random static jets')
 print('=== A. frame twists in a periodic box ===')
 E_VAC = torch.tensor([100.0, 1.0, 0.01, 0.0])
 N_VAC = torch.diag(E_VAC)
@@ -186,8 +198,8 @@ rho_min, xbest = best
 FF0, phi0 = (float(v) for v in jet_terms(xbest))
 scale = abs(phi0)
 FF0, phi0 = FF0 / scale ** 2, phi0 / scale            # unit |phi| jet: rescale A by 1/sqrt(|phi|)
-print(f'  rho_min = min F.F/phi^2 = {rho_min:.5f} (bound 1/6 = {1 / 6:.5f}); worst jet at unit |phi|: F.F = {FF0:.5f}')
-B = {'rho_min': rho_min, 'bound': 1 / 6, 'FF_at_unit_phi': FF0}
+print(f'  rho_min = min F.F/phi^2 = {rho_min:.5f} (bound 1/3 = {1 / 3:.5f}, model normalisation); worst jet at unit |phi|: F.F = {FF0:.5f}')
+B = {'rho_min': rho_min, 'bound': 1 / 3, 'FF_at_unit_phi': FF0}
 
 
 def e3_of(ev):
@@ -201,51 +213,64 @@ for label, E in (('E3=0', (100.0, 1.0, 0.01, 0.0)), ('E3=E2 (lattice)', (100.0, 
     g = np.array([(e3_of(E + 1e-6 * np.eye(4)[a]) - e3_of(E - 1e-6 * np.eye(4)[a])) / 2e-6 for a in range(4)]) / (2 * e3vac)
     kappa_lin = 2 * np.sqrt(rho_min) / np.linalg.norm(g)
 
-    def worst_energy(kappa, lam):
-        # minimise over de (4 params) with e3 > 0; phi0 sign chosen so that kappa*phi0 > 0 (destabilising)
-        p = kappa * lam ** 2 * abs(phi0)
+    def f_of_p(p, bound):
+        """min over the four eigenvalue shifts (e3 > 0, |de_a| <= bound) of sum de^2 - p (sqrt(e3/e3vac) - 1);
+        p carries the sign of kappa*phi. Starts include the weight-collapse corner (small eigenvalues -> 0)."""
+        starts = [[0, 0, 0, 0], [0, 0, 0.05, 0.05], [0, 0, 0.5, 0.5], [0.5, 0.5, 0.5, 0.5],
+                  [0, 0, -0.99 * E[2], -0.99 * E[3]], [0, -0.5, -0.99 * E[2], -0.99 * E[3]], [0, 0, -0.5 * E[2], -0.5 * E[3]]]
 
         def f(de):
             e3 = e3_of(E + de)
-            if e3 <= 0:
+            if e3 <= 0 or np.abs(de).max() > bound:
                 return 1e6
             return float((de ** 2).sum() - p * (np.sqrt(e3 / e3vac) - 1))
-        best_v = None
-        for s0 in ([0, 0, 0, 0], [0, 0, 0.05, 0.05], [0, 0, 0.5, 0.5], [0.5, 0.5, 0.5, 0.5], [0, 0, 2, 2]):
-            r = minimize(f, np.array(s0, float) * (1 if kappa > 0 else 1), method='Nelder-Mead',
-                         options={'xatol': 1e-10, 'fatol': 1e-14, 'maxiter': 20000})
+        best_v, best_h = None, None
+        for s0 in starts:
+            r = minimize(f, np.array(s0, float), method='Nelder-Mead',
+                         options={'xatol': 1e-10, 'fatol': 1e-14, 'maxiter': 4000})
             if best_v is None or r.fun < best_v:
                 best_v = r.fun
-        return best_v + lam ** 4 * FF0
+                best_h = float(np.sqrt(max(e3_of(E + r.x), 0.0) / e3vac) - 1)
+        return best_v, best_h
 
-    lams = np.geomspace(1e-3, 30, 60)
-
-    def stable(kappa):
-        return all(worst_energy(kappa, lam) >= -1e-12 for lam in lams)
-
-    # bracket the threshold from kappa = 1 in both directions, then bisect
-    hi = 1.0
-    if stable(hi):
-        lo = hi
-        while stable(hi) and hi < 1e4:
-            lo, hi = hi, hi * 2
-    else:
-        while not stable(hi) and hi > 1e-6:
-            hi = hi / 2
-        lo = hi
-        hi = 2 * hi
-    for _ in range(30):
-        mid = 0.5 * (lo + hi)
-        if stable(mid):
-            lo = mid
-        else:
-            hi = mid
-    kappa_c = lo
-    lam_star = min(lams, key=lambda l: worst_energy(hi, l))
+    # (i) LOCAL threshold. The pointwise energy at amplitude lambda on the worst jet is f(p) + lambda^4 Q0 with
+    # p = kappa lambda^2 |phi0| (either sign attainable), so stability for all lambda is
+    # kappa^2 <= rho_min * min_p p^2 / (-f(p)) over p with f(p) < 0. With the eigenvalue shifts bounded (|de| <= 1)
+    # one table of f(p) gives the local threshold; the collapse branch (h -> -1) sets it.
+    table = []
+    for pval in np.geomspace(1e-7, 1e2, 120):
+        for sgn in (+1.0, -1.0):
+            v, h = f_of_p(sgn * pval, bound=1.0)
+            table.append((pval, sgn, v, h))
+    cand = [(pv * pv / (-v), pv, sgn, h) for pv, sgn, v, h in table if v < -1e-16]
+    val, p_star, sgn_star, h_star = min(cand)
+    kappa_c = float(np.sqrt(rho_min * val))
+    lam_star = float(np.sqrt(p_star / (kappa_c * abs(phi0))))
+    # closed forms: linear response kappa_lin = 2 sqrt(rho)/|g|; weight collapse kappa_col = 2 sqrt(rho V_c)/|h_c|
+    # cheapest collapse of the weight: e3 ~ E0 E1 (e2 + e3) -> 0 along de2 = de3 = -(E2 + E3)/2, cost (E2 + E3)^2 / 2, h -> -1
+    V_c = float((E[2] + E[3]) ** 2 / 2)
+    h_c = -1.0
+    kappa_col = 2 * np.sqrt(rho_min * V_c) / abs(h_c)
+    # (ii) GLOBAL runaway. Minimising over the jet amplitude first gives the reduced density
+    # G(de) = V(de) - kappa^2 (sqrt(e3/e3vac) - 1)^2 / (4 rho_min); e3 grows as e^3 while V is quadratic, so G is
+    # unbounded below for every kappa != 0. Along the uniform ray de_a = t the sign change is at t* ~ 16 rho e3vac /kappa^2.
+    runaway = {}
+    ts = np.geomspace(1e-2, 1e8, 2000)
+    for kap in (0.003, 0.01, 0.03):
+        G = np.array([float(((t * np.ones(4)) ** 2).sum() - kap ** 2 * (np.sqrt(e3_of(E + t) / e3vac) - 1) ** 2 / (4 * rho_min)) for t in ts])
+        neg = np.where(G < 0)[0]
+        t_star = float(ts[neg[0]]) if len(neg) else float('inf')
+        runaway[str(kap)] = {'t_star': t_star, 't_star_kappa2': t_star * kap ** 2, 'G_min_on_grid': float(G.min())}
+    t_pred = 16 * rho_min * e3vac / 3 if E[3] == 0 else None
     B[label] = {'E': E.tolist(), 'e3vac': float(e3vac), 'g': g.tolist(), 'g_norm': float(np.linalg.norm(g)),
-                'kappa_lin': float(kappa_lin), 'kappa_c': float(kappa_c), 'lambda_at_threshold': float(lam_star)}
-    print(f'  {label}: |g| = {np.linalg.norm(g):.2f}, kappa_lin = {kappa_lin:.4f}, kappa_c (exact de-minimisation) = {kappa_c:.4f}, '
-          f'unstable amplitude lambda ~ {lam_star:.3g}')
+                'kappa_lin': float(kappa_lin), 'V_collapse': V_c, 'h_collapse': h_c, 'kappa_collapse_closed_form': float(kappa_col),
+                'kappa_c_local': float(kappa_c), 'lambda_at_threshold': float(lam_star), 'p_at_threshold': float(p_star), 'sign_at_threshold': float(sgn_star), 'h_at_threshold': h_star,
+                'branch_at_threshold': 'weight collapse' if h_star < -0.5 else 'linear response',
+                'global_runaway': runaway, 'runaway_scaling_note': 'V ~ e^2 against kappa^2 e3 / (4 rho) ~ kappa^2 e^3: unbounded below for every kappa != 0; t* kappa^2 ~ const'}
+    print(f'  {label}: |g| = {np.linalg.norm(g):.2f}, kappa_lin = {kappa_lin:.4f}, kappa_collapse (closed form) = {kappa_col:.4f}, '
+          f'kappa_c local (both signs, |de| <= 1, p-table) = {kappa_c:.4f}, at lambda ~ {lam_star:.3g} with h = {h_star:+.3f} '
+          f'({B[label]["branch_at_threshold"]}); global runaway t* for kappa 0.003/0.01/0.03: '
+          + ', '.join(f'{runaway[k]["t_star"]:.3g}' for k in runaway) + ' (t* kappa^2 = ' + ', '.join(f'{runaway[k]["t_star_kappa2"]:.3g}' for k in runaway) + ')')
 out['B_threshold'] = B
 json.dump(out, open(os.path.join(HERE, 'results', 'appendix_volume_vacuum.json'), 'w'), indent=1)
 print('written results/appendix_volume_vacuum.json')

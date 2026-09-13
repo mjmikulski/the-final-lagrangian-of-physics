@@ -27,6 +27,49 @@
    ]
   }
  },
+ "R_G": {
+  "eta": {
+   "basis_order": [
+    "F_01",
+    "F_02",
+    "F_03",
+    "F_12",
+    "F_13",
+    "F_23"
+   ],
+   "fit_coefficients": [
+    -2.000000000000002,
+    -1.9999999999999973,
+    -1.999999999999996,
+    -1.9999999999999993,
+    -1.9999999999999993,
+    -1.9999999999999964
+   ],
+   "fit_residual_relative": 1.3463565344853821e-15,
+   "L2_vs_R_G_relative": 1.2010452358811228
+  },
+  "adj_eta": {
+   "basis_order": [
+    "F_01",
+    "F_02",
+    "F_03",
+    "F_12",
+    "F_13",
+    "F_23"
+   ],
+   "fit_coefficients": [
+    0.56561680122655,
+    -0.3473705836440603,
+    -0.18522745663484735,
+    -0.3737900225777162,
+    -0.5177923242701534,
+    -0.9908745753591602
+   ],
+   "fit_residual_relative": 0.8468997831158475,
+   "L2_vs_R_G_relative": 1.3768099215327074
+  },
+  "statement": "R_eta = -phi (in the module); R_G with G = adj(N) eta is neither L2 nor any combination of the six even generators: it is not a contraction of F (its eta pairs a derivative slot with a matrix slot)."
+ },
  "decomposition": {
   "trials": [
    {

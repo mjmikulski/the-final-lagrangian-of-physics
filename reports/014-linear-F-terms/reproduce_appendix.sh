@@ -41,11 +41,21 @@ for s in range(3):
     assert c32['max_abs_I_L1'] < 1e-8 and c48['max_abs_I_L1'] < 1e-8
     assert abs(c32['c3'] - c48['c3']) < 1e-2 * abs(c48['c3']) and abs(c48['c3']) > 1e3
     assert abs(c48['c2']) < 1e-6 * abs(c48['c3'])
-# threshold: the Cauchy-Schwarz bound is attained, kappa_c of order 1e-2 in both conventions
-assert abs(vc['B_threshold']['rho_min'] - 1 / 6) < 1e-4
+# threshold: the Cauchy-Schwarz bound is attained; the LOCAL threshold (bounded shifts) is set by the weight-collapse
+# branch; the global runaway (eigenvalue growth) is present for every kappa with t* kappa^2 ~ const
+import math
+assert abs(vc['B_threshold']['rho_min'] - 1 / 3) < 1e-4   # model normalisation F.F = sum over ordered pairs
 for lab in ('E3=0', 'E3=E2 (lattice)'):
     b = vc['B_threshold'][lab]
-    assert 0.003 < b['kappa_c'] < 0.1, b
-    assert abs(b['kappa_c'] - b['kappa_lin']) < 0.5 * b['kappa_lin'], b
+    assert 0.003 < b['kappa_c_local'] < 0.1, b
+    assert abs(b['kappa_c_local'] - min(b['kappa_lin'], b['kappa_collapse_closed_form'])) < 0.2 * b['kappa_c_local'], b
+    assert b['kappa_c_local'] <= b['kappa_lin'] * 1.05, b
+    rw = b['global_runaway']
+    assert all(math.isfinite(rw[k]['t_star']) for k in rw), rw
+    tk = [rw[k]['t_star_kappa2'] for k in rw]
+    assert max(tk) / min(tk) < 3, tk
+# R_G of the discussion: -phi for G = eta, outside the F_ab span for G = adj eta (not L2)
+assert idn['R_G']['eta']['fit_residual_relative'] < 1e-10 and idn['R_G']['adj_eta']['fit_residual_relative'] > 0.1
+assert idn['R_G']['adj_eta']['L2_vs_R_G_relative'] > 0.1
 print('APPENDIX REPRODUCTION OK')
 PYEOF

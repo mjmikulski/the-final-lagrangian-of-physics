@@ -1,7 +1,9 @@
 # Appendix — volume weights on the linear sector: √e₃·φ and adj(M)·Φ
 
 *Added 2026-09-13 under METHOD §7 (new material extending the report;
-no conclusion of report 014 changes). Motivation: the model author's
+no conclusion of report 014 changes; revised after review round 1, which
+corrected the normalisation of §5, the sign search of §5, the
+identification of §2 and withdrew the pair-law estimate of §6). Motivation: the model author's
 GR analogy √(−g)R, with a volume weight that does not vanish on the
 rank-3 vacuum — w = e₃(ηM), the third elementary symmetric polynomial
 of the spectrum, or the adjugate adj(ηM) as the analogue of √(−g)g^{μν}.
@@ -21,12 +23,12 @@ Einstein–Hilbert action. Both candidates below are members of the
 rank-12 module of result 1 with **polynomial** coefficients — smooth
 where the individual spectral projectors of the report are not (the
 eigenvalue collisions of the electron, result 4) — and everything the
-report established for the module applies to them. The same family
-was proposed independently on substrate-framework discussion #186
-(the model author, 2026-09-03: R_G = double mixed trace with
-G ∈ {η, ηMη, M⁻¹, η + 2uuᵀ}) and closed as a Newton mediator there
-(OpenWave R14, 2026-09-05); the volume weights e₃ and adj were not on
-that list.
+report established for the module applies to them. A related family was
+proposed on substrate-framework discussion #186 (the model author,
+2026-09-03: R_G, a double mixed trace with G ∈ {η, ηMη, M⁻¹, η + 2uuᵀ})
+and closed as a Newton mediator there (OpenWave R14, 2026-09-05); §2
+records that for G ≠ η that object is not a contraction of F at all,
+so nothing from R14 transfers to the terms studied here.
 
 ## 1. The weights
 
@@ -56,9 +58,17 @@ L_2 := \mathrm{adj}(N)^{\nu\beta}\,\Phi_{\nu\beta} = \sum_{a<b}(w_a + w_b)\,F_{a
 ```
 
 both to 10⁻¹⁴ on random points (`appendix_volume_identities.py`).
-L₂ is the R_G of the discussion with G = adj = det·M⁻¹; on the
-vacuum with E₃ = 0 it reduces to F₀₃ + F₁₃ + F₂₃, a non-null
-combination.
+On the vacuum with E₃ = 0, L₂ reduces to F₀₃ + F₁₃ + F₂₃, a non-null
+combination. L₂ is **not** the R_G of the discussion with G = adj
+(review round 1): in R_G = Σ G_cd(∂_μM^{νc}∂_νM^{μd} − ∂_μM^{μc}∂_νM^{νd})
+the weight sits on the internal pair and η pairs a derivative slot with
+a matrix slot, whereas L₂ puts the weight on the free pair of Φ and
+keeps F's internal η. For G = η the two coincide (R_η = −φ, fitted
+exactly); for G = adj·η the least-squares fit of R_G onto the six even
+generators leaves a residual of 0.8 and R_G differs from L₂ by order
+one: R_G with G ≠ η is not a contraction of F and lies outside the
+report's grammar (it is a two-derivative term of the non-commutator
+kind that 006 §7 and the report's optional extension mention).
 
 ## 3. Euler–Lagrange structure
 
@@ -118,17 +128,22 @@ boost planes), grids n = 16–48, three twists:
   c₂ = 0 (the O(t²) part is the null term with vacuum coefficients),
   c₃ ≠ 0 with both signs across the three twists (−2.4, +2.6,
   +1.4·10⁵ in the box's units), converged between n = 32 and n = 48
-  to four digits; the static F·F on the same twists is c₄ ≈
-  0.7–1.1·10¹². The cubic term dominates below the crossover
-  amplitude t* = |c₃|/c₄ ≈ 1–3·10⁻⁷ per unit coupling (an rms rapidity
-  of 5·10⁻⁷): the vacuum
-  saddle of result 5, for L₂ as for every individual class.
+  to four digits; the static F·F on the same twists (the model's
+  normalisation, asserted against `e0_route/lagrangian.py`) is c₄ ≈
+  1.5–2.1·10¹². The cubic term dominates below the crossover
+  amplitude t* = |c₃|/c₄ ≈ 0.6–1.6·10⁻⁷ per unit coupling (an rms
+  rapidity of 3·10⁻⁷): the vacuum saddle of result 5, for L₂ as for
+  every individual class.
 
-**The threshold for L₁** (part B). The worst static jet at the vacuum
-attains the Cauchy–Schwarz bound: min F·F/φ² = 1/6 exactly (from
-|φ| ≤ 2Σ_{i<j}|([A_i,A_j])_{ij}| ≤ 2Σ‖[A_i,A_j]‖_F). Shifting the
-eigenvalues at fixed jet leaves F·F and φ unchanged and moves only
-V = Σ(e_a − E_a)² and the weight; to leading order
+**The threshold for L₁** (part B). With F·F in the model's
+normalisation (Σ over ordered pairs, i.e. 2Σ_{i<j}‖[A_i,A_j]‖²; the
+first version of this appendix used half of it, review round 1) the
+worst static jet at the vacuum attains the Cauchy–Schwarz bound:
+ρ_min = min F·F/φ² = 1/3 exactly (from
+|φ| ≤ 2Σ_{i<j}|([A_i,A_j])_{ij}| ≤ 2Σ‖[A_i,A_j]‖_F), and jets with
+either sign of φ attain it. Shifting the eigenvalues at fixed jet
+leaves F·F and φ unchanged and moves only V = Σ(e_a − E_a)² and the
+weight. Two branches compete. Linear response,
 
 ```math
 H \supset \sum_a \delta e_a^2 - \kappa\,(g\cdot\delta e)\,\varphi + F\!\cdot\!F
@@ -136,18 +151,53 @@ H \supset \sum_a \delta e_a^2 - \kappa\,(g\cdot\delta e)\,\varphi + F\!\cdot\!F
 g_a = \partial_a\sqrt{e_3/e_{3,\rm vac}},
 ```
 
-so the vacuum is stable at quartic order iff κ² ≤ 4ρ_min/|g|². With
-|g| = 71 (E₃ = 0) and 35.5 (E₃ = E₂) this gives κ_lin = 0.012 and
-0.023; the exact minimisation over the four eigenvalue shifts on the
-worst jet, scanned over the amplitude, gives κ_c = 0.0115
-(E₃ = 0) and 0.023 (E₃ = E₂), equal to κ_lin to three digits: the
-small-amplitude regime is the worst, as the leading order predicts. Along every ray the vacuum stays
-a local minimum (the quadratic term of V dominates; L₁'s third-order
-term needs an eigenvalue shift), so the threshold is a finite-amplitude
-statement in the pointwise, leading-order sense. On the electron
-(§4) κ_c corresponds to a reweighting of the static energy by about
-15% — the range the report's scans covered — so the stability window
-is not a small-coupling artefact of the units.
+gives κ_lin = 2√ρ_min/|g| = 0.016 (E₃ = 0, |g| = 71) and 0.033
+(E₃ = E₂, |g| = 35.5). The other branch is the **collapse of the
+weight** (review round 1's counterexample): driving e₃ to zero along
+δe₂ = δe₃ = −(E₂ + E₃)/2 costs only V_c = (E₂ + E₃)²/2 (5·10⁻⁵ or
+2·10⁻⁴) and takes h = √(e₃/e₃_vac) − 1 to −1, so with the sign of κφ chosen
+accordingly the gain is linear in κ|φ| and
+
+```math
+E \supset V_c + \lambda^4 Q_0 - \kappa|arphi_0|\lambda^2 \;\ge\; 0 \iff
+\kappa \le \kappa_{
+m col} = 2\sqrt{
+ho_{\min} V_c}\,,
+```
+
+κ_col = 0.0082 (E₃ = 0) and 0.0163 (E₃ = E₂), below κ_lin in both
+conventions. Exactly: the pointwise energy on the worst jet at
+amplitude λ is f(p) + λ⁴Q₀ with p = κλ²|φ₀| of either sign and
+f(p) = min_{δe}[Σδe² − p(√(e₃/e₃_vac) − 1)], so stability for all
+amplitudes is κ² ≤ ρ_min·min_p p²/(−f(p)); one table of f(p) with the
+shifts bounded by |δe_a| ≤ 1 gives the **local** threshold
+κ_c = 0.0082 (E₃ = 0) and 0.0164 (E₃ = E₂), at the collapse branch
+(h ≈ −1 at the minimiser). On the electron (§4) this is a reweighting
+of the static energy by about 20% (0.016 × 13 in the lattice
+convention).
+
+**Without the bound there is no threshold at all.** Minimising over
+the jet amplitude first leaves the reduced density
+
+```math
+G(\delta e) = V(\delta e) - rac{\kappa^2}{4
+ho_{\min}}\Big(\sqrt{e_3/e_{3,
+m vac}} - 1\Big)^2 ,
+```
+
+and e₃ grows as the cube of the eigenvalues while V is quadratic: for
+every κ ≠ 0, G < 0 once the eigenvalues exceed t* ≈ 4ρ_min e₃_vac/κ²
+(measured on the uniform ray δe_a = t: t*κ² constant to within the grid
+for κ = 0.003, 0.01, 0.03; t* ≈ 10⁴ at κ = 0.01). This is the runaway
+of an indefinite term against a quadratic potential — the disease of
+003's C2 and of 008 §4 — in the eigenvalue channel: with the model's
+V, a weighted null term κ·w·φ is bounded below pointwise only if its
+weight grows no faster than the eigenvalues themselves (w² ≲ e²),
+which √e₃ ~ e^{3/2} violates. The local threshold therefore describes
+a metastable vacuum, separated from the runaway by eigenvalues three
+to four orders of magnitude above the vacuum's largest; a bounded
+weight (or a potential steeper than quadratic) would be needed for a
+stable one, and neither is chosen here.
 
 ## 6. Two facts that need no run
 
@@ -160,25 +210,29 @@ is not a small-coupling artefact of the units.
    3(a)) neither enters the kinetic form, so the count of dynamical
    components is unchanged and the trace stays an algebraic
    constraint (tr N = ΣE + (κ/2)φ ∂_c√(w/w_vac) for L₁).
-2. **No 1/d pair law.** Outside the cores e₃ is constant, so there
-   L₁ = ∂_μ(√w J^μ) with J ~ M∂M: the interaction energy of two
-   solitons from L₁ comes from ∫J·∂√w over the core of one times the
-   field of the other, ∂M₂ ~ Δ/d², hence E_int ≲ C/d² (with the 1/r²
-   eigenvalue tails of §4 the same bound up to logarithms). This is
-   the discussion's "no pair law / d⁻² refuted" for R_G, derived
-   without a run.
+2. **The two-body question is open.** A first version of this
+   appendix claimed E_int ≲ C/d² from "L₁ is a total derivative outside
+   the cores"; review round 1 showed the estimate wrong. The frame
+   gradient of the hedgehog is O(1/r), not O(1/r²): for
+   N = E₂1 + Δ n nᵀ, n = x/r, exactly Σᵢ‖∂ᵢN‖² = 4Δ²/r², and the weight
+   tail w − w_vac = O(r⁻²) of §4 is not confined to a core, so a cross
+   term such as (w₁ − w_vac)φ₂ has the overlap ∫d³x/(r₁²r₂²) ∝ 1/d.
+   Whether such contributions cancel is not established here in either
+   direction; the claim is withdrawn and no pair law is asserted for
+   L₁ or L₂. What stands is fact 1: on the configurations of 006 and
+   016 both terms vanish identically.
 
 ## 7. What this appendix does not show
 
-- No lattice scan with the weight was run: the plan's electron scan
-  and two-body legs were dropped once §6 and the discussion's R14
-  closed the class as a Newton mediator; on the electron a scan
-  would measure a core reweighting of the kind result 4 already
-  shows.
-- The threshold of §5 is pointwise and leading-order (spectrum shifted
-  at fixed jet); the response δe* ≈ κφg/2 is of the order of E₂ near
-  κ_c, so the number is an estimate of the scale, not a certified
-  bound.
+- No lattice scan with the weight was run, and no two-body
+  measurement: after the withdrawal in §6 the pair law of L₁ is
+  simply not known; on the electron a single-soliton scan would
+  measure a core reweighting of the kind result 4 already shows.
+- The thresholds and the runaway of §5 are pointwise (spectrum
+  shifted at fixed jet); a field configuration realising them over a
+  region pays gradient costs not counted here, so κ_c is the scale of
+  the local instability and t* the scale of the runaway, not certified
+  bounds.
 - The sign choice w = e₃ versus e₃² where e₃ < 0 (the screened
   electron) is not made.
 - E₃ = 0 versus E₃ = E₂ changes the vacuum weights of L₂
