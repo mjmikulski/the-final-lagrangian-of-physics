@@ -253,7 +253,7 @@ for label, E in (('E3=0', (100.0, 1.0, 0.01, 0.0)), ('E3=E2 (lattice)', (100.0, 
     kappa_col = 2 * np.sqrt(rho_min * V_c) / abs(h_c)
     # (ii) GLOBAL runaway. Minimising over the jet amplitude first gives the reduced density
     # G(de) = V(de) - kappa^2 (sqrt(e3/e3vac) - 1)^2 / (4 rho_min); e3 grows as e^3 while V is quadratic, so G is
-    # unbounded below for every kappa != 0. Along the uniform ray de_a = t the sign change is at t* ~ 16 rho e3vac /kappa^2.
+    # unbounded below for every kappa != 0. Along the uniform ray de_a = t (V ~ 4 t^2, e3 ~ 4 t^3) the sign change is at t* ~ 4 rho e3vac / kappa^2.
     runaway = {}
     ts = np.geomspace(1e-2, 1e8, 2000)
     for kap in (0.003, 0.01, 0.03):

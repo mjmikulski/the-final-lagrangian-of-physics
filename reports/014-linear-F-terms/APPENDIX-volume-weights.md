@@ -20,15 +20,17 @@ null with a constant coefficient by report 005) is exactly the
 mechanism of result 2: a field-dependent coefficient makes a null
 linear term dynamical, as the weight √(−g) does for the ΓΓ form of the
 Einstein–Hilbert action. Both candidates below are members of the
-rank-12 module of result 1 with **polynomial** coefficients — smooth
-where the individual spectral projectors of the report are not (the
-eigenvalue collisions of the electron, result 4) — and everything the
-report established for the module applies to them. A related family was
+rank-12 module of result 1 with coefficients built from e₃ and adj(N),
+which are polynomials in N (√e₃ itself is smooth where e₃ > 0, not
+polynomial) — regular where the individual spectral projectors of the
+report are not (the eigenvalue collisions of the electron, result 4) —
+and everything the report established for the module applies to them. A related family was
 proposed on substrate-framework discussion #186 (the model author,
 2026-09-03: R_G, a double mixed trace with G ∈ {η, ηMη, M⁻¹, η + 2uuᵀ})
 and closed as a Newton mediator there (OpenWave R14, 2026-09-05); §2
-records that for G ≠ η that object is not a contraction of F at all,
-so nothing from R14 transfers to the terms studied here.
+records that with G = adj·η that object is not in the module (it is
+not a contraction of F), so nothing from R14 transfers to the terms
+studied here.
 
 ## 1. The weights
 
@@ -63,12 +65,13 @@ combination. L₂ is **not** the R_G of the discussion with G = adj
 (review round 1): in R_G = Σ G_cd(∂_μM^{νc}∂_νM^{μd} − ∂_μM^{μc}∂_νM^{νd})
 the weight sits on the internal pair and η pairs a derivative slot with
 a matrix slot, whereas L₂ puts the weight on the free pair of Φ and
-keeps F's internal η. For G = η the two coincide (R_η = −φ, fitted
-exactly); for G = adj·η the least-squares fit of R_G onto the six even
+keeps F's internal η. R_η = −φ (fitted exactly, so the constant-G case is in the
+module); for G = adj·η the least-squares fit of R_G onto the six even
 generators leaves a residual of 0.8 and R_G differs from L₂ by order
-one: R_G with G ≠ η is not a contraction of F and lies outside the
-report's grammar (it is a two-derivative term of the non-commutator
-kind that 006 §7 and the report's optional extension mention).
+one: with that G the object is not a contraction of F and lies outside
+the report's grammar (a two-derivative term of the non-commutator kind
+that 006 §7 and the report's optional extension mention). Whether
+other M-dependent G stay inside the module is not examined.
 
 ## 3. Euler–Lagrange structure
 
@@ -86,8 +89,7 @@ six frame directions δM = η[G, N] and the four eigenvalue directions
 L₁ is a (∂λ)·(∂frame) coupling exactly: within the constant-spectrum
 orbit it exerts no force, and where the frame varies it pushes the
 eigenvalues. L₂ carries the rotated projector and acts on the frame as
-well — the discussion's finding that R_G with an M-dependent G is not
-a total derivative on two-plane boost textures.
+well.
 
 ## 4. The weights on the electron
 
@@ -153,26 +155,25 @@ g_a = \partial_a\sqrt{e_3/e_{3,\rm vac}},
 
 gives κ_lin = 2√ρ_min/|g| = 0.016 (E₃ = 0, |g| = 71) and 0.033
 (E₃ = E₂, |g| = 35.5). The other branch is the **collapse of the
-weight** (review round 1's counterexample): driving e₃ to zero along
-δe₂ = δe₃ = −(E₂ + E₃)/2 costs only V_c = (E₂ + E₃)²/2 (5·10⁻⁵ or
-2·10⁻⁴) and takes h = √(e₃/e₃_vac) − 1 to −1, so with the sign of κφ chosen
+weight** (review round 1's counterexample): with e₃ ≈ E₀E₁(e₂ + e₃)
+(the product terms of the small pair dropped), driving e₃ to zero
+along δe₂ = δe₃ = −(E₂ + E₃)/2 costs only V_c ≈ (E₂ + E₃)²/2 (5·10⁻⁵
+or 2·10⁻⁴) and takes h = √(e₃/e₃_vac) − 1 to −1, so with the sign of κφ chosen
 accordingly the gain is linear in κ|φ| and
 
 ```math
-E \supset V_c + \lambda^4 Q_0 - \kappa|arphi_0|\lambda^2 \;\ge\; 0 \iff
-\kappa \le \kappa_{
-m col} = 2\sqrt{
-ho_{\min} V_c}\,,
+E \supset V_c + \lambda^4 Q_0 - |\kappa|\,|\varphi_0|\,\lambda^2 \;\ge\; 0\ \text{ for all } \lambda \iff
+|\kappa| \le \kappa_{\rm col} = 2\sqrt{\rho_{\min} V_c}\,,
 ```
 
-κ_col = 0.0082 (E₃ = 0) and 0.0163 (E₃ = E₂), below κ_lin in both
-conventions. Exactly: the pointwise energy on the worst jet at
+an estimate, κ_col ≈ 0.0082 (E₃ = 0) and 0.0163 (E₃ = E₂), below
+κ_lin in both conventions. Exactly: the pointwise energy on the worst jet at
 amplitude λ is f(p) + λ⁴Q₀ with p = κλ²|φ₀| of either sign and
 f(p) = min_{δe}[Σδe² − p(√(e₃/e₃_vac) − 1)], so stability for all
-amplitudes is κ² ≤ ρ_min·min_p p²/(−f(p)); one table of f(p) with the
-shifts bounded by |δe_a| ≤ 1 gives the **local** threshold
-κ_c = 0.0082 (E₃ = 0) and 0.0164 (E₃ = E₂), at the collapse branch
-(h ≈ −1 at the minimiser). On the electron (§4) this is a reweighting
+amplitudes is κ² ≤ ρ_min·min_p p²/(−f(p)); one table of f(p) on a sampled
+p-grid, with the shifts bounded by |δe_a| ≤ 1, gives the **local**
+threshold estimate κ_c ≈ 0.0082 (E₃ = 0) and 0.0164 (E₃ = E₂), at the
+collapse branch (h ≈ −1 at the minimiser). On the electron (§4) this is a reweighting
 of the static energy by about 20% (0.016 × 13 in the lattice
 convention).
 
@@ -180,24 +181,22 @@ convention).
 the jet amplitude first leaves the reduced density
 
 ```math
-G(\delta e) = V(\delta e) - rac{\kappa^2}{4
-ho_{\min}}\Big(\sqrt{e_3/e_{3,
-m vac}} - 1\Big)^2 ,
+G(\delta e) = V(\delta e) - \frac{\kappa^2}{4\rho_{\min}}\Big(\sqrt{e_3/e_{3,\rm vac}} - 1\Big)^2 ,
 ```
 
 and e₃ grows as the cube of the eigenvalues while V is quadratic: for
 every κ ≠ 0, G < 0 once the eigenvalues exceed t* ≈ 4ρ_min e₃_vac/κ²
-(measured on the uniform ray δe_a = t: t*κ² constant to within the grid
-for κ = 0.003, 0.01, 0.03; t* ≈ 10⁴ at κ = 0.01). This is the runaway
+(measured on the uniform ray δe_a = t: t*κ² approximately constant,
+within 5%, for κ = 0.003, 0.01, 0.03; t* ≈ 10⁴ at κ = 0.01, about two
+orders of magnitude above the vacuum's largest eigenvalue). This is the runaway
 of an indefinite term against a quadratic potential — the disease of
 003's C2 and of 008 §4 — in the eigenvalue channel: with the model's
 V, a weighted null term κ·w·φ is bounded below pointwise only if its
 weight grows no faster than the eigenvalues themselves (w² ≲ e²),
-which √e₃ ~ e^{3/2} violates. The local threshold therefore describes
-a metastable vacuum, separated from the runaway by eigenvalues three
-to four orders of magnitude above the vacuum's largest; a bounded
-weight (or a potential steeper than quadratic) would be needed for a
-stable one, and neither is chosen here.
+which √e₃ ~ e^{3/2} violates. The local threshold is therefore a
+bounded-shift pointwise stability window, not field metastability
+(§7); a bounded weight (or a potential steeper than quadratic) would be
+needed for a pointwise-bounded energy, and neither is chosen here.
 
 ## 6. Two facts that need no run
 
