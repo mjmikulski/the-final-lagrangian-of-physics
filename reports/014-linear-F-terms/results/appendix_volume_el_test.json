@@ -1,0 +1,54 @@
+{
+ "generic": {
+  "phi": {
+   "el_ratio": 6.215476347707723e-17,
+   "frame_projection": 5.790419456486364e-17,
+   "eigenvalue_projection": 5.1766489518953345e-17,
+   "null": true
+  },
+  "I1": {
+   "el_ratio": 0.4944831374727454,
+   "frame_projection": 0.4009294828662293,
+   "eigenvalue_projection": 0.3684345872572523,
+   "null": false
+  },
+  "L1": {
+   "el_ratio": 0.6133738341397494,
+   "frame_projection": 0.4019870109527453,
+   "eigenvalue_projection": 0.5066327361550559,
+   "null": false
+  },
+  "L2": {
+   "el_ratio": 0.48714775176390135,
+   "frame_projection": 0.7047507335781886,
+   "eigenvalue_projection": 0.31563410285077187,
+   "null": false
+  }
+ },
+ "pure_frame_constant_spectrum": {
+  "phi": {
+   "el_ratio": 3.459005326632401e-17,
+   "frame_projection": 3.1267562716338955e-17,
+   "eigenvalue_projection": 2.026372208739471e-17,
+   "null": true
+  },
+  "I1": {
+   "el_ratio": 0.49642183197696327,
+   "frame_projection": 0.3917750882249693,
+   "eigenvalue_projection": 0.2066955775292826,
+   "null": false
+  },
+  "L1": {
+   "el_ratio": 0.9994035793104139,
+   "frame_projection": 9.66849466507022e-12,
+   "eigenvalue_projection": 0.9600389639524036,
+   "null": false
+  },
+  "L2": {
+   "el_ratio": 0.999443873853398,
+   "frame_projection": 1.2476247870470927,
+   "eigenvalue_projection": 1.0614478252298984,
+   "null": false
+  }
+ }
+}
