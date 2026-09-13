@@ -2,9 +2,9 @@
 
 Public research reports from work on the M5 liquid-crystal particle model
 (Jarek Duda's program, simulated in [OpenWave](https://github.com/openwave-labs/openwave)).
-The repo name quotes an ambition from the project correspondence; the content is
+The repo name quotes an ambition; the content is
 more modest: one directory per problem, each with a markdown report, the code
-behind every number, and a reproduction script.
+behind every number and a reproduction script.
 
 ## Reports
 
@@ -42,14 +42,20 @@ pip install -r requirements.txt          # Python >= 3.12
 Each report's `reproduce.sh` regenerates all results and asserts the
 structural claims (counts, ranks, identities). Exact floating-point values may
 differ in the last digits across machines/BLAS; the asserted structure may not.
+Everyone is encouraged to reproduce and create an issue if sth does not agree.
 
 ## Method
+See [METHOD.md](METHOD.md).
 
-A few rules, borrowed from the best of
-[OpenWave](https://github.com/openwave-labs/openwave) and
-[substrate-framework](https://github.com/vantasnerdan/substrate-framework)
-and nothing else — see [METHOD.md](METHOD.md).
+## Remarks
+Reports are written by AI (Anthropic Claude) and reviewed by AI (OpenAI Codex),
+with only general directions given by MJ Mikulski. 
 
-Reports are written by Maciej J. Mikulski with AI assistance (Claude); every
-claim is human-owned and script-backed. This is a working record of an ongoing
-collaboration, not peer-reviewed publication.
+The original Lagrangian was proposed by Jarek Duda.
+
+Many ideas here come from conversations between Jarek and MJ.
+
+Claims are script-backed but not verified by experts. 
+This is a working record of an ongoing research experiment, not peer-reviewed publication.
+
+Will AI (with human in the loop) find **the final Lagrangian of the Physics?** - We shall see.
