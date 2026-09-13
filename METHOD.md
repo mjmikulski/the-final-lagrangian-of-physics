@@ -15,8 +15,7 @@ deliberately minimal.
 
 3. **Load-bearing claims get a second, independent route.** A different
    implementation, a different method, or an external replication — recorded
-   in the report. AI-produced derivations are drafts until something that is
-   not a language model confirms them.
+   in the report. 
 
 4. **Claims carry explicit exclusions.** Each report says what it does *not*
    show, in its own section. Negative results and failed branches stay in the
@@ -48,5 +47,7 @@ deliberately minimal.
    A materially revised result is not a correction: it becomes a new,
    independent report.
 
-AI assistance (Claude) is used for derivation drafts, code, and text; a human
-owns and can defend every published sentence.
+
+This set of rules is a distilled version of approaches from
+[OpenWave](https://github.com/openwave-labs/openwave) and
+[substrate-framework](https://github.com/vantasnerdan/substrate-framework)
