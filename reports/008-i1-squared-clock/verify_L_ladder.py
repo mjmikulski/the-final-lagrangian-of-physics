@@ -34,13 +34,12 @@ assert all(a > b for a, b in zip(oms, oms[1:])), oms
 l48 = json.load(open(os.path.join(RES, "ladder_N48.json")))
 assert l48["interior"] and l48["min_omega"] == 0.2 and set(l48["min_omega_per_level"]) == {0.2}
 assert 5e-5 < l48["well_depth_vs_omega0"] < 8e-5
-# N = 64 (when present): record the verdict, whatever it is
-f64 = os.path.join(RES, "ladder_N64.json")
-if os.path.exists(f64):
-    l64 = json.load(open(f64))
-    print("N = 64:", "interior" if l64["interior"] else "no interior minimum", "min at", l64["min_omega"],
-          "levels", l64["min_omega_per_level"], "depth", l64["well_depth_vs_omega0"])
-else:
-    print("N = 64 ladder not yet recorded")
+# N = 64: interior well, the sampled minimum at 0.2 at every level (as at N = 48), the depth NOT converged
+# (it grows across the four L-BFGS cycles) -- recorded as such
+l64 = json.load(open(os.path.join(RES, "ladder_N64.json")))
+assert l64["interior"] and l64["min_omega"] == 0.2 and set(l64["min_omega_per_level"]) == {0.2}
+assert all(c > 0 for c in l64["depth_changes"]), l64["depth_changes"]
+assert l64["well_depth_vs_omega0"] > 2 * l48["well_depth_vs_omega0"]
+print("N = 64: interior, min at", l64["min_omega"], "at all levels; depth", l64["well_depth_vs_omega0"], "(not plateaued)")
 assert os.path.getsize(os.path.join(RES, "fig_L_ladder.png")) > 10000
 print("L-ladder records consistent")

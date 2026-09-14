@@ -1,8 +1,7 @@
 # Appendix — the box ladder at fixed spacing: does the (I₁^G)² well survive a larger box?
 
 *Added 2026-09-14 under METHOD §7 (new material extending the report;
-no conclusion of report 008 changes). **Draft: the N = 64 rungs are
-still running; this file will be updated when they land.** Requested by
+no conclusion of report 008 changes). Requested by
 OpenWave's M5.32 ledger (substrate-framework discussion #186,
 2026-09-02), which rates the JG_E well of this report as "the only
 convergence-certified localized clock on the original 4×4 field" and
@@ -50,13 +49,13 @@ skipping the instrument — lands in a different static minimum (E_stat
 instead of 0.33; `chain_N32_analytic_seed.json`), which is why the seed
 is regenerated rather than approximated.
 
-## Results so far
+## Results
 
 | L (N) | E_stat | ω_E = √(C₁/C₂) | sampled minimum, per protocol level | depth vs ω = 0 | depth per level (10⁻⁵) | ticking density: sites, r½ | ‖g‖∞ on rungs |
 |---|---|---|---|---|---|---|---|
 | 48 (32) | 4.835 | 0.326 | 0.35 at all five levels | 6.6·10⁻⁵ | 6.6, 6.5, 6.4, 6.5, 6.6 | 101, 6.8 | 3·10⁻³ |
 | 72 (48) | 4.548 | 0.280 | 0.2 at all five levels | 6.7·10⁻⁵ | 8.3, 7.5, 7.6, 7.6, 6.7 | 314, 7.8 | 1·10⁻² |
-| 96 (64) | 4.377 | 0.249 | *rungs running* | — | — | — | — |
+| 96 (64) | 4.377 | 0.249 | 0.2 at all five levels | 2.5·10⁻⁴ | 9.8, 13, 20, 23, 25 | 277, 6.1 | 3·10⁻² |
 
 ![L ladder](results/L_ladder/fig_L_ladder.png)
 
@@ -71,24 +70,30 @@ the well at each protocol level, the plateau criterion of §6.*
    boundary), and the clock-channel coefficients grow (C₁: 0.9, 2.0,
    2.6·10⁻⁵; C₂: 0.9, 2.6, 4.3·10⁻⁴), so the frozen-profile prediction
    of §2 falls, 0.326 → 0.280 → 0.249.
-2. **At L = 72 the well is there and has moved with the prediction.**
-   The sampled minimum sits at ω = 0.2 at every protocol level (0.35 in
-   the report's box), one rung below, with ω_E = 0.28 between the two
-   rungs; the depth relative to ω = 0 is the same 7·10⁻⁵. Two things are
-   weaker than in the L = 48 box: the depth does not plateau under the
-   fixed-depth protocol (8.3 → 6.7·10⁻⁵ across the four L-BFGS cycles,
-   the last change −0.9·10⁻⁵ against the report's criterion of a final
-   change below 10% of the depth), and the rung residuals are ten times
-   larger. The ticking density spreads over three times as many sites
-   inside the same envelope (r½ 6.8 → 7.8).
-3. **L = 96:** statics and prediction recorded; the rungs are running
-   (about two hours each on the GPU) and will be added here.
+2. **The well survives, and its location moves once.** In both larger
+   boxes the sampled minimum sits at ω = 0.2 at every protocol level
+   (0.35 in the report's box), one rung below, with the frozen-profile
+   prediction (0.28, 0.25) between the 0.2 and 0.35 rungs; from L = 72
+   to L = 96 the location does not move at the rung resolution. The
+   ticking density stays inside the envelope (r½ 6–8) but spreads over
+   about three times as many sites as in the report's box.
+3. **The depth is converged only in the report's box.** At L = 48 the
+   depth plateaus (§6's criterion); at L = 72 it drifts down by 20%
+   across the four L-BFGS cycles (8.3 → 6.7·10⁻⁵, last change −0.9·10⁻⁵
+   against the criterion of a final change below 10% of the depth); at
+   L = 96 it grows monotonically, 1.0 → 2.5·10⁻⁴, and the rung residuals
+   are 10⁻², ten times the report's. The fixed-depth protocol resolves
+   the bracket in the larger boxes but not the 10⁻⁴-level energy
+   differences; the L = 96 depth is a lower bound under this protocol,
+   not a value.
 
 ## What this appendix does not show
 
 - No continuum extrapolation (h fixed) and no protocol deepening: the
-  L = 72 depth is not converged at four L-BFGS cycles, and whether more
-  cycles restore a plateau or move the minimum is not measured.
+  L = 72 and L = 96 depths are not converged at four L-BFGS cycles, and
+  whether more cycles restore a plateau or move the minimum is not
+  measured; the rung grid is the report's, so "0.2 in both boxes" means
+  the same rung, not the same continuous ω*.
 - The frozen tangent and the boost-x generator are those of the report;
   no equivariant tangent.
 - γ is fixed at the L = 48 value; the per-box 5% coupling (87.9 at
@@ -105,7 +110,7 @@ stage in `results/L_ladder/`), `instrument/m5_21_2b_a_instrument.py`
 (the OpenWave seed instrument, output directory changed), the seeds
 (`results/L_ladder/seeds/`, float32, with the instrument's row JSONs),
 the polished fields for N = 32 and 48 (`M_G_polished_N*.npz`; the
-64³ field, 33 MB, is not committed), `make_appendix_L_figure.py`,
+64³ fields, 13–14 MB each, are not committed), `make_appendix_L_figure.py`,
 `verify_L_ladder.py`.
 
 ```bash
@@ -115,6 +120,8 @@ M5_RUN_LADDER=1 bash reproduce_appendix_L.sh  # seeds (CPU hours) + chains and l
 ```
 
 Provenance: development in `duda-particle-model/i1sq_L_ladder/`
-(2026-09-13/14); the request in discussion #186, comment 18254268; the
+(2026-09-13/14; the run took 1, 5 and 8 GPU-hours for the three ladders
+and 4 h for the N = 64 chain); the request in discussion #186, comment
+18254268; the
 seed recipe from OpenWave `research/scripts/m5_21_2b_a_instrument.py`
 (w₂ identified by the gradient residual of the committed seed, 8·10⁻⁵).
