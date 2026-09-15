@@ -2,7 +2,7 @@
  "N": 32,
  "L": 48.0,
  "H": 1.5,
- "seed": "/mnt/c/Users/Maciej/SRC/the-final-lagrangian-of-physics/reports/004-lattice-clock/results/seed_3x3_electron.npz",
+ "seed": "/mnt/c/Users/Maciej/SRC/the-final-lagrangian-of-physics/reports/008-i1-squared-clock/results/L_ladder/seeds/m5_21_2b_end_A_T2_sym_e0_n32_d0.3_pinned.npz",
  "seed_vs_committed_seed_maxdev": 0.0,
  "E_seed_eta": 9.263660060337791,
  "E_eta_relaxed": 4.8995866223241835,
@@ -25,10 +25,9 @@
   "envelope_mass_in_box": 2289.0810569632126,
   "offblock_max": 0.0
  },
- "vs_committed_polished": {
-  "E_stat_committed": 4.83471781404309,
-  "max_abs_dM": 0.0,
-  "rms_dM": 0.0
+ "vs_committed_E_stat0": {
+  "E_stat0_recorded": 4.83471781404309,
+  "rel_dev": 0.0
  },
- "wall_s": 1892.6789474487305
+ "wall_s": 7367.590112447739
 }

@@ -37,6 +37,7 @@ R008 = HERE
 POLISHED32 = os.path.join(os.environ.get("M5_FIELDS_DIR", os.path.join(R004, "results")), "M_G_polished.npz")
 NS = (32, 48, 64)
 OMEGAS = (0.0, 0.1, 0.2, 0.35, 0.5, 0.8, 1.2)
+SAVE_RUNGS = (0.0, 0.1, 0.2, 0.35)          # the persisted rung fields: the bracket of the well in every box
 L008 = json.load(open(os.path.join(R008, "results", "i1sq_ladders.json")))
 GAMMA = L008["gamma"]
 
@@ -144,11 +145,15 @@ def chain(N, seed=None):
     _, prof = profile_numbers(st, Mg, GAMMA)
     out["profile"] = prof
     if N == 32:
-        Mp = torch.tensor(np.load(POLISHED32)["M"], dtype=DT, device=st.dev)
-        out["vs_committed_polished"] = {
-            "E_stat_committed": st.e_static(st.field(Mp), "G").item(),
-            "max_abs_dM": (st.field(Mp) - Mg).abs().max().item(),
-            "rms_dM": (st.field(Mp) - Mg).pow(2).mean().sqrt().item()}
+        # the committed statics of 008 are always compared; the field itself only if available (M5_FIELDS_DIR)
+        out["vs_committed_E_stat0"] = {"E_stat0_recorded": L008["E_stat0"],
+                                       "rel_dev": abs(out["E_G_polished"] - L008["E_stat0"]) / L008["E_stat0"]}
+        if os.path.exists(POLISHED32):
+            Mp = torch.tensor(np.load(POLISHED32)["M"], dtype=DT, device=st.dev)
+            out["vs_committed_polished"] = {
+                "E_stat_committed": st.e_static(st.field(Mp), "G").item(),
+                "max_abs_dM": (st.field(Mp) - Mg).abs().max().item(),
+                "rms_dM": (st.field(Mp) - Mg).pow(2).mean().sqrt().item()}
     out["wall_s"] = time.time() - t0
     np.savez_compressed(os.path.join(RES, f"M_G_polished_N{N}.npz"), M=Mr.cpu().numpy())
     print(json.dumps({k: v for k, v in out.items() if k != "profile"}, indent=1), flush=True)
@@ -157,16 +162,24 @@ def chain(N, seed=None):
     return out
 
 
-def ladder(N):
-    st = Stack(N)
+def box_stack(N):
+    """The stack of the box with the shell frozen at the box's 2b seed, the same object the chain used (a first
+    run built the rung stacks with the analytic ansatz on the shell instead, 3e-8 away in float32; recorded)."""
+    return Stack(N, seed3=np.load(seed_path(N))["M"].astype(np.float64))
+
+
+def ladder(N, omegas=OMEGAS, tag="ladder"):
+    """The JG_E ladder on the polished field of the box; `omegas` = the rungs to run (all by default; the
+    `rungs` mode runs a chosen subset with the same protocol and persists their fields)."""
+    st = box_stack(N)
     t0 = time.time()
-    print(f"==== ladder N = {N} ====", flush=True)
+    print(f"==== {tag} N = {N}: rungs {list(omegas)} ====", flush=True)
     Mr0 = torch.tensor(np.load(os.path.join(RES, f"M_G_polished_N{N}.npz"))["M"], dtype=DT, device=st.dev)
     Mg = st.field(Mr0)
     a0, prof = profile_numbers(st, Mg, GAMMA)
     e_extra = e_extra_fn(st, a0, GAMMA)
     rungs = []
-    for om in OMEGAS:
+    for om in omegas:
         M_raw, E_levels, ginf = st.relax_rung(
             lambda Mr, om=om: st.e_static(st.field(Mr), "G") + e_extra(st.field(Mr), om), Mr0, cycles=4)
         Mf = st.field(M_raw)
@@ -184,43 +197,91 @@ def ladder(N):
                       "r_half_k": r_half, "grad_inf": ginf, "E_levels": E_levels})
         print(f"  [N{N}] omega {om}: E {Es+Ex:.6f} (extra {Ex:+.4f}), PR {pr:.0f}, r_half {r_half:.1f}, "
               f"|g|inf {ginf:.1e}, levels {['%.6f' % e for e in E_levels]} [{time.time()-t0:.0f}s]", flush=True)
-        if om in (0.0, 0.35):
+        if om in SAVE_RUNGS:
             np.savez_compressed(os.path.join(RES, f"jge_N{N}_om{str(om).replace('.', '')}.npz"), M=Mf.cpu().numpy())
-    k = min(range(len(rungs)), key=lambda i: rungs[i]["E_total"])
-    nlev = len(rungs[0]["E_levels"])
-    min_per_level = [rungs[min(range(len(rungs)), key=lambda i: rungs[i]["E_levels"][lv])]["omega"] for lv in range(nlev)]
-    r0 = {r["omega"]: r for r in rungs}
-    depth_per_level = [r0[0.0]["E_levels"][lv] - min(r["E_levels"][lv] for r in rungs) for lv in range(nlev)]
     out = {"N": N, "L": st.L, "H": st.H, "gamma": GAMMA, "profile": prof, "rungs": rungs,
-           "min_omega": rungs[k]["omega"], "interior": bool(0 < k < len(rungs) - 1),
-           "min_omega_per_level": min_per_level, "depth_per_level": depth_per_level,
-           "depth_changes": [depth_per_level[i + 1] - depth_per_level[i] for i in range(nlev - 1)],
-           "well_depth_vs_omega0": r0[0.0]["E_total"] - rungs[k]["E_total"],
            "max_grad_inf": max(r["grad_inf"] for r in rungs), "wall_s": time.time() - t0}
-    print(f"  [N{N}] verdict: min at omega {out['min_omega']} (interior {out['interior']}), per level "
-          f"{min_per_level}, depth {out['well_depth_vs_omega0']:.3e}, depth per level {['%.2e' % d for d in depth_per_level]}",
-          flush=True)
-    jdump(out, f"ladder_N{N}.json")
+    r0 = {r["omega"]: r for r in rungs}
+    if 0.0 in r0 and len(rungs) > 2:
+        k = min(range(len(rungs)), key=lambda i: rungs[i]["E_total"])
+        nlev = len(rungs[0]["E_levels"])
+        min_per_level = [rungs[min(range(len(rungs)), key=lambda i: rungs[i]["E_levels"][lv])]["omega"] for lv in range(nlev)]
+        depth_per_level = [r0[0.0]["E_levels"][lv] - min(r["E_levels"][lv] for r in rungs) for lv in range(nlev)]
+        out.update({"min_omega": rungs[k]["omega"], "interior": bool(0 < k < len(rungs) - 1),
+                    "min_omega_per_level": min_per_level, "depth_per_level": depth_per_level,
+                    "depth_changes": [depth_per_level[i + 1] - depth_per_level[i] for i in range(nlev - 1)],
+                    "well_depth_vs_omega0": r0[0.0]["E_total"] - rungs[k]["E_total"]})
+        print(f"  [N{N}] verdict: min at omega {out['min_omega']} (interior {out['interior']}), per level "
+              f"{min_per_level}, depth {out['well_depth_vs_omega0']:.3e}, depth per level {['%.2e' % d for d in depth_per_level]}",
+              flush=True)
+    else:
+        print(f"  [N{N}] {tag} recorded for rungs {[r['omega'] for r in rungs]}", flush=True)
+    jdump(out, f"{tag}_N{N}.json")
+    return out
+
+
+def record(N, omegas):
+    """Evaluate persisted rung fields (jge_N{N}_om*.npz) with the stack and write rungs_N{N}.json: the record of
+    a rerun whose fields were saved but whose JSON was not (E_levels are not available in that case)."""
+    st = box_stack(N)
+    Mr0 = torch.tensor(np.load(os.path.join(RES, f"M_G_polished_N{N}.npz"))["M"], dtype=DT, device=st.dev)
+    a0, prof = profile_numbers(st, st.field(Mr0), GAMMA)
+    e_extra = e_extra_fn(st, a0, GAMMA)
+    rungs = []
+    for om in omegas:
+        Mf = torch.tensor(np.load(os.path.join(RES, f"jge_N{N}_om{str(om).replace('.', '')}.npz"))["M"], dtype=DT, device=st.dev)
+        Es, Ex = st.e_static(Mf, "G").item(), e_extra(Mf, om).item()
+        _, kd = st.densities(Mf, a0, max(om, 1e-9), "G")
+        pr = ((kd.sum() ** 2) / (kd ** 2).sum().clamp_min(1e-30)).item()
+        X, Y, Z = st.coords()
+        r = torch.sqrt(X ** 2 + Y ** 2 + Z ** 2)
+        order = torch.argsort(r.flatten())
+        cum = torch.cumsum(kd.flatten()[order], 0)
+        r_half = r.flatten()[order][int(torch.searchsorted(cum, 0.5 * cum[-1]).clamp(max=cum.numel() - 1))].item()
+        rungs.append({"omega": om, "E_total": Es + Ex, "E_stat": Es, "E_extra": Ex, "PR_k_sites": pr, "r_half_k": r_half,
+                      "from_persisted_field": True})
+        print(f"  [N{N}] record omega {om}: E {Es+Ex:.9f} (extra {Ex:+.4f}), PR {pr:.0f}, r_half {r_half:.1f}", flush=True)
+    out = {"N": N, "L": st.L, "H": st.H, "gamma": GAMMA, "profile": prof, "rungs": rungs,
+           "note": "rerun of the bracket rungs with the ladder protocol; fields persisted, record evaluated from them"}
+    jdump(out, f"rungs_N{N}.json")
     return out
 
 
 if __name__ == "__main__":
-    mode = sys.argv[1] if len(sys.argv) > 1 else "all"
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    fresh = "--fresh" in sys.argv          # regenerate every stage even if its record exists (the default resumes)
+    dry = "--dry-run" in sys.argv          # print the stages `all` would run, compute nothing
+    mode = args[0] if args else "all"
     if mode == "validate":
         validate()
     elif mode == "chain":
-        chain(int(sys.argv[2]), sys.argv[3] if len(sys.argv) > 3 else None)
+        chain(int(args[1]), args[2] if len(args) > 2 else None)
     elif mode == "ladder":
-        ladder(int(sys.argv[2]))
+        ladder(int(args[1]))
+    elif mode == "rungs":
+        # e.g. `rungs 48 0.1 0.2`: the chosen rungs, same protocol, fields persisted, record rungs_N48.json
+        ladder(int(args[1]), tuple(float(x) for x in args[2:]), tag="rungs")
+    elif mode == "record":
+        record(int(args[1]), tuple(float(x) for x in args[2:]))
     else:
+        if dry:
+            for N in NS:
+                for stage in ("chain", "ladder"):
+                    rec = os.path.join(RES, f"{stage}_N{N}.json")
+                    print(f"{stage} N = {N}: {'RUN' if fresh or not os.path.exists(rec) else 'skip (record exists)'}")
+            sys.exit(0)
         v = validate()
         assert v["pass"], "reimplementation does not reproduce the committed 004/008 artifacts"
         for N in NS:
-            if not os.path.exists(os.path.join(RES, f"chain_N{N}.json")):
+            if fresh or not os.path.exists(os.path.join(RES, f"chain_N{N}.json")):
                 while not os.path.exists(seed_path(N)):
                     print(f"waiting for the 2b seed at N = {N}", flush=True)
                     time.sleep(300)
                 chain(N)
-            if not os.path.exists(os.path.join(RES, f"ladder_N{N}.json")):
+            else:
+                print(f"chain N = {N}: record exists, skipped (use --fresh to regenerate)", flush=True)
+            if fresh or not os.path.exists(os.path.join(RES, f"ladder_N{N}.json")):
                 ladder(N)
+            else:
+                print(f"ladder N = {N}: record exists, skipped (use --fresh to regenerate)", flush=True)
         print("ALL DONE", flush=True)

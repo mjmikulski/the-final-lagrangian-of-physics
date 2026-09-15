@@ -39,10 +39,19 @@ checks pin it to the record. On the committed rung fields of this
 report the energies are reproduced to 10⁻⁹ (`validate.json`); from the
 committed 004 seed the chain reproduces the committed polished field
 **bitwise** (E_stat 4.834717814 to every printed digit, max |ΔM| = 0),
-and the instrument reproduces the committed seed bitwise at N = 32;
-the rerun N = 32 ladder agrees with the committed rung energies to
-10⁻⁶ on the bracket (the rung relaxation itself is not bitwise
-reproducible; the well, its location and its plateau are). A
+and the instrument reproduces the committed seed bitwise at N = 32.
+One inconsistency of the first ladder run is recorded rather than
+hidden: its rung stacks froze the shell at the analytic ansatz in
+float64 while the chains had used the instrument's float32 seed
+(3·10⁻⁸ apart on the shell), which is why that run agreed with the
+committed rung energies only to 10⁻⁶; the bracket rungs
+ω ∈ {0, 0.1, 0.2, 0.35} of every box were therefore rerun with the
+shell of the chain (the record `rungs_N*.json`, fields persisted). With
+the shell consistent the full N = 32 ladder reproduces the committed
+ladder of this report **bitwise** (all seven rungs and the depth at
+every protocol level, difference 0.0): the stack is deterministic end
+to end, and the independent route below evaluates the persisted
+bracket fields of every box. A
 shortcut tried first — the analytic hedgehog ansatz relaxed directly,
 skipping the instrument — lands in a different static minimum (E_stat
 0.1% higher, max |ΔM| = 0.75, C₁ thirteen times larger, ω_E = 0.20
@@ -51,17 +60,24 @@ is regenerated rather than approximated.
 
 ## Results
 
-| L (N) | E_stat | ω_E = √(C₁/C₂) | sampled minimum, per protocol level | depth vs ω = 0 | depth per level (10⁻⁵) | ticking density: sites, r½ | ‖g‖∞ on rungs |
+The table gives, per box, the statics of the chain, the frozen-profile
+prediction, and the bracket ω ∈ {0, 0.1, 0.2, 0.35} rerun with the
+chain's shell (the certified record: fields persisted, evaluated
+independently below); the outer rungs 0.5, 0.8, 1.2 come from the
+first seven-rung run and are far above ω = 0 in every box.
+
+| L (N) | E_stat | ω_E = √(C₁/C₂) | bracket minimum, per protocol level | E − E(0) at ω = 0.1, 0.2, 0.35 (10⁻⁵) | depth of the minimum per level (10⁻⁵) | ticking density: sites, r½ | ‖g‖∞ on the bracket |
 |---|---|---|---|---|---|---|---|
-| 48 (32) | 4.835 | 0.326 | 0.35 at all five levels | 6.6·10⁻⁵ | 6.6, 6.5, 6.4, 6.5, 6.6 | 101, 6.8 | 3·10⁻³ |
-| 72 (48) | 4.548 | 0.280 | 0.2 at all five levels | 6.7·10⁻⁵ | 8.3, 7.5, 7.6, 7.6, 6.7 | 314, 7.8 | 1·10⁻² |
-| 96 (64) | 4.377 | 0.249 | 0.2 at all five levels | 2.5·10⁻⁴ | 9.8, 13, 20, 23, 25 | 277, 6.1 | 3·10⁻² |
+| 48 (32) | 4.835 | 0.326 | 0.35 at all five levels | −0.9, −3.9, −6.6 | 6.6, 6.5, 6.4, 6.4, 6.5 | 101, 6.8 | 7·10⁻³ |
+| 72 (48) | 4.548 | 0.280 | 0.2 at levels 1–3, 0.35 at levels 4–5 | −5.1, −7.2, −8.3 | 8.4, 7.6, 7.3, 9.1, 8.3 | 314, 7.8 | 7·10⁻² |
+| 96 (64) | 4.377 | 0.249 | 0.2 at all five levels | +8.0, −19.9, +6.6 | 9.8, 15.5, 21.7, 19.2, 19.9 | 277, 6.1 | 3·10⁻² |
 
 ![L ladder](results/L_ladder/fig_L_ladder.png)
 
-*Left: the ladder in each box at the final protocol level, with the
-frozen-profile prediction ω_E marked on the axis. Right: the depth of
-the well at each protocol level, the plateau criterion of §6.*
+*Left: the bracket in each box at the final protocol level (solid; the
+first seven-rung run dashed), with the frozen-profile prediction ω_E
+marked on the axis. Right: the depth of the bracket minimum at each
+protocol level.*
 
 1. **The static electron changes with the box.** Moving the pinned
    shell from 24 to 36 and 48 lowers the polished static energy by 6%
@@ -70,30 +86,48 @@ the well at each protocol level, the plateau criterion of §6.*
    boundary), and the clock-channel coefficients grow (C₁: 0.9, 2.0,
    2.6·10⁻⁵; C₂: 0.9, 2.6, 4.3·10⁻⁴), so the frozen-profile prediction
    of §2 falls, 0.326 → 0.280 → 0.249.
-2. **The well survives, and its location moves once.** In both larger
-   boxes the sampled minimum sits at ω = 0.2 at every protocol level
-   (0.35 in the report's box), one rung below, with the frozen-profile
-   prediction (0.28, 0.25) between the 0.2 and 0.35 rungs; from L = 72
-   to L = 96 the location does not move at the rung resolution. The
-   ticking density stays inside the envelope (r½ 6–8) but spreads over
-   about three times as many sites as in the report's box.
-3. **The depth is converged only in the report's box.** At L = 48 the
-   depth plateaus (§6's criterion); at L = 72 it drifts down by 20%
-   across the four L-BFGS cycles (8.3 → 6.7·10⁻⁵, last change −0.9·10⁻⁵
-   against the criterion of a final change below 10% of the depth); at
-   L = 96 it grows monotonically, 1.0 → 2.5·10⁻⁴, and the rung residuals
-   are 10⁻², ten times the report's. The fixed-depth protocol resolves
-   the bracket in the larger boxes but not the 10⁻⁴-level energy
-   differences; the L = 96 depth is a lower bound under this protocol,
-   not a value.
+2. **The well survives the larger boxes and its rung follows the
+   prediction.** In every box a rung sits below ω = 0: by 7·10⁻⁵ at
+   L = 48 (the report's well, reproduced bitwise), by 8·10⁻⁵ at L = 72,
+   by 2·10⁻⁴ at L = 96. The sampled minimum is at 0.35 in the report's
+   box, at L = 72 it lies between the 0.2 and 0.35 rungs — they differ
+   by 1·10⁻⁵ and swap order between protocol levels — and at L = 96 it
+   is 0.2 at every level and in both runs, with the neighbours 0.1 and
+   0.35 above ω = 0; the prediction 0.326 → 0.280 → 0.249 tracks this
+   drift. The ticking density stays inside the envelope (r½ 6–8) but
+   spreads over about three times as many sites as in the report's box.
+3. **In the larger boxes the protocol resolves the rung, not the
+   depth.** Two runs of the same protocol whose boundary values differ
+   by 3·10⁻⁸ (the first run and the bracket rerun) agree bitwise at
+   L = 48 but differ by 4·10⁻⁵ on the 0.35 rung at L = 72 and by
+   1–1.5·10⁻⁴ on the 0.1 and 0.35 rungs at L = 96, while agreeing on
+   which rung is lowest (except the L = 72 pair); the depth per level
+   is non-monotone in both larger boxes, and the residuals are ten
+   times the report's. §6's plateau criterion is formally met by the
+   reruns (final change 9% and 3.5% of the depth), but the run-to-run
+   scatter is the honest uncertainty: the depths quoted for L = 72 and
+   96 are the values observed after the stated protocol, known to
+   about 10⁻⁵ and 10⁻⁴, and nothing more.
+
+## Independent route on the persisted bracket
+
+`verify_L_ladder_energies.py` is the report's numpy energy route
+(route 2 of §2) extended to any box, with the frozen tangent rebuilt
+in numpy from the box's polished field. On the twelve persisted
+bracket fields it reproduces every recorded energy to 10⁻¹⁵ relative
+(`results/L_ladder/independent_route.json`) and, evaluated on its own,
+finds the same minima: 0.35 at L = 48, 0.35 at L = 72 (0.2 within
+1.2·10⁻⁵), 0.2 at L = 96, each below ω = 0 by the depths of the table.
+The route certifies the energies of the persisted endpoints; what the
+relaxation protocol left unresolved (point 3) it cannot resolve.
 
 ## What this appendix does not show
 
 - No continuum extrapolation (h fixed) and no protocol deepening: the
-  L = 72 and L = 96 depths are not converged at four L-BFGS cycles, and
-  whether more cycles restore a plateau or move the minimum is not
-  measured; the rung grid is the report's, so "0.2 in both boxes" means
-  the same rung, not the same continuous ω*.
+  L = 72 and L = 96 depths and neighbouring rungs are not converged at
+  four L-BFGS cycles, and whether more cycles settle the L = 72 pair
+  or move the L = 96 minimum is not measured; the rung grid is the
+  report's, so "0.2" means that rung, not a continuous ω*.
 - The frozen tangent and the boost-x generator are those of the report;
   no equivariant tangent.
 - γ is fixed at the L = 48 value; the per-box 5% coupling (87.9 at
@@ -105,18 +139,24 @@ the well at each protocol level, the plateau criterion of §6.*
 ## Artifacts and reproduction
 
 `lattice_L.py` (the stack with N as a parameter), `appendix_L_ladder.py`
-(`validate` / `chain N` / `ladder N` / `all`, resumable, one JSON per
-stage in `results/L_ladder/`), `instrument/m5_21_2b_a_instrument.py`
+(`validate` / `chain N` / `ladder N` / `rungs N ω…` / `all`; `all`
+resumes from the stage records by default and regenerates every stage
+with `--fresh`, `--dry-run` prints the plan), `instrument/m5_21_2b_a_instrument.py`
 (the OpenWave seed instrument, output directory changed), the seeds
 (`results/L_ladder/seeds/`, float32, with the instrument's row JSONs),
-the polished fields for N = 32 and 48 (`M_G_polished_N*.npz`; the
-64³ fields, 13–14 MB each, are not committed), `make_appendix_L_figure.py`,
-`verify_L_ladder.py`.
+`make_appendix_L_figure.py`, `verify_L_ladder.py` (structure of the
+records), `verify_L_ladder_energies.py` (the independent numpy route on
+the persisted bracket fields). Fields: the polished fields of N = 32
+and 48 and the persisted bracket rungs ω ∈ {0, 0.1, 0.2, 0.35} of
+every box; the N = 32 fields are committed, the 48³ rungs (5 MB each)
+and all 64³ fields (13 MB each) are attached to the repository release
+`appendix-008-L-ladder-fields` and downloaded by
+`reproduce_appendix_L.sh` when absent.
 
 ```bash
 pip install torch numpy matplotlib
-bash reproduce_appendix_L.sh                  # CPU: checks the records and redraws the figure
-M5_RUN_LADDER=1 bash reproduce_appendix_L.sh  # seeds (CPU hours) + chains and ladders (GPU, about a day)
+bash reproduce_appendix_L.sh                  # CPU: fetches the 64^3 fields if absent, runs the numpy route on every box, checks the records, redraws the figure
+M5_RUN_LADDER=1 bash reproduce_appendix_L.sh  # seeds (CPU hours) + chains, ladders and bracket reruns regenerated with --fresh (GPU, about a day)
 ```
 
 Provenance: development in `duda-particle-model/i1sq_L_ladder/`

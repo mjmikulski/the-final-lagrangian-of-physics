@@ -1,3 +1,6 @@
 .idea/
 __pycache__/
 *.pyc
+reports/008-i1-squared-clock/results/L_ladder/*N64*.npz
+reports/008-i1-squared-clock/results/L_ladder/rerun_logs/
+reports/008-i1-squared-clock/results/L_ladder/jge_N48_om*.npz
