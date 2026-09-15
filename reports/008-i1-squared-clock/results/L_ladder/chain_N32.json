@@ -1,0 +1,33 @@
+{
+ "N": 32,
+ "L": 48.0,
+ "H": 1.5,
+ "seed": "/mnt/c/Users/Maciej/SRC/the-final-lagrangian-of-physics/reports/008-i1-squared-clock/results/L_ladder/seeds/m5_21_2b_end_A_T2_sym_e0_n32_d0.3_pinned.npz",
+ "seed_vs_committed_seed_maxdev": 0.0,
+ "E_seed_eta": 9.263660060337791,
+ "E_eta_relaxed": 4.8995866223241835,
+ "E_G_relaxed": 4.882280773226911,
+ "E_G_polished": 4.83471781404309,
+ "grad_inf_polished": 0.00011348245802117459,
+ "profile": {
+  "E_stat0": 4.83471781404309,
+  "C1": 9.075435624180151e-06,
+  "C2": 8.564773350793511e-05,
+  "omega_pred_E": 0.3255185953964089,
+  "gamma_5pct_of_this_N": 70.61005836040782,
+  "gamma_used": 70.61005836040782,
+  "statics_deformation_at_gamma_used": 0.05,
+  "spectral_gap_min": 6.974994013004395,
+  "tail_G": {
+   "slope": 0.5093801196777294,
+   "coeff": 1.5983103219203383e-05
+  },
+  "envelope_mass_in_box": 2289.0810569632126,
+  "offblock_max": 0.0
+ },
+ "vs_committed_E_stat0": {
+  "E_stat0_recorded": 4.83471781404309,
+  "rel_dev": 0.0
+ },
+ "wall_s": 7367.590112447739
+}

@@ -1,0 +1,28 @@
+{
+ "N": 48,
+ "L": 72.0,
+ "H": 1.5,
+ "seed": "/mnt/c/Users/Maciej/SRC/duda-particle-model/i1sq_L_ladder/results/seeds/m5_21_2b_end_A_T2_sym_e0_n48_d0.3_pinned.npz",
+ "E_seed_eta": 9.547162872340543,
+ "E_eta_relaxed": 5.013470887700681,
+ "E_G_relaxed": 4.822584361634919,
+ "E_G_polished": 4.547614565203438,
+ "grad_inf_polished": 0.00029648749631604876,
+ "profile": {
+  "E_stat0": 4.547614565203438,
+  "C1": 2.0378055999939346e-05,
+  "C2": 0.00026014058417463235,
+  "omega_pred_E": 0.27988351539414674,
+  "gamma_5pct_of_this_N": 87.86118480205744,
+  "gamma_used": 70.61005836040782,
+  "statics_deformation_at_gamma_used": 0.0401827374166905,
+  "spectral_gap_min": 6.973629457963458,
+  "tail_G": {
+   "slope": -0.694110958559326,
+   "coeff": 0.00015472668336747176
+  },
+  "envelope_mass_in_box": 2289.081056963213,
+  "offblock_max": 0.0
+ },
+ "wall_s": 6397.311499595642
+}
