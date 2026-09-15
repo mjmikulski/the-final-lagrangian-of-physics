@@ -199,7 +199,7 @@ def ladder(N, omegas=OMEGAS, tag="ladder"):
               f"|g|inf {ginf:.1e}, levels {['%.6f' % e for e in E_levels]} [{time.time()-t0:.0f}s]", flush=True)
         if om in SAVE_RUNGS:
             np.savez_compressed(os.path.join(RES, f"jge_N{N}_om{str(om).replace('.', '')}.npz"), M=Mf.cpu().numpy())
-    out = {"N": N, "L": st.L, "H": st.H, "gamma": GAMMA, "profile": prof, "rungs": rungs,
+    out = {"N": N, "L": st.L, "H": st.H, "gamma": GAMMA, "profile": prof, "rungs": rungs, "shell": "chain seed",
            "max_grad_inf": max(r["grad_inf"] for r in rungs), "wall_s": time.time() - t0}
     r0 = {r["omega"]: r for r in rungs}
     if 0.0 in r0 and len(rungs) > 2:
@@ -217,6 +217,13 @@ def ladder(N, omegas=OMEGAS, tag="ladder"):
     else:
         print(f"  [N{N}] {tag} recorded for rungs {[r['omega'] for r in rungs]}", flush=True)
     jdump(out, f"{tag}_N{N}.json")
+    if tag == "ladder" and set(SAVE_RUNGS) <= set(omegas):
+        # the bracket subset of this run, in the record the independent route reads; it is written from the same
+        # relaxations whose fields were persisted above, so the record and the fields never diverge
+        sub = dict(out, rungs=[r for r in rungs if r["omega"] in SAVE_RUNGS], note="bracket subset of the full ladder run")
+        for k in ("min_omega", "interior", "min_omega_per_level", "depth_per_level", "depth_changes", "well_depth_vs_omega0"):
+            sub.pop(k, None)
+        jdump(sub, f"rungs_N{N}.json")
     return out
 
 
@@ -241,7 +248,7 @@ def record(N, omegas):
         rungs.append({"omega": om, "E_total": Es + Ex, "E_stat": Es, "E_extra": Ex, "PR_k_sites": pr, "r_half_k": r_half,
                       "from_persisted_field": True})
         print(f"  [N{N}] record omega {om}: E {Es+Ex:.9f} (extra {Ex:+.4f}), PR {pr:.0f}, r_half {r_half:.1f}", flush=True)
-    out = {"N": N, "L": st.L, "H": st.H, "gamma": GAMMA, "profile": prof, "rungs": rungs,
+    out = {"N": N, "L": st.L, "H": st.H, "gamma": GAMMA, "profile": prof, "rungs": rungs, "shell": "chain seed",
            "note": "rerun of the bracket rungs with the ladder protocol; fields persisted, record evaluated from them"}
     jdump(out, f"rungs_N{N}.json")
     return out

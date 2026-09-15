@@ -1,8 +1,9 @@
 """Figure for APPENDIX-L-ladder: the (I1^G)^2 energy-functional well at three box sizes, from the committed JSON.
 
-Left: E(omega) - E(0) per box (final protocol level), with the frozen-profile prediction omega_E of each box as a
-tick on the axis. Right: the depth of the well relative to omega = 0 at each protocol level (Adam, then four
-L-BFGS cycles) per box, i.e. the plateau check of report 008 section 6. Boxes are an ordered set, so one hue,
+Left: E(omega) - E(0) of the bracket rerun with the chain's shell per box (solid, final protocol level) and of the
+preserved first seven-rung runs with the analytic ansatz on the shell (dashed; N = 48 and 64), with the
+frozen-profile prediction omega_E of each box as a tick on the axis. Right: the depth of the bracket minimum
+relative to omega = 0 at each protocol level (Adam, then four L-BFGS cycles) per box. Boxes are an ordered set, so one hue,
 light to dark with L; each series is direct-labelled.
 """
 import json
@@ -41,22 +42,24 @@ for N, lad in ladders.items():
         levels = br["depth_per_level"]
         bx.plot(range(len(levels)), [d * 1e5 for d in levels], "-", color=COLORS[N], lw=2, marker="o", ms=5,
                 mec="white", mew=1.2, label=f"L = {L:g}")
-    # the first seven-rung run (analytic shell, 3e-8 off on the boundary): dashed, the outer rungs only
-    omf = [r["omega"] for r in lad["rungs"]]
-    E0f = lad["rungs"][0]["E_total"]
-    dEf = [(r["E_total"] - E0f) * 1e5 for r in lad["rungs"]]
-    ax.plot(omf, dEf, "--", color=COLORS[N], lw=1, alpha=0.8, label=None)
+    # the preserved first seven-rung runs (analytic ansatz on the shell, 3e-8 off; N = 48 and 64 only -- the
+    # N = 32 seven-rung record is the corrected run, identical to the bracket on its rungs): dashed
+    if "analytic" in lad.get("shell", ""):
+        omf = [r["omega"] for r in lad["rungs"]]
+        E0f = lad["rungs"][0]["E_total"]
+        dEf = [(r["E_total"] - E0f) * 1e5 for r in lad["rungs"]]
+        ax.plot(omf, dEf, "--", color=COLORS[N], lw=1, alpha=0.8, label=None)
     ax.axvline(lad["profile"]["omega_pred_E"], color=COLORS[N], lw=1, ls=":", ymin=0, ymax=0.08)
-ax.plot([], [], "--", color=MUTED, lw=1, label="first run (analytic shell)")
+ax.plot([], [], "--", color=MUTED, lw=1, label="first run, analytic shell (L = 72, 96)")
+ax.plot([], [], ":", color=MUTED, lw=1, label="frozen-profile ω_E per box (ticks)")
 ax.axhline(0, color=MUTED, lw=0.8)
-ax.set_xlim(-0.03, 0.55)
+ax.set_xlim(-0.03, 0.62)
 ymin = min(min((r["E_total"] - [x for x in br["rungs"] if x["omega"] == 0.0][0]["E_total"]) * 1e5 for r in br["rungs"]) for br in brackets.values())
 ax.set_ylim(ymin * 1.6, 12)
 ax.set_xlabel("ω (rung)")
 ax.set_ylabel("E(ω) − E(0)  [×10⁻⁵]")
-ax.set_title("JG_E ladder at fixed h = 1.5, γ = 70.6\nthe bracket per box (solid) and the first run (dashed)", fontsize=9, loc="left")
-ax.text(0.02, 0.04, "dotted ticks: frozen-profile ω_E per box", transform=ax.transAxes, color=MUTED, fontsize=8)
-ax.legend(frameon=False, fontsize=9, loc="upper right")
+ax.set_title("JG_E ladder at fixed h = 1.5, γ = 70.6\nbracket with the chain's shell (solid); first run, analytic shell (dashed)", fontsize=9, loc="left")
+ax.legend(frameon=False, fontsize=8, loc="lower right")
 bx.set_ylim(0, 1.15 * max(max(d for d in br["depth_per_level"]) for br in brackets.values()) * 1e5)
 bx.set_xticks(range(5))
 bx.set_xticklabels(["Adam", "L-BFGS 1", "L-BFGS 2", "L-BFGS 3", "L-BFGS 4"], fontsize=8)

@@ -157,5 +157,6 @@
  ],
  "well_depth_vs_omega0": 0.000252753636948988,
  "max_grad_inf": 0.06862720996775676,
- "wall_s": 28893.855679750443
+ "wall_s": 28893.855679750443,
+ "shell": "analytic ansatz on the pinned shell (first run; 3e-8 from the chain seed)"
 }

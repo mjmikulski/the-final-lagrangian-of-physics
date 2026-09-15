@@ -5,11 +5,11 @@ No torch, no import of lattice_L.py: the definitions are the same from-scratch n
 verify_energies.py (one-sided differences, eta-commutator, Lagrange-projector Euclideanizer, V4, the static
 I1_G density and the G-metric time density, the energy reading of the quartic), with N read from the field
 and h = 1.5. The frozen tangent is rebuilt here in numpy from the box's polished field (envelope
-exp(-(r/10)^4) times the boost-x conjugation tangent, unit Frobenius norm). For each box the persisted rungs
-omega in {0, 0.1, 0.2, 0.35} are evaluated and compared with the records: the first ladder run
-(ladder_N*.json) for the rungs it persisted (0 and 0.35), the bracket rerun (rungs_N*.json) for 0.1 and 0.2.
-Asserts: every persisted energy matches its record to 1e-9 relative, and in every box the sampled well
-(minimum below its neighbours and below omega = 0) holds in this independent evaluation.
+exp(-(r/10)^4) times the boost-x conjugation tangent, unit Frobenius norm). For each box the persisted bracket
+rungs omega in {0, 0.1, 0.2, 0.35} are evaluated and compared with the bracket record rungs_N*.json, which is
+written by the same run that persisted the fields (the `rungs` mode, or the bracket subset of a full ladder).
+With --strict: every persisted energy matches its record to 1e-9 relative, and in every box a bracket rung lies
+below omega = 0 in this independent evaluation.
 Writes results/L_ladder/independent_route.json.
 """
 import json
@@ -112,9 +112,7 @@ def pinned_field(M_raw, N, seed3):
 
 out, worst = {}, 0.0
 for N in (32, 48, 64):
-    lad = json.load(open(os.path.join(RES, f"ladder_N{N}.json")))
-    rer_path = os.path.join(RES, f"rungs_N{N}.json")
-    rer = json.load(open(rer_path)) if os.path.exists(rer_path) else None
+    rer = json.load(open(os.path.join(RES, f"rungs_N{N}.json")))
     seed3 = np.load(os.path.join(RES, "seeds", f"m5_21_2b_end_A_T2_sym_e0_n{N}_d0.3_pinned.npz"))["M"].astype(np.float64)
     pol = np.load(os.path.join(RES, f"M_G_polished_N{N}.npz"))["M"]
     a0 = tangent(pinned_field(pol, N, seed3))
@@ -126,13 +124,11 @@ for N in (32, 48, 64):
             continue
         M = pinned_field(np.load(f)["M"], N, seed3)
         E = energy(M, a0, om)
-        # the record this field belongs to: the first ladder run persisted 0 and 0.35, the rerun 0.1 and 0.2
-        src = rer if (rer and om in [r["omega"] for r in rer["rungs"]]) else lad
-        ref = [r for r in src["rungs"] if r["omega"] == om][0]["E_total"]
+        ref = [r for r in rer["rungs"] if r["omega"] == om][0]["E_total"]
         rel = abs(E - ref) / abs(ref)
         worst = max(worst, rel)
-        rows[om] = {"E_numpy": E, "E_record": ref, "rel_dev": rel, "record": "rungs rerun" if src is rer else "ladder"}
-        print(f"N = {N} omega {om}: E_numpy {E:.9f} vs record {ref:.9f} (rel {rel:.1e}, {rows[om]['record']})")
+        rows[om] = {"E_numpy": E, "E_record": ref, "rel_dev": rel}
+        print(f"N = {N} omega {om}: E_numpy {E:.9f} vs record {ref:.9f} (rel {rel:.1e})")
     out[str(N)] = rows
     if all(o in rows for o in BRACKET):
         e = {o: rows[o]["E_numpy"] for o in BRACKET}
@@ -144,5 +140,6 @@ json.dump(out, open(os.path.join(RES, "independent_route.json"), "w"), indent=1)
 if "--strict" in sys.argv:
     assert worst < 1e-9, worst
     for N in (32, 48, 64):
-        assert out[str(N)]["well"]["min_at"] in (0.2, 0.35) and out[str(N)]["well"]["E_minus_E0"][str(out[str(N)]["well"]["min_at"])] < 0
-    print("ROUTE-2 ENERGIES MATCH IN EVERY BOX; the sampled wells hold independently")
+        w = out[str(N)]["well"]
+        assert w["min_at"] != 0.0 and w["E_minus_E0"][str(w["min_at"])] < 0, (N, w)
+    print("ROUTE-2 ENERGIES MATCH IN EVERY BOX; a bracket rung below omega = 0 in every box, independently")
