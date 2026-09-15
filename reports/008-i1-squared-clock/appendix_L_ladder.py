@@ -220,9 +220,18 @@ def ladder(N, omegas=OMEGAS, tag="ladder"):
     if tag == "ladder" and set(SAVE_RUNGS) <= set(omegas):
         # the bracket subset of this run, in the record the independent route reads; it is written from the same
         # relaxations whose fields were persisted above, so the record and the fields never diverge
-        sub = dict(out, rungs=[r for r in rungs if r["omega"] in SAVE_RUNGS], note="bracket subset of the full ladder run")
-        for k in ("min_omega", "interior", "min_omega_per_level", "depth_per_level", "depth_changes", "well_depth_vs_omega0"):
-            sub.pop(k, None)
+        # the subset carries the same verdict fields as a `rungs` run (the figure and the verifier read
+        # depth_per_level); they are recomputed on the bracket alone
+        br = [r for r in rungs if r["omega"] in SAVE_RUNGS]
+        b0 = {r["omega"]: r for r in br}
+        kb = min(range(len(br)), key=lambda i: br[i]["E_total"])
+        nl = len(br[0]["E_levels"])
+        dpl = [b0[0.0]["E_levels"][lv] - min(r["E_levels"][lv] for r in br) for lv in range(nl)]
+        sub = dict(out, rungs=br, note="bracket subset of the full ladder run",
+                   min_omega=br[kb]["omega"], interior=bool(0 < kb < len(br) - 1),
+                   min_omega_per_level=[br[min(range(len(br)), key=lambda i: br[i]["E_levels"][lv])]["omega"] for lv in range(nl)],
+                   depth_per_level=dpl, depth_changes=[dpl[i + 1] - dpl[i] for i in range(nl - 1)],
+                   well_depth_vs_omega0=b0[0.0]["E_total"] - br[kb]["E_total"])
         jdump(sub, f"rungs_N{N}.json")
     return out
 
