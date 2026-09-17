@@ -45,7 +45,11 @@ deliberately minimal.
      recall note states what failed and why, and the root README marks the
      report as recalled. The original files remain untouched.
    A materially revised result is not a correction: it becomes a new,
-   independent report.
+   independent report. The companion files are the only exception to the
+   root README's immutability rule for a merged report: whenever one is
+   merged, update the report's row in the root README (the appendix links
+   and the *last updated* date; `python report_dates.py --markdown`
+   regenerates the cells).
 
 
 This set of rules is a distilled version of approaches from
