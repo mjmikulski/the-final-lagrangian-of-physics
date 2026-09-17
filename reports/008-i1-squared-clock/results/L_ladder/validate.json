@@ -1,0 +1,36 @@
+{
+ "device": "NVIDIA GeForce RTX 4070",
+ "committed_field": {
+  "shell_vs_analytic_seed_maxdev": 2.9771239584697184e-08,
+  "E_stat_G": 4.8347178769452315,
+  "E_stat_G_recorded": 4.83471781404309,
+  "a0_maxdev": 1.0389084359388072e-20,
+  "gamma_5pct": 70.61004360843691,
+  "gamma_recorded": 70.61005836040782,
+  "C1": 9.075435624180151e-06,
+  "C1_recorded": 9.075435624180151e-06,
+  "C2": 8.564773350793511e-05,
+  "C2_recorded": 8.564773350793511e-05,
+  "omega_pred": 0.3255185953964089,
+  "omega_pred_recorded": 0.3255185953964089
+ },
+ "rung_fields": {
+  "0.2": {
+   "E_total": 5.070728650377521,
+   "E_total_recorded": 5.070728650377521,
+   "rel_dev": 0.0
+  },
+  "0.35": {
+   "E_total": 5.070701495063198,
+   "E_total_recorded": 5.070701495063198,
+   "rel_dev": 0.0
+  },
+  "0.5": {
+   "E_total": 5.070807873316969,
+   "E_total_recorded": 5.070807873316969,
+   "rel_dev": 0.0
+  }
+ },
+ "worst_rel_dev": 0.0,
+ "pass": true
+}
