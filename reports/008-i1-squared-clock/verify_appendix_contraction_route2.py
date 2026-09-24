@@ -1,5 +1,5 @@
-"""Route 2 for APPENDIX-contraction-release: the report's from-scratch numpy energy route (verify_L_ladder_energies.py,
-no torch) evaluated on the persisted fields of this appendix (float32, so energies agree with the float64 records
+"""Route 2 for APPENDIX-contraction-release: the report's from-scratch numpy energy route (the functions of verify_L_ladder_energies.py
+copied here, no torch) evaluated on the persisted fields of this appendix (float32, so energies agree with the float64 records
 up to a common offset of 1.7e-5 from the float32 rounding of the stored fields; the offset is the same for every
 field to 1e-7, so every energy difference is reproduced to that level, well below the depths of 3-7e-5).
 
@@ -14,11 +14,108 @@ import os
 
 import numpy as np
 
-import verify_L_ladder_energies as v
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RES = os.path.join(HERE, "results", "contraction_release")
 I4 = np.eye(4)
+
+# ---- the report's numpy route, copied verbatim from verify_L_ladder_energies.py (whose module body runs the L-ladder
+# check on release-asset fields, so it is not imported) ----
+Hh = 1.5
+SG, DELTA, W1 = 8.0, 0.3, 0.000724023879
+C_P = tuple(SG ** p + 1.0 + DELTA ** p for p in range(1, 5))
+ETA = np.diag([-1.0, 1.0, 1.0, 1.0])
+GAMMA = json.load(open(os.path.join(HERE, "results", "i1sq_ladders.json")))["gamma"]
+
+
+def d1(f, ax, st):
+    out = np.zeros_like(f)
+    sl = [slice(None)] * f.ndim
+    lo, hi = [slice(None)] * f.ndim, [slice(None)] * f.ndim
+    lo[ax], hi[ax] = slice(0, -1), slice(1, None)
+    if st == "fwd":
+        sl[ax] = slice(0, -1)
+        out[tuple(sl)] = (f[tuple(hi)] - f[tuple(lo)]) / Hh
+    else:
+        sl[ax] = slice(1, None)
+        out[tuple(sl)] = (f[tuple(hi)] - f[tuple(lo)]) / Hh
+    return out
+
+
+def comm(A, B):
+    return A @ ETA @ B - B @ ETA @ A
+
+
+def G_of(M):
+    x = np.einsum("ab,...bc->...ac", ETA, M)
+    I4 = np.broadcast_to(np.eye(4), M.shape)
+    q = (x @ (x - I4) @ (x - DELTA * I4)) / (SG * (SG - 1) * (SG - DELTA))
+    return ETA - 2.0 * q @ ETA
+
+
+def inner_pc(F, X):
+    return np.einsum("...ab,...ac,...bd,...cd->...", F, X, X, F)
+
+
+def v4_density(M):
+    Me = M @ ETA
+    P, v4 = Me, 0.0
+    for p in range(4):
+        if p:
+            P = P @ Me
+        v4 = v4 + (np.einsum("...kk->...", P) - C_P[p]) ** 2
+    return v4
+
+
+def densities_G(M, a0, om):
+    G = G_of(M)
+    V = om * a0
+    i1s, k = 0.0, 0.0
+    for st in ("fwd", "bwd"):
+        A = [d1(M, ax, st) for ax in range(3)]
+        for i in range(3):
+            k = k + 0.5 * 4.0 * inner_pc(comm(V, A[i]), G)
+            for j in range(i + 1, 3):
+                i1s = i1s + 0.5 * 4.0 * inner_pc(comm(A[i], A[j]), G)
+    return i1s, k
+
+
+def energy(M, a0, om):
+    i1s, k = densities_G(M, a0, om)
+    Es = Hh ** 3 * (i1s.sum() + W1 * v4_density(M).sum())
+    return Es + GAMMA * Hh ** 3 * ((i1s - k) ** 2).sum()
+
+
+def tangent(M):
+    """Frozen boost-x tangent of the polished field, as in 004's lattice.py, rebuilt in numpy."""
+    N = M.shape[0]
+    x = (np.arange(N) - (N - 1) / 2.0) * Hh
+    X, Y, Z = np.meshgrid(x, x, x, indexing="ij")
+    env = np.exp(-((np.sqrt(X * X + Y * Y + Z * Z) / 10.0) ** 4))
+    W = np.zeros((4, 4)); W[0, 1] = W[1, 0] = 1.0
+    a = env[..., None, None] * (np.einsum("ab,...bc->...ac", W, M) + np.einsum("...ab,cb->...ac", M, W))
+    return a / np.linalg.norm(a)
+
+
+def pinned_field(M_raw, N, seed3):
+    """The field as the stack sees it: shell of physical depth 1.6 frozen at the embedded seed."""
+    wc = max(1, int(np.ceil(1.6 / Hh)))
+    mask = np.zeros((N, N, N), dtype=bool)
+    for ax in range(3):
+        sl = [slice(None)] * 3
+        sl[ax] = slice(0, wc); mask[tuple(sl)] = True
+        sl[ax] = slice(N - wc, N); mask[tuple(sl)] = True
+    seed4 = np.zeros((N, N, N, 4, 4)); seed4[..., 1:, 1:] = seed3; seed4[..., 0, 0] = -SG
+    Ms = 0.5 * (M_raw + np.swapaxes(M_raw, -1, -2))
+    return np.where(mask[..., None, None], seed4, Ms)
+
+
+class v:  # namespace so the calls below read as in the source route
+    pass
+
+
+for _n in ("d1", "comm", "G_of", "inner_pc", "v4_density", "densities_G", "energy", "tangent", "pinned_field", "Hh", "W1", "GAMMA"):
+    setattr(v, _n, globals()[_n])
 
 
 def e_frob(M, a0, om):
