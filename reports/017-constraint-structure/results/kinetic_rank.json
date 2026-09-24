@@ -19,6 +19,46 @@
    ]
   }
  },
+ "special": {
+  "boost twist": {
+   "c = 0": {
+    "rank": 5,
+    "route_deviation": 0.0
+   },
+   "c = 1": {
+    "rank": 6,
+    "route_deviation": 3.623720902482919e-84
+   },
+   "M03_kinetic_c0": 8.0
+  },
+  "rotation twist": {
+   "c = 0": {
+    "rank": 5,
+    "route_deviation": 0.0
+   },
+   "c = 1": {
+    "rank": 6,
+    "route_deviation": 1.8118604512414596e-84
+   },
+   "M03_kinetic_c0": 0.0
+  },
+  "uniaxial hedgehog, z axis, k = x": {
+   "c = 0": {
+    "rank": 8,
+    "K_XX": 34.2792,
+    "G_X_norm": 0.0,
+    "speed2_min": -1.1102230246251565e-16,
+    "route_deviation": 1.1189508411864104e-16
+   },
+   "c = 1": {
+    "rank": 8,
+    "K_XX": 34.2792,
+    "G_X_norm": 0.0,
+    "speed2_min": -5.551115123125783e-17,
+    "route_deviation": 8.937554537314091e-17
+   }
+  }
+ },
  "random": {
   "generic": {
    "points": 600,

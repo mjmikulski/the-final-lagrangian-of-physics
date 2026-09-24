@@ -23,6 +23,14 @@ for (grp, name), rank in expected.items():
     assert r['eta_norm_points_with_negative_K'] == r['points'], 'the eta norm makes K indefinite'
     assert r['route1_route2_max_relative_deviation'] < 1e-12, 'autograd and closed form agree'
 
+sp = k['special']
+for name in ('boost twist', 'rotation twist'):
+    assert sp[name]['c = 0']['rank'] == 5, 'one-direction twists have rank 5'
+assert sp['rotation twist']['M03_kinetic_c0'] == 0.0, 'a time-space component without kinetic term'
+for c in ('c = 0', 'c = 1'):
+    h = sp['uniaxial hedgehog, z axis, k = x'][c]
+    assert h['rank'] == 8 and h['K_XX'] > 1 and h['G_X_norm'] < 1e-12 and abs(h['speed2_min']) < 1e-12, 'exact zero speed'
+
 t = json.load(open('results/trace_constraint.json'))
 for name, r in t.items():
     if name.startswith('rotor'):

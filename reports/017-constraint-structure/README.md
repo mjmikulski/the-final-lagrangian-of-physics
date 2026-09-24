@@ -1,4 +1,4 @@
-# Report 017 — Constraint structure of the field M: the trace is not a field, the kinetic form has rank 9, 8 or 0, and every static background has characteristic speeds in [0, 1]
+# Report 017 — Constraint structure of the field M: the trace is not a field, the kinetic form has rank 9 on generic backgrounds, and every static background has characteristic speeds in [0, 1]
 
 *2026-09-24 · Maciej J. Mikulski (AI-assisted, see [METHOD](../../METHOD.md)) ·
 report 016 left open "the polarization count and constraint structure";
@@ -70,30 +70,35 @@ development repository `new-duda-lagrangian`):
    certified action) the secondary constraint is a polynomial in s
    instead of a linear one; the structure is the same.
 
-3. **The rank of K depends on the background: 9, 8 or 0.** The kernel of
-   K is the set of symmetric X with [ηX, ∂ᵢN] = 0 for i = 1, 2, 3, the
-   commutant of the three spatial gradients (`kinetic_rank.py`,
-   figure 1):
+3. **The rank of K is set by the spatial gradients: 9 generically, 8 on
+   the frozen sector, lower on special strata.** The kernel of K is the
+   set of symmetric X with [ηX, ∂ᵢN] = 0 for i = 1, 2, 3 (and Y(X) = 0 when
+   c > 0), the commutant of the three spatial gradients
+   (`kinetic_rank.py`, figure 1):
 
-   | background | rank of K | kernel | points |
+   | background | rank of K | kernel | checked on |
    |---|---|---|---|
-   | generic (time axis varies in space) | 9 | trace | 600 random; 8000 lattice (time sector free, c = 0.1) |
-   | time axis locally constant (∂ᵢv₀ = 0), incl. the whole frozen sector | 8 | trace, P₀ | 600 random frozen; 8000 lattice (frozen hedgehog, c = 3) |
+   | generic | 9 | trace | 600 random; 8000 lattice points (time sector free; c = 0.1) |
+   | generic frozen (M₀₀ = E₀, M₀ᵢ = 0) | 8 | trace, P₀ | 600 random; 8000 lattice points (frozen hedgehog; c = 3) |
+   | one gradient direction (twist along z), boost or rotation | 5 | commutant of ∂_zN | exact static solutions (review round 1) |
    | vacuum, base model | 0 | everything | — |
    | vacuum, with K_u | 3 | all but M₀ᵢ | the three tilts propagate at speed 1 |
 
-   The time–space components M₀ᵢ are dynamical on every background with
-   gradients; what loses its kinetic term on the frozen locus is the
-   time–time direction P₀. Around a frozen background M₀₀ therefore
-   enters the quadratic action only through V (an auxiliary field, pinned
-   at linear order), and its kinetic term starts at quartic order in the
-   fluctuations; around the vacuum this holds for all ten components
-   unless K_u is added. The same K with the indefinite matrix norm
-   (η in place of δ_M, the ⟨·,·⟩_η of the thread) has negative directions
-   at every point checked, three on the frozen hedgehog: positivity of
-   the kinetic energy rests on the Euclidean norm. In the melted core of
-   the screened field the smallest nonzero eigenvalue falls to 3·10⁻⁶ of
-   the largest, so near-degeneracy extends beyond the loci in the table.
+   The rank depends on the gradient triple, not on whether the time axis
+   varies: a pure twist along one axis is an exact static solution
+   (F = 0) of rank 5 whether it twists a boost or a rotation, and in the
+   rotation twist a time–space component (M₀₃) has no kinetic term. On
+   the generic and generic-frozen backgrounds, which include every
+   sampled point of the relaxed hedgehogs, M₀ᵢ are dynamical and what the
+   frozen sector loses is the time–time direction P₀: around a frozen
+   static M₀₀ enters the quadratic action only through V (an auxiliary
+   field, pinned at linear order). Around the vacuum all ten components
+   lose their kinetic term unless K_u is added. The same K with the
+   indefinite matrix norm (η in place of δ_M, the ⟨·,·⟩_η of the thread)
+   has negative directions at every point checked, three on the frozen
+   hedgehog: positivity of the kinetic energy rests on the Euclidean
+   norm. In the melted core of the screened field the smallest nonzero
+   eigenvalue falls to 3·10⁻⁶ of the largest.
 
 4. **The principal symbol is a Lagrange identity, so every static
    background has characteristic speeds in [0, 1].** With Wᵢ = [X, ∂ᵢN],
@@ -104,14 +109,18 @@ development repository `new-duda-lagrangian`):
    ‖k·W‖² ≤ |k|²Σ‖Wᵢ‖², so on the range of K the squared speeds lie in
    [0, 1]: no faster-than-light characteristic and no gradient
    instability at principal order, for any static background and any
-   c ≥ 0; K is positive definite there, so the characteristic vectors are
-   complete. On the kernel of K the whole symbol vanishes (Wᵢ = 0 implies
+   c ≥ 0. The lower end is attained: on the continuum uniaxial hedgehog
+   X = diag(0, 2, −1, −1) at a point of the z axis, propagating along x,
+   has K[X, X] > 0 and G(x̂)X = 0 exactly (review round 1; both routes).
+   A dynamical direction with zero speed makes the first-order reduction
+   a Jordan block, so the principal part is not strongly hyperbolic in
+   the usual sense; the bound excludes superluminal and gradient
+   instabilities, not loss of derivatives. On the kernel of K the whole symbol vanishes (Wᵢ = 0 implies
    k·W = 0), so those directions are fixed by lower-order terms, as
    item 2 does for the trace. The numbers follow: on 17 200 points the
    squared speeds span 4·10⁻¹⁰ to 1 + 10⁻¹² (figure 2), and the closed
    form agrees with the Hessians of the model code to 2·10⁻¹⁴. The speed
-   is exactly 1 for modes with k·W = 0 and approaches 0 when
-   Wᵢ ∝ kᵢ. For a single gradient direction C along z the identity
+   is exactly 1 for modes with k·W = 0 and exactly 0 when Wᵢ ∝ kᵢ. For a single gradient direction C along z the identity
    reduces to J. Duda's L₂ = ½(ω² − k_x² − k_y²)|[Φ, C]|² (2026-09-22),
    which is thereby confirmed and extended to arbitrary static
    backgrounds. The structure is that of the quartic term of the Skyrme
@@ -119,10 +128,10 @@ development repository `new-duda-lagrangian`):
 
 5. **Counting.** Per point: ten components, one second-class pair
    removes the trace, so nine configuration variables and an
-   18-dimensional phase space wherever the time axis varies. The rank of
-   K is not constant on phase space, so the system is irregular in
-   Dirac's sense: on the frozen locus one more direction (P₀) loses its
-   kinetic term, and on the vacuum all do. General relativity,
+   18-dimensional phase space on the generic stratum. The rank of K is not
+   constant on phase space, so the system is irregular in Dirac's sense:
+   on the frozen sector one more direction (P₀) loses its kinetic term,
+   on one-direction twists five do, and on the vacuum all do. General relativity,
    by contrast, removes eight of ten metric components by first-class
    constraints on every background; here there is no gauge symmetry and
    no background-independent reduction below nine.
@@ -143,13 +152,15 @@ development repository `new-duda-lagrangian`):
 
 ## What this means
 
-- For the thread's question whether M₀ᵢ are constrained: they are not.
-  The only exact constraint is the trace; the only extra kinetic
-  degeneracy on the backgrounds everyone uses is the time–time direction.
+- For the thread's question whether M₀ᵢ are constrained: not by any
+  constraint. The only exact constraint is the trace; on the relaxed
+  hedgehogs (generic frozen points) the only extra kinetic degeneracy is
+  the time–time direction, while special backgrounds such as pure
+  twists lose more, time–space directions included.
 - Linear perturbation theory around any frozen static (reports 004–016,
-  OpenWave's certified static sector) treats M₀₀ as auxiliary and is
-  otherwise well posed at principal order; around the vacuum it is empty
-  without K_u. A regulating inertia ε tr(∂ₜM ∂ₜM) would give the trace a
+  OpenWave's certified static sector) treats M₀₀ as auxiliary, has no
+  superluminal or gradient-unstable characteristic, but has exact
+  zero-speed directions; around the vacuum it is empty without K_u. A regulating inertia ε tr(∂ₜM ∂ₜM) would give the trace a
   kinetic term with a mass of order ε^{−1/2} that decouples as ε → 0,
   consistent with item 2; it is not needed for the principal part on
   backgrounds with gradients.
@@ -161,11 +172,13 @@ development repository `new-duda-lagrangian`):
 ## Pre-registered predictions
 
 P1 (rank 9 where the time axis varies, 8 on frozen backgrounds, including
-all endpoints of 016): confirmed, with the kernel identified. P2 (trace
+all endpoints of 016): confirmed on all sampled points, with the kernel
+identified, but not as a classification: one-direction twists have
+rank 5 whether or not the time axis varies. P2 (trace
 constraint on the endpoints to ≤ 10⁻⁶): confirmed. P3 (squared speeds in
-(0, 1], real characteristics with the mixed term): confirmed and proved;
-the mixed term turned out to vanish, and speeds approach but do not reach
-0. P4 (b = 0 in the base model): confirmed; b ≠ 0 for the linear-in-F
+(0, 1], real characteristics with the mixed term): the interval [0, 1] is
+proved and the mixed term vanishes, but 0 is attained, so the strict
+lower bound fails. P4 (b = 0 in the base model): confirmed; b ≠ 0 for the linear-in-F
 terms of report 014 not tested (they were defined only in the frozen static
 sector). P5 (three propagating polarizations in the vacuum with K_u,
 none without): confirmed.
@@ -176,10 +189,12 @@ none without): confirmed.
   background W₀ = [X, Ṅ] ≠ 0 and the Cauchy–Schwarz bound no longer
   applies; the symbol of report 015's clocks is not computed.
 - Principal order only. Lower-order terms (V″, the dependence of δ_M on
-  M) decide the masses and the unstable directions; well-posedness of the
-  nonlinear evolution is not claimed, and the zero-symbol directions on
-  the degeneracy loci make it doubtful there.
-- The Dirac analysis is pointwise and on the generic stratum; the
+  M) decide the masses and the unstable directions; well-posedness is not
+  claimed, and the zero-speed directions and the kernel of K argue
+  against strong hyperbolicity.
+- The strata of lower rank are not classified (only the ones in the
+  table are exhibited); the Dirac analysis is pointwise and on the
+  generic stratum; the
   behaviour of the constraint algebra where the rank of K jumps (frozen
   locus, vacuum) is only described, not resolved.
 - The second variation of E − ωJ (gate 3 on #186, prereg Q6) is not

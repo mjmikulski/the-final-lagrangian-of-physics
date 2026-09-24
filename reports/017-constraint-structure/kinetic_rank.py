@@ -147,9 +147,56 @@ def vacuum():
     return res
 
 
+def special_strata():
+    """Exact point backgrounds on lower strata (review round 1): only the gradient triple matters.
+    (a) a boost twist N = L(z)^-1 N_v L(z): one gradient d_zN = E01 - E10 (operator form), F = 0, exact static;
+    (b) a rotation twist in the 12 plane: d_zN = E12 + E21; the tilt X = E03 - E30 commutes with it;
+    (c) the uniaxial frozen hedgehog on the z axis (a = 0.8, b = 0.11, a' = 0.2, b' = -0.1 at r = 1):
+        X = diag(0, 2, -1, -1) has K[X, X] > 0 and G(e_x) X = 0, an exact zero-speed dynamical direction."""
+    def cov(Nop):                                   # covariant M from the operator N = eta M
+        return ETA @ Nop
+    Nv = np.diag([E[0], E[1], E[2], E[3]]).astype(float)
+    out = {}
+    for name, D in (('boost twist', np.eye(4)[[0]].T @ np.eye(4)[[1]] - np.eye(4)[[1]].T @ np.eye(4)[[0]]),
+                    ('rotation twist', np.eye(4)[[1]].T @ np.eye(4)[[2]] + np.eye(4)[[2]].T @ np.eye(4)[[1]])):
+        M = cov(Nv)
+        dM = np.zeros((4, 4, 4))
+        dM[3] = cov(D)
+        rows = {}
+        for c in (0.0, 1.0):
+            K2, _ = forms_formula(M, dM, c)
+            K1, _ = forms_autograd(M, dM, E, c)
+            rows['c = %g' % c] = {'rank': rank_kernel(K2, RTOL)[0], 'route_deviation': float(abs(K1 - K2).max() / abs(K2).max())}
+        rows['M03_kinetic_c0'] = float(forms_formula(M, dM, 0.0)[0][3, 3])
+        out[name] = rows
+    a, b, ap, bp, r = 0.8, 0.11, 0.2, -0.1, 1.0
+    s = (a - b) / r
+    Nop = np.diag([E[0], b, b, a])
+    D = np.zeros((3, 4, 4))
+    D[0, 1, 3] = D[0, 3, 1] = s
+    D[1, 2, 3] = D[1, 3, 2] = s
+    D[2] = np.diag([0, bp, bp, ap])
+    M = cov(Nop)
+    dM = np.zeros((4, 4, 4))
+    for i in range(3):
+        dM[1 + i] = cov(D[i])
+    X = cov(np.diag([0.0, 2.0, -1.0, -1.0]))
+    x = np.array([X[p, q] for p, q in [(0, 0), (0, 1), (0, 2), (0, 3), (1, 1), (1, 2), (1, 3), (2, 2), (2, 3), (3, 3)]])
+    rows = {}
+    for c in (0.0, 1.0):
+        K2, G2 = forms_formula(M, dM, c, (1.0, 0.0, 0.0))
+        K1, G1 = forms_autograd(M, dM, E, c, (1.0, 0.0, 0.0))
+        rows['c = %g' % c] = {'rank': rank_kernel(K2, RTOL)[0], 'K_XX': float(x @ K2 @ x),
+                              'G_X_norm': float(np.linalg.norm(G2 @ x)), 'speed2_min': float(speeds2(K2, G2, RTOL)[0].min()),
+                              'route_deviation': float(max(abs(K1 - K2).max(), abs(G1 - G2).max()) / abs(K2).max())}
+    out['uniaxial hedgehog, z axis, k = x'] = rows
+    return out
+
+
 if __name__ == '__main__':
     torch.set_default_dtype(torch.float64)
-    record = {'rtol': RTOL, 'vacuum': vacuum(), 'random': {}, 'lattice': {}}
+    record = {'rtol': RTOL, 'vacuum': vacuum(), 'special': special_strata(), 'random': {}, 'lattice': {}}
+    print('special', record['special'])
     for frozen in (False, True):
         rows = []
         for i in range(300):
