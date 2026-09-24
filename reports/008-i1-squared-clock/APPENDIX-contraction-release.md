@@ -75,8 +75,9 @@ energy keeps creeping by 1–2·10⁻⁶ per cycle after the first cycles, as
 depth is flat, not growing. The recomputed tangent differs from the
 frozen one by 2·10⁻⁴ in norm, because the relaxed fields differ from the
 polished one by at most 0.03. Releasing it changes the depth by at most 7%.
-Within this protocol the energy does not keep falling at the well's
-frequency.
+Within this protocol the depth relative to
+ω = 0 stays about constant while both absolute energies keep creeping
+downward together; no run-away of the well's depth is seen.
 
 ![contraction and release](results/contraction_release/fig_contraction_release.png)
 
