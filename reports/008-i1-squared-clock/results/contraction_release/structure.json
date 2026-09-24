@@ -1,0 +1,69 @@
+{
+ "fields": {
+  "polished": {
+   "offblock_max": 0.0,
+   "G_minus_identity_max_free": 0.00039219775454779615,
+   "M00_plus_g_max": 0.0002606726618363808,
+   "clock_channel_time_space_part": 0.025315177168472685,
+   "clock_channel_space_space_part": 0.0,
+   "int_i1s_G": 4.153975185517527,
+   "int_i1s_frob": 4.1532877721448545,
+   "int_i1s_eta": 4.1532877721448545,
+   "int_k_G": 0.17089788867530806,
+   "int_k_frob": 0.17087744588719064,
+   "int_k_eta": 0.17087744588719064
+  },
+  "rung 00": {
+   "offblock_max": 0.0,
+   "G_minus_identity_max_free": 0.00039214188018843465,
+   "M00_plus_g_max": 0.0002614964383695906,
+   "clock_channel_time_space_part": 0.025223969421948166,
+   "clock_channel_space_space_part": 0.0,
+   "int_i1s_G": 4.150756193759433,
+   "int_i1s_frob": 4.150071893128282,
+   "int_i1s_eta": 4.150071893128282,
+   "int_k_G": 0.17028238693121847,
+   "int_k_frob": 0.1702617935981501,
+   "int_k_eta": 0.1702617935981501
+  },
+  "rung 01": {
+   "offblock_max": 0.0,
+   "G_minus_identity_max_free": 0.00039214031429568585,
+   "M00_plus_g_max": 0.0002614665432201235,
+   "clock_channel_time_space_part": 0.025248389962282868,
+   "clock_channel_space_space_part": 0.0,
+   "int_i1s_G": 4.150761903396187,
+   "int_i1s_frob": 4.150077612821755,
+   "int_i1s_eta": 4.150077612821755,
+   "int_k_G": 0.1704472121871043,
+   "int_k_frob": 0.17042663224540938,
+   "int_k_eta": 0.17042663224540938
+  },
+  "rung 02": {
+   "offblock_max": 0.0,
+   "G_minus_identity_max_free": 0.00039214200525083953,
+   "M00_plus_g_max": 0.00026140101550709005,
+   "clock_channel_time_space_part": 0.025264732907104768,
+   "clock_channel_space_space_part": 0.0,
+   "int_i1s_G": 4.150811012359394,
+   "int_i1s_frob": 4.150126739348338,
+   "int_i1s_eta": 4.150126739348338,
+   "int_k_G": 0.1705575314718962,
+   "int_k_frob": 0.17053694712295717,
+   "int_k_eta": 0.17053694712295717
+  },
+  "rung 035": {
+   "offblock_max": 0.0,
+   "G_minus_identity_max_free": 0.00039214043850543945,
+   "M00_plus_g_max": 0.0002613382199196934,
+   "clock_channel_time_space_part": 0.025153668443813525,
+   "clock_channel_space_space_part": 0.0,
+   "int_i1s_G": 4.150824264402435,
+   "int_i1s_frob": 4.150139994023627,
+   "int_i1s_eta": 4.150139994023627,
+   "int_k_G": 0.16980788443956674,
+   "int_k_frob": 0.1697872619957413,
+   "int_k_eta": 0.1697872619957413
+  }
+ }
+}
