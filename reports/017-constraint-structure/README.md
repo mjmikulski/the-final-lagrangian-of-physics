@@ -29,8 +29,9 @@ development repository `new-duda-lagrangian`):
   were computed there or started from there.
 - Kinetic form K = ∂²L/∂Ṁ∂Ṁ (10×10); gradient form G(k) = −∂²L/∂(∂_kM)²
   for a unit wave vector k. A plane wave exp(i(k·x − ωt)) has, at
-  principal (highest-derivative) order, det(ω²K − G(k)) = 0; ω²/|k|² are
-  the squared characteristic speeds.
+  principal (highest-derivative) order, det(ω²K − G(k)) = 0 on the range
+  of K (on the full 10×10 matrices the determinant vanishes identically,
+  item 2); ω²/|k|² are the squared characteristic speeds.
 - Backgrounds: the vacuum; random point backgrounds (generic and
   frozen, 300 each); and 4000 random quadrature points of each of four
   committed lattice fields of report 016 (frozen hedgehog; time sector
@@ -65,13 +66,12 @@ development repository `new-duda-lagrangian`):
    not a gauge symmetry. The trace is fixed pointwise by the other nine
    components. The committed fields obey it to 10⁻⁸ (frozen) and
    10⁻¹⁰–10⁻¹³ (time sector free, with K_u) while e₁ varies from 0.15 to
-   1.2 across the same points. For a potential that is not a function of
-   the eigenvalues alone (e.g. traces of powers, as in OpenWave's
-   certified action) the secondary constraint is a polynomial in s
+   1.2 across the same points. For other polynomial spectral potentials
+   (e.g. traces of powers, as in OpenWave's certified action) the secondary constraint is a polynomial in s
    instead of a linear one; the structure is the same.
 
 3. **The rank of K is set by the spatial gradients: 9 generically, 8 on
-   the frozen sector, lower on special strata.** The kernel of K is the
+   generic frozen backgrounds, lower on special strata.** The kernel of K is the
    set of symmetric X with [ηX, ∂ᵢN] = 0 for i = 1, 2, 3 (and Y(X) = 0 when
    c > 0), the commutant of the three spatial gradients
    (`kinetic_rank.py`, figure 1):
@@ -80,13 +80,13 @@ development repository `new-duda-lagrangian`):
    |---|---|---|---|
    | generic | 9 | trace | 600 random; 8000 lattice points (time sector free; c = 0.1) |
    | generic frozen (M₀₀ = E₀, M₀ᵢ = 0) | 8 | trace, P₀ | 600 random; 8000 lattice points (frozen hedgehog; c = 3) |
-   | one gradient direction (twist along z), boost or rotation | 5 | commutant of ∂_zN | exact static solutions (review round 1) |
+   | one gradient direction (twist along z), boost or rotation, c = 0 | 5 | commutant of ∂_zN | exact static solutions (review round 1) |
    | vacuum, base model | 0 | everything | — |
    | vacuum, with K_u | 3 | all but M₀ᵢ | the three tilts propagate at speed 1 |
 
    The rank depends on the gradient triple, not on whether the time axis
-   varies: a pure twist along one axis is an exact static solution
-   (F = 0) of rank 5 whether it twists a boost or a rotation, and in the
+   varies: in the base model (c = 0) a pure twist along one axis is an
+   exact static solution (F = 0) of rank 5 whether it twists a boost or a rotation, and in the
    rotation twist a time–space component (M₀₃) has no kinetic term. On
    the generic and generic-frozen backgrounds, which include every
    sampled point of the relaxed hedgehogs, M₀ᵢ are dynamical and what the
@@ -101,9 +101,10 @@ development repository `new-duda-lagrangian`):
    eigenvalue falls to 3·10⁻⁶ of the largest.
 
 4. **The principal symbol is a Lagrange identity, so every static
-   background has characteristic speeds in [0, 1].** With Wᵢ = [X, ∂ᵢN],
+   background has characteristic speeds in [0, 1].** For an operator
+   perturbation δN = X, with Wᵢ = [X, ∂ᵢN],
 
-   ω²K − G(k) ∝ (ω² − |k|²) Σᵢ‖Wᵢ‖² + ‖Σᵢ kᵢWᵢ‖²  (+ c(ω² − |k|²)‖Y‖², Y = (1 − P₀)X P₀)
+   ω²K − G(k) ∝ (ω² − |k|²) Σᵢ‖Wᵢ‖² + ‖Σᵢ kᵢWᵢ‖²  (+ (c/2)(ω² − |k|²)‖Y‖², Y = (1 − P₀)X P₀)
 
    exactly (symbolic, check 3, all entries symbolic). By Cauchy–Schwarz
    ‖k·W‖² ≤ |k|²Σ‖Wᵢ‖², so on the range of K the squared speeds lie in
@@ -118,9 +119,10 @@ development repository `new-duda-lagrangian`):
    instabilities, not loss of derivatives. On the kernel of K the whole symbol vanishes (Wᵢ = 0 implies
    k·W = 0), so those directions are fixed by lower-order terms, as
    item 2 does for the trace. The numbers follow: on 17 200 points the
-   squared speeds span 4·10⁻¹⁰ to 1 + 10⁻¹² (figure 2), and the closed
-   form agrees with the Hessians of the model code to 2·10⁻¹⁴. The speed
-   is exactly 1 for modes with k·W = 0 and exactly 0 when Wᵢ ∝ kᵢ. For a single gradient direction C along z the identity
+   closed form gives squared speeds from 4·10⁻¹⁰ to 1 + 10⁻¹² (figure 2);
+   on a subset of 240, and on the special backgrounds of item 3, it agrees
+   with the Hessians of the model code to 2·10⁻¹⁴. The speed
+   is exactly 1 for modes with k·W = 0 and exactly 0 when Wᵢ ∝ kᵢ and cY = 0. For a single gradient direction C along z the identity
    reduces to J. Duda's L₂ = ½(ω² − k_x² − k_y²)|[Φ, C]|² (2026-09-22),
    which is thereby confirmed and extended to arbitrary static
    backgrounds. The structure is that of the quartic term of the Skyrme
@@ -131,7 +133,7 @@ development repository `new-duda-lagrangian`):
    18-dimensional phase space on the generic stratum. The rank of K is not
    constant on phase space, so the system is irregular in Dirac's sense:
    on the frozen sector one more direction (P₀) loses its kinetic term,
-   on one-direction twists five do, and on the vacuum all do. General relativity,
+   on one-direction twists (c = 0) five do, and on the vacuum all do. General relativity,
    by contrast, removes eight of ten metric components by first-class
    constraints on every background; here there is no gauge symmetry and
    no background-independent reduction below nine.
@@ -152,18 +154,17 @@ development repository `new-duda-lagrangian`):
 
 ## What this means
 
-- For the thread's question whether M₀ᵢ are constrained: not by any
-  constraint. The only exact constraint is the trace; on the relaxed
+- For the thread's question whether M₀ᵢ are constrained: on the generic
+  stratum, no. The only exact constraint found is the trace; on the relaxed
   hedgehogs (generic frozen points) the only extra kinetic degeneracy is
   the time–time direction, while special backgrounds such as pure
   twists lose more, time–space directions included.
-- Linear perturbation theory around any frozen static (reports 004–016,
+- Linear perturbation theory around a generic frozen static (reports 004–016,
   OpenWave's certified static sector) treats M₀₀ as auxiliary, has no
   superluminal or gradient-unstable characteristic, but has exact
   zero-speed directions; around the vacuum it is empty without K_u. A regulating inertia ε tr(∂ₜM ∂ₜM) would give the trace a
   kinetic term with a mass of order ε^{−1/2} that decouples as ε → 0,
-  consistent with item 2; it is not needed for the principal part on
-  backgrounds with gradients.
+  consistent with item 2.
 - The instabilities found so far (report 016's screening direction,
   report 014's cubic saddle of the vacuum) are therefore not principal-part
   pathologies: they sit in lower-order terms (V″, the δ_M variation) or
