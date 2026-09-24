@@ -1,0 +1,9 @@
+{
+ "velocity_powers": [
+  0,
+  2
+ ],
+ "F_blind_to_trace": true,
+ "K_u_blind_to_trace": true,
+ "symbol_identity": true
+}
