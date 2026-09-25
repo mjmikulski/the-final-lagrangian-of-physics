@@ -101,12 +101,13 @@ def fig_pairs():
         tr = d['trace']
         st = [t['step'] for t in tr]
         mc = d.get('melt_centre', False)
-        lab = ('uniaxial vacuum' if d['beta'] == 0 else f'β = {d["beta"]:g}') + f', d = {d["d"]:g}' + (', resolved seed' if mc else '')
+        lab = ('uniaxial vacuum' if d['beta'] == 0 else f'β = {d["beta"]:g}') + f', d = {d["d"]:g}' + ((', resolved seed' if d['beta'] == 0 else ', melted centre') if mc else '')
         kw = dict(marker='o', markevery=10, ms=5, mfc='white', mew=1.2) if mc else {}
         ax.plot(st, [t['E'] for t in tr], linestyle=dash[d['d']], color=style[d['beta']], lw=2.2, label=lab, **kw)
         bx.plot(st, [0.5 * (abs(t['degrees'][0][0]) + abs(t['degrees'][1][0])) for t in tr], linestyle=dash[d['d']],
                 color=style[d['beta']], lw=2.2, label=lab, **kw)
     ax.set(xlabel='gradient-flow step', ylabel='energy (model units)', title='held pair: the energy only falls', ylim=(0, 60))
+    ax.text(2950, 57, 'initial energies of six runs (up to 260) off scale', ha='right', va='top', fontsize=8.5, color=MUTED)
     bx.set(xlabel='gradient-flow step', ylabel='charge of the held cores (sphere r = 1.6)',
            title='the charge of the held cores melts away', ylim=(-0.03, 1.03))
     h, l = bx.get_legend_handles_labels()

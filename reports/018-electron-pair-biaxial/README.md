@@ -1,4 +1,4 @@
-# Report 018 — The electron of the E₀ = 100 conventions: its static record, a charge pair without a barrier, and the strands of a biaxial vacuum
+# Report 018 — The electron of the E₀ = 100 conventions: its static record, held charge pairs that find no barrier under gradient flow, and the strands of a biaxial vacuum
 
 *2026-09-25 · Maciej J. Mikulski (AI-assisted, see [METHOD](../../METHOD.md)) ·
 reports 014–017 use the charged hedgehog of the E₀ = 100 conventions
@@ -26,7 +26,7 @@ Pre-registration: `duda-particle-model/notes/prereg_018_electron_pair_biaxial.md
   the frozen branch, not a particle mass.
 - Charge: the degree of the charge direction (a line field, lifted to a
   vector field) on a sphere around the core.
-- Strand: a line around which the transverse pair turns by kπ (k = ½, a
+- Strand: a line around which the transverse pair turns by the angle 2πk (k = ½, a
   half-disclination, allowed because M is quadratic in its eigenvectors;
   k = 1, a full one). Its tension T is the energy per unit length.
 - Lattices: the report-016 scheme (trilinear interpolant, four
@@ -37,14 +37,15 @@ Pre-registration: `duda-particle-model/notes/prereg_018_electron_pair_biaxial.md
 
 1. **The static electron (uniaxial vacuum).** At lattice spacing
    h = 0.375 the energy in boxes 12, 18 and 24 is 27.3, 29.4 and 30.5.
-   With the exterior hedgehog tail 16πΔ⁴/R (R the half box) it is
-   35.3, 34.8 and 34.5, which extrapolates in 1/R to 33.6–33.8. A finer
+   Adding the hedgehog tail outside the inscribed sphere, 16πΔ⁴/R (R the
+   half box; a convention, since the lattice already covers the cube's
+   corners), gives 35.3, 34.8 and 34.5, which extrapolates in 1/R to 33.6–33.8. A finer
    spacing (h = 0.25, box 16) lowers this by 0.2. The mass of the frozen
    branch is therefore 33.4 ± 0.3. Report 016's radial problem without a
    box gives 33.3 independently. The charge is 0.997 on every sphere
    from r = 1 to 4 in every box (the lattice lift, not a fractional
-   charge). The virial (E₄ + tail)/(3E_V) is 1.04, 1.02 and 1.01 in the
-   three boxes (`electron_record.py`).
+   charge). The virial diagnostic (E₄ + tail)/(3E_V) in the same convention is
+   1.04, 1.02 and 1.01 in the three boxes (`electron_record.py`).
 
 2. **A held charge pair finds no barrier.** The two cores are held in
    Dirichlet balls of radius 1.2 that carry the relaxed single-hedgehog
@@ -53,18 +54,15 @@ Pre-registration: `duda-particle-model/notes/prereg_018_electron_pair_biaxial.md
    seed director of the development code (electrostatic analogy, pair.py)
    vanishes at the midpoint: a third, degree-0 defect that only the
    lattice cuts off, so the energy of a unit box around it grows like
-   1/h (59, 137, 291 at h = 1/8, 1/16, 1/32; review round 1). The runs
-   are therefore repeated from a resolved seed, in which that defect has
-   a melted core; its unit-box energy is finite and falls with h (6.8,
-   6.3, 5.9; `central_check.py`). From both seeds the energy falls
-   monotonically (resolved seed: 42.8 → 16.2) and the charge on a sphere
-   of radius 1.6 around each held core drops below 0.1 (resolved seed:
-   by step 50, as from the other). The eigenvalues melt in a shell outside the balls, the
-   charge direction stops being defined there, and no step of the flow
-   raises the energy on the way. This is a statement about gradient flow
-   from these seeds, not a proof that no metastable pair exists; within
-   it, the charge of this model is held by the boundary condition at
-   infinity, not by energy (`pair_flow.py`; figure 3).
+   1/h (review round 1; `central_check.py`). The uniaxial run is
+   therefore repeated from a resolved seed, in which that defect has a
+   melted core and a finite unit-box energy that falls with h. From both
+   seeds the energy falls monotonically and the charge on a sphere of
+   radius 1.6 around each held core drops below 0.1 within 50 steps. The
+   eigenvalues melt in a shell outside the balls and the charge direction
+   stops being defined there. This is a statement about gradient flow
+   from these seeds, not a proof that no metastable pair exists
+   (`pair_flow.py`; figure 3).
 
 3. **The straight strand: T = (2√2π/3)·k·β³, a Bogomolny bound.** Far
    from the line the texture is a pure rotation of the transverse block,
@@ -100,14 +98,16 @@ Pre-registration: `duda-particle-model/notes/prereg_018_electron_pair_biaxial.md
 
 5. **In the biaxial vacuum the held pair melts all the same.** With the
    same held cores and flow (3000 steps), the charge of the held cores
-   falls below 0.1 in every run, from the electrostatic seed and from the
-   resolved one, and the energy falls monotonically:
+   falls below 0.1 in every run and the energy falls monotonically. The
+   runs marked "melted centre" start from seeds whose uniaxial part is
+   melted at the midpoint but whose transverse splitting is not, so their
+   midpoint is only partly resolved:
 
    | vacuum | d = 4 | d = 6 | d = 8 |
    |---|---|---|---|
-   | uniaxial | step 50 (resolved: 50) | — | — |
-   | β = 0.1 | step 100 | step 450 (resolved: 450) | step 800 |
-   | β = 0.3 | step 400 | step 600 (resolved: 600) | step 1100 |
+   | uniaxial | step 50 (resolved seed: 50) | — | — |
+   | β = 0.1 | step 100 | step 450 (melted centre: 450) | step 800 |
+   | β = 0.3 | step 400 | step 600 (melted centre: 600) | step 1100 |
 
    The charge survives more flow steps at larger separation and larger β,
    which suggests the strands slow the melting, but it leaves in every
@@ -128,10 +128,10 @@ Pre-registration: `duda-particle-model/notes/prereg_018_electron_pair_biaxial.md
   every charge strands, of the predicted topology and with a tension
   that is exactly computable. That tension scales as β³, not β⁴, so any
   bound on β drawn from L* = m/σ changes its power from ¼ to ⅓.
-- The strands do not create a barrier between opposite charges held
-  apart: the charge melts outside the held cores exactly as in the
-  uniaxial vacuum. Linear confinement needs a charge that survives,
-  which the frozen sector of this model does not provide.
+- In these flows the strands do not create a barrier between opposite
+  charges held apart: the charge melts outside the held cores as in the
+  uniaxial vacuum. Measuring linear confinement needs a pair whose
+  charge survives, and none of the seeds tried here gives one.
 - Report 016's saddle stays unresolved here. Every number above belongs
   to the frozen branch.
 

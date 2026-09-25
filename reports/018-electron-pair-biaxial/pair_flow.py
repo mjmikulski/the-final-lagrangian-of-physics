@@ -50,8 +50,10 @@ def seed(grid, E, d, prof, hold_radius, beta, melt_centre=False):
     u, hold = pair_full(grid, (E[0], E[1], mid, mid), d, prof, hold_radius)
     if melt_centre:
         # the electrostatic director of pair.py vanishes at the midpoint (lambda = (d/2)^2 / 2 makes V(0) = 0): a third,
-        # degree-0 defect whose lattice energy grows like 1/h. Melt it: the anisotropy (charge direction and
-        # transverse splitting) is multiplied by tanh^2(r_0/0.5), the middle eigenvalue follows the single-hedgehog profile.
+        # degree-0 defect whose lattice energy grows like 1/h. Melt it: the uniaxial anisotropy is multiplied by
+        # tanh^2(r_0/0.5), the middle eigenvalue follows the single-hedgehog profile. For beta > 0 the transverse
+        # splitting added below is NOT melted here and its frame is still singular at the midpoint, so the biaxial
+        # seeds are only partly resolved (review round 2); the uniaxial seed is fully resolved.
         rs_, gaps_, mids_ = prof
         D = E[1] - mid
         r0 = grid.x.norm(dim=-1)
