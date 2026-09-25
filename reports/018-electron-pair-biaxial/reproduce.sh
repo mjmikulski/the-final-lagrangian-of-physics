@@ -15,11 +15,14 @@ for f in static_base_n48 static_base_n64_box24 static_base_n64_box16 single_biax
   fi
 done
 $PY strand_bogomolny.py
+[ -f results/fields/static_base_n48.pt ] && $PY central_check.py
 if [ "${M5_RUN:-0}" = "1" ]; then
   $PY strand2d.py
   $PY single_biaxial.py --beta 0.3 --n 32 --box 12
   $PY pair_flow.py --beta 0 --d 4
   for b in 0.3 0.1; do for d in 4 6 8; do $PY pair_flow.py --beta $b --d $d; done; done
+  $PY pair_flow.py --melt-centre --beta 0 --d 4
+  for b in 0.3 0.1; do $PY pair_flow.py --melt-centre --beta $b --d 6; done
 fi
 [ -f results/fields/static_base_n48.pt ] && $PY electron_record.py
 [ -f results/fields/single_biaxial_b0.3_n32.pt ] && $PY single_strands.py

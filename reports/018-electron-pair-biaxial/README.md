@@ -46,18 +46,25 @@ Pre-registration: `duda-particle-model/notes/prereg_018_electron_pair_biaxial.md
    charge). The virial (E₄ + tail)/(3E_V) is 1.04, 1.02 and 1.01 in the
    three boxes (`electron_record.py`).
 
-2. **A charge pair has no barrier.** The two cores are held in Dirichlet
-   balls of radius 1.2 that carry the relaxed single-hedgehog profile,
-   and the rest follows a small-step gradient flow that never raises the
-   energy (n = 48, box 16, separation d = 4). The energy falls
-   monotonically from 46.7 to 15.9 in 3000 steps, and the charge on a
-   sphere of radius 1.6 around each held core is below 0.1 within the
-   first 50 steps. The eigenvalues melt in a shell outside the balls,
-   the charge direction stops being defined there, and the charge
-   leaves without crossing a barrier. A charge of this model is held by
-   the boundary condition at infinity, not by energy
-   (`pair_flow.py`; figure 3). This reproduces the development record
-   (46.7 → 29.7 in 600 fixed-size steps).
+2. **A held charge pair finds no barrier.** The two cores are held in
+   Dirichlet balls of radius 1.2 that carry the relaxed single-hedgehog
+   profile, and the rest follows a small-step gradient flow that never
+   raises the energy (n = 48, box 16, separation d = 4, 3000 steps). The
+   seed director of the development code (electrostatic analogy, pair.py)
+   vanishes at the midpoint: a third, degree-0 defect that only the
+   lattice cuts off, so the energy of a unit box around it grows like
+   1/h (59, 137, 291 at h = 1/8, 1/16, 1/32; review round 1). The runs
+   are therefore repeated from a resolved seed, in which that defect has
+   a melted core; its unit-box energy is finite and falls with h (6.8,
+   6.3, 5.9; `central_check.py`). From both seeds the energy falls
+   monotonically (resolved seed: 42.8 → 16.2) and the charge on a sphere
+   of radius 1.6 around each held core drops below 0.1 (resolved seed:
+   by step 50, as from the other). The eigenvalues melt in a shell outside the balls, the
+   charge direction stops being defined there, and no step of the flow
+   raises the energy on the way. This is a statement about gradient flow
+   from these seeds, not a proof that no metastable pair exists; within
+   it, the charge of this model is held by the boundary condition at
+   infinity, not by energy (`pair_flow.py`; figure 3).
 
 3. **The straight strand: T = (2√2π/3)·k·β³, a Bogomolny bound.** Far
    from the line the texture is a pure rotation of the transverse block,
@@ -91,15 +98,16 @@ Pre-registration: `duda-particle-model/notes/prereg_018_electron_pair_biaxial.md
    on #186 (09-24) this is the {1,1,1,1} partition, realised as two π
    lines through the core.
 
-5. **In the biaxial vacuum the pair melts all the same.** With the same
-   held cores and flow (3000 steps), the charge of the held cores falls
-   below 0.1 in every run and the energy falls monotonically:
+5. **In the biaxial vacuum the held pair melts all the same.** With the
+   same held cores and flow (3000 steps), the charge of the held cores
+   falls below 0.1 in every run, from the electrostatic seed and from the
+   resolved one, and the energy falls monotonically:
 
    | vacuum | d = 4 | d = 6 | d = 8 |
    |---|---|---|---|
-   | uniaxial | step 50 | — | — |
-   | β = 0.1 | step 100 | step 450 | step 800 |
-   | β = 0.3 | step 400 | step 600 | step 1100 |
+   | uniaxial | step 50 (resolved: 50) | — | — |
+   | β = 0.1 | step 100 | step 450 (resolved: 450) | step 800 |
+   | β = 0.3 | step 400 | step 600 (resolved: 600) | step 1100 |
 
    The charge survives more flow steps at larger separation and larger β,
    which suggests the strands slow the melting, but it leaves in every
@@ -130,7 +138,9 @@ Pre-registration: `duda-particle-model/notes/prereg_018_electron_pair_biaxial.md
 ## What this report does not show
 
 - No free (unheld) pair and no configuration where the charge survives;
-  the linear confinement slope σ is therefore not measured.
+  the linear confinement slope σ is therefore not measured. Gradient flow
+  from two families of seeds is not a proof that no metastable pair
+  exists; a seed that keeps its charge in a barrier would refute point 2.
 - The strand tension of the 3D charge is not extracted from the 3D
   field. The box (12) is too small to separate it from the Coulomb
   exterior, so only its topology is read.

@@ -32,7 +32,15 @@ for rad, sp in s['spheres'].items():
     assert all(0.4 < m['rho_from_axis'] < 0.9 for m in sp['minima'])
 
 pairs = sorted(glob.glob(os.path.join(R, 'pair_flow_b*.json')))
-assert len(pairs) == 7, 'uniaxial d = 4 and biaxial beta = 0.3, 0.1 at d = 4, 6, 8'
+assert len(pairs) == 10, 'uniaxial d = 4 and biaxial beta = 0.3, 0.1 at d = 4, 6, 8; three runs from the resolved seed'
+assert sum(json.load(open(f)).get('melt_centre', False) for f in pairs) == 3
+cc = json.load(open(os.path.join(R, 'central_check.json')))
+for r in cc:
+    e = [r['energies'][k] for k in ('8', '16', '32')]
+    if r['melt_centre']:
+        assert e[0] > e[1] > e[2], 'resolved seed: finite midpoint energy, falling with h'
+    else:
+        assert e[1] > 1.8 * e[0] and e[2] > 1.8 * e[1], 'electrostatic seed: midpoint energy grows like 1/h'
 for f in pairs:
     tr = json.load(open(f))['trace']
     assert all(tr[i + 1]['E'] <= tr[i]['E'] + 1e-9 for i in range(len(tr) - 1)), ('energy never rises', f)

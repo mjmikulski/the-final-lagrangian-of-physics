@@ -27,7 +27,7 @@ import time
 import torch
 from lagrangian import eigvalsh3
 from soliton import Grid, to_matrix, to_vector
-from pair import single_profiles, pair_full, pair_director, signed_degree
+from pair import single_profiles, pair_full, pair_director, signed_degree, interp1
 
 torch.set_default_dtype(torch.float64)
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -41,13 +41,29 @@ def biaxial_vacuum_field(x, E):
     return to_vector(M)
 
 
-def seed(grid, E, d, prof, hold_radius, beta):
+def seed(grid, E, d, prof, hold_radius, beta, melt_centre=False):
     # the core profiles of the single hedgehog (uniaxial, transverse eigenvalue 0.01) mapped onto the mean
     # transverse eigenvalue of this vacuum: the middle eigenvalue shifted, the gap rescaled
     mid = 0.5 * (E[2] + E[3])
     rs, gaps, mids = prof
     prof = (rs, gaps * (E[1] - mid) / (1.0 - 0.01), mids - 0.01 + mid)
     u, hold = pair_full(grid, (E[0], E[1], mid, mid), d, prof, hold_radius)
+    if melt_centre:
+        # the electrostatic director of pair.py vanishes at the midpoint (lambda = (d/2)^2 / 2 makes V(0) = 0): a third,
+        # degree-0 defect whose lattice energy grows like 1/h. Melt it: the anisotropy (charge direction and
+        # transverse splitting) is multiplied by tanh^2(r_0/0.5), the middle eigenvalue follows the single-hedgehog profile.
+        rs_, gaps_, mids_ = prof
+        D = E[1] - mid
+        r0 = grid.x.norm(dim=-1)
+        M = to_matrix(u)
+        n_ = M[..., 1:, 1:]
+        I3 = torch.eye(3, dtype=u.dtype, device=u.device)
+        c_old = eigvalsh3(-n_)[..., 1:].mean(-1)                         # the transverse value of the seed (closed form)
+        g0 = torch.tanh(r0 / 0.5) ** 2                                  # full melting at the midpoint
+        c0 = interp1(rs_, mids_, r0, mid) - mid
+        aniso = -n_ - c_old[..., None, None] * I3
+        M[..., 1:, 1:] = -((c_old + c0)[..., None, None] * I3 + g0[..., None, None] * aniso)
+        u = to_vector(M)
     if beta > 0:
         n = pair_director(grid.x, d)
         xh = torch.zeros_like(n)
@@ -77,15 +93,16 @@ if __name__ == '__main__':
     ap.add_argument('--every', type=int, default=50)
     ap.add_argument('--single', default=os.path.join(HERE, 'results', 'fields', 'static_base_n48.pt'))
     ap.add_argument('--tag', default=None)
+    ap.add_argument('--melt-centre', action='store_true', help='resolve the degree-0 defect of the seed at the midpoint')
     a = ap.parse_args()
-    tag = a.tag or f'b{a.beta:g}_d{a.d:g}'
+    tag = a.tag or (f'b{a.beta:g}_d{a.d:g}' + ('_mc' if a.melt_centre else ''))
     dev = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     E = (100.0, 1.0, 0.01, 0.01) if a.beta == 0 else (100.0, 1.0, a.beta, 0.0)
     grid = Grid(a.n, a.box, E=E, degree=0, device=dev)
     if a.beta > 0:
         grid.boundary = biaxial_vacuum_field(grid.boundary.new_zeros(*grid.boundary.shape[:-1], 3), E)
     prof = single_profiles(a.single)
-    u, hold = seed(grid, E, a.d, prof, a.hold, a.beta)
+    u, hold = seed(grid, E, a.d, prof, a.hold, a.beta, a.melt_centre)
     aa = torch.zeros(3, dtype=u.dtype, device=u.device)
     aa[2] = a.d / 2
     trace, tau, t0 = [], 2e-3, time.time()
@@ -114,7 +131,7 @@ if __name__ == '__main__':
     zs = torch.linspace(-a.box / 2 + 0.5, a.box / 2 - 0.5, 121, device=u.device)
     pts = torch.stack([torch.full_like(zs, 1e-3), torch.full_like(zs, 1e-3), zs], -1)
     ev = eigvalsh3(-to_matrix(grid.sample(u, pts))[..., 1:, 1:])
-    out = dict(beta=a.beta, d=a.d, n=a.n, box=a.box, hold=a.hold, E=E, steps=a.steps, trace=trace,
+    out = dict(melt_centre=a.melt_centre, beta=a.beta, d=a.d, n=a.n, box=a.box, hold=a.hold, E=E, steps=a.steps, trace=trace,
                axis_z=zs.tolist(), axis_eigs=ev.tolist())
     json.dump(out, open(os.path.join(HERE, 'results', f'pair_flow_{tag}.json'), 'w'), indent=1)
     torch.save({'u': u.cpu(), 'n': a.n, 'box': a.box, 'E': E, 'd': a.d, 'beta': a.beta},

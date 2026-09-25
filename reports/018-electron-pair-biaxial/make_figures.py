@@ -93,26 +93,28 @@ def fig_charge():
 
 def fig_pairs():
     files = sorted(glob.glob(os.path.join(R, 'pair_flow_b*.json')))
-    fig, (ax, bx) = plt.subplots(1, 2, figsize=(11, 5.0))
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(11, 5.6))
     style = {0.0: BLUE, 0.3: ORANGE, 0.1: AQUA}
     dash = {4.0: '-', 6.0: (0, (5, 2)), 8.0: (0, (1, 1.2))}
     for f in files:
         d = json.load(open(f))
         tr = d['trace']
         st = [t['step'] for t in tr]
-        lab = ('uniaxial vacuum' if d['beta'] == 0 else f'β = {d["beta"]:g}') + f', d = {d["d"]:g}'
-        ax.plot(st, [t['E'] for t in tr], linestyle=dash[d['d']], color=style[d['beta']], lw=2.2, label=lab)
+        mc = d.get('melt_centre', False)
+        lab = ('uniaxial vacuum' if d['beta'] == 0 else f'β = {d["beta"]:g}') + f', d = {d["d"]:g}' + (', resolved seed' if mc else '')
+        kw = dict(marker='o', markevery=10, ms=5, mfc='white', mew=1.2) if mc else {}
+        ax.plot(st, [t['E'] for t in tr], linestyle=dash[d['d']], color=style[d['beta']], lw=2.2, label=lab, **kw)
         bx.plot(st, [0.5 * (abs(t['degrees'][0][0]) + abs(t['degrees'][1][0])) for t in tr], linestyle=dash[d['d']],
-                color=style[d['beta']], lw=2.2, label=lab)
+                color=style[d['beta']], lw=2.2, label=lab, **kw)
     ax.set(xlabel='gradient-flow step', ylabel='energy (model units)', title='held pair: the energy only falls', ylim=(0, 60))
     bx.set(xlabel='gradient-flow step', ylabel='charge of the held cores (sphere r = 1.6)',
            title='the charge of the held cores melts away', ylim=(-0.03, 1.03))
     h, l = bx.get_legend_handles_labels()
     order = sorted(range(len(l)), key=lambda i: l[i])
-    fig.legend([h[i] for i in order], [l[i] for i in order], loc='lower center', ncol=4, frameon=False, fontsize=9)
+    fig.legend([h[i] for i in order], [l[i] for i in order], loc='lower center', ncol=3, frameon=False, fontsize=9)
     for a in (ax, bx):
         a.title.set_fontsize(11)
-    fig.tight_layout(rect=(0, 0.12, 1, 1))
+    fig.tight_layout(rect=(0, 0.2, 1, 1))
     save(fig, 'fig_pairs.png')
 
 
