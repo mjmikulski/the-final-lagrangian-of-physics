@@ -58,19 +58,20 @@ now for the eigenvalue potential.
    16πκk²b₀² ln(R/ξ) per unit length (b₀ = β/2). Between R = 4, 8 and
    16 ρ½ the added energy grows by (2.76–2.83)·10⁻⁴ per unit of ln R at
    κ = 10⁻³, against the predicted 2.83·10⁻⁴. The growth is linear in κ.
-2. **The full strand splits.** At k = 1 the logarithmic growth is only
-   1.9–2.4 times that of k = ½, not 4. The relaxed k = 1 field at κ = 10⁻²
+2. **The full strand splits.** At k = 1 the logarithmic growth between
+   R = 8 and 16 ρ½ is only 1.9–2.4 times that of k = ½, not 4. The relaxed k = 1 field at κ = 10⁻²
    (R = 16 ρ½) shows why: it has split into two half strands of winding π
    each, pushed apart to y = ±4.45 in a box of half-size 6.5, with no
    winding left at the centre. With κ, like half strands repel
    logarithmically, and two halves (Σk² = ½) cost less than one full
    strand (Σk² = 1). This is the ordering by Σk² proposed on #186, seen in
    the field.
-3. **The floor.** With κ = 10⁻² the kicked seed stops falling: at
+3. **With κ the descent levels off.** With κ = 10⁻² the kicked seed stops
+   falling: at
    h = ρ½/8 it converges (gradient 8·10⁻⁷) to 0.845 T_B, with the line at
-   the centre and no sheets. At h = ρ½/16 it reaches 0.843 T_B, the same
-   to 0.2%: unlike the descent without κ, this state does not depend on the
-   spacing. That state lies below
+   the centre and no sheets. At h = ρ½/16 it reaches 0.843 T_B (still
+   decreasing slightly in its last block): the energies attained at the two
+   tested spacings agree to 0.2%, unlike the descent without κ. That state lies below
    the planar strand with the same κ (about 1.15–1.19 T_B at these boxes);
    it is the lowest strand found with κ, not a demonstrated minimum, and its
    stability and its dependence on β are not measured.
@@ -84,7 +85,7 @@ slope 16πk²b₀² for each.*
 
 ## What this does not show
 
-- No continuum limit is taken and the infimum is not bounded from below.
+- No continuum limit is taken; whether the infimum is zero remains open.
   Two spacings show descent below T_B, slower at the finer one; neither
   run without κ has stopped, so the lowest lattice energy at either
   spacing is not known.
@@ -103,6 +104,7 @@ slope 16πk²b₀² for each.*
 (GPU, hours each; `kick` and `continue16` about 2 and 4 hours on an RTX
 4070) regenerates the records; `make_appendix_walls_figure.py` draws the
 figure from them and `verify_appendix_walls.py` asserts their structure;
-`reproduce_appendix_walls.sh` runs the last two (seconds) or everything
-with `M5_RUN=1`. The relaxed 2D fields (`results/fields/*.npz`) are assets of
+`reproduce_appendix_walls.sh` recomputes the saddle witness (CPU, minutes;
+skip it with `M5_SKIP_SADDLE=1`), redraws the figure and runs the assertions,
+or regenerates everything with `M5_RUN=1`. The relaxed 2D fields (`results/fields/*.npz`) are assets of
 the `report-018-fields` release.

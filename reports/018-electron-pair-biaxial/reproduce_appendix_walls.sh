@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# APPENDIX-walls-kappa: default (seconds) redraws the figure and checks the records; M5_RUN=1 regenerates them on a GPU
-# (hours per part; at most two parts side by side on a 12 GB card).
+# APPENDIX-walls-kappa: default recomputes the saddle witness (CPU, minutes; M5_SKIP_SADDLE=1 skips it), redraws the
+# figure and checks the records; M5_RUN=1 also regenerates the records on a GPU (hours per part; at most two side by side).
 set -e
 cd "$(dirname "$0")"
 PY=${PYTHON:-python}

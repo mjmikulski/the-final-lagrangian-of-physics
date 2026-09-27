@@ -4,7 +4,8 @@ Field: the exact k = 1/2 Bogomolny strand S_0 = A (+) 1, A = b0 I + b(r)(cos phi
 8 k b b'/r = sqrt2 (b0 - b)). Perturbation: only the symmetric xz and yz entries, which tilt the charge direction,
   H_xz = f(r) cos 2phi,  H_yz = -f(r) sin 2phi,  f = (r/w)^2 exp(-r^2 / 2w^2) (1 - r^2/L^2)^3 for r < L (w = 0.65, L = 3),
 regular at the line and zero before the box boundary. Two routes to the second variation Q in T(S_0 + eps H) = T_B + eps^2 Q:
-  (1) the lattice energy of strand_walls.py, (T(eps) - T(0)) / eps^2 at eps = 1e-3, at h = rho_1/2 / 8 and / 16;
+  (1) the lattice energy of strand_walls.py, (T(eps) - T(0)) / eps^2 at eps = 1e-3, at nominal h = rho_1/2 / 8 and / 16
+      (the grid spans [-3.3, 3.3], so its coordinate pitch differs from the nominal h by < 0.3%; both are recorded);
   (2) the radial integral of the expanded density (m = -2),
       Q = 2 pi int r dr { 4/r^2 [(b f')^2 + m^2 (b' f)^2 + 6 m b b' f f'] + [2 b (b0 - b) / ((1 - b0)^2 - b^2)] f^2 }.
 Q < 0: arbitrarily small regular perturbations lower the tension. The smooth and unmelted seeds of the appendix have
@@ -82,7 +83,8 @@ if __name__ == '__main__':
         h, R = rh / div, 3.3                          # box half-size 3.3 > L: the perturbation vanishes before the boundary
         T0 = float(energy(fields(h, R, 0.0, bfun), h, E))
         Te = float(energy(fields(h, R, eps, bfun), h, E))
-        out['lattice'].append(dict(h=h, T0=T0, T0_over_bound=T0 / bound(BETA, K), Q=(Te - T0) / eps ** 2))
+        n = int(round(2 * R / h)) + 1
+        out['lattice'].append(dict(h_nominal=h, h_coordinate=2 * R / (n - 1), T0=T0, T0_over_bound=T0 / bound(BETA, K), Q=(Te - T0) / eps ** 2))
         print(json.dumps(out['lattice'][-1]), flush=True)
     print('Q radial', out['Q_radial'])
     json.dump(out, open('results/strand_saddle.json', 'w'), indent=1)
