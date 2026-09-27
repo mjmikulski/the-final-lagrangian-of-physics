@@ -1,2 +1,3 @@
 results/fields/*.pt
 !results/fields/README
+results/fields/*.npz
