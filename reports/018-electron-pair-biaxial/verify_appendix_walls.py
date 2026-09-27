@@ -41,4 +41,7 @@ r1 = (added(1.0, 1e-2, 16) - added(1.0, 1e-2, 8)) / (added(0.5, 1e-2, 16) - adde
 assert 1.5 < r1 < 3.0, 'k = 1 grows about twice as fast as k = 1/2, not four times (it splits)'
 sp = load('strand_walls_split.json')[0]
 assert sp['k'] == 1.0 and sp['kappa'] == 1e-2
+sd = load('strand_saddle.json')
+assert -0.4 < sd['Q_radial'] < -0.25 and all(abs(r['Q'] / sd['Q_radial'] - 1) < 0.02 for r in sd['lattice']), \
+    'the Bogomolny strand is a saddle: Q < 0 by the radial integral and on the lattice at both spacings'
 print('verify_appendix_walls: all assertions pass')

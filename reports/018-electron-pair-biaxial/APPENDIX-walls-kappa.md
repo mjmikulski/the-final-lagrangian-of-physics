@@ -1,8 +1,8 @@
 # Appendix — is the Bogomolny strand the lowest state, and what a two-derivative term changes
 
 *Added 2026-09-27 under METHOD §7 (new material; no conclusion of the report
-is withdrawn, one is qualified: result 3's tension is that of the smooth
-local minimum). Prompted by substrate-framework discussion #186
+is withdrawn, one is qualified: result 3's tension is that of the planar
+branch, which is a saddle of the full frozen 2D problem). Prompted by substrate-framework discussion #186
 (2026-09-25): OpenWave's R26 found that under its action the smooth-core
 strand is a saddle and relaxes into π-jump walls of the pair anisotropy
 ("free under the commutator curvature along the wall"), and J. Duda
@@ -23,23 +23,34 @@ the 2D lattice of `strand2d.py` (β = 0.3; ρ½ is the Bogomolny core radius,
 
 The unmelted core costs ∝ 1/h² on the lattice (its line cell carries
 gradients of order β/h) and melts back to the Bogomolny profile. The
-same random perturbation (drawn once and interpolated) goes below T_B at
-both spacings, later at the finer one. The states below T_B are built from
-turns of the transverse frame by 1.2–1.5 rad **across a single cell**
-while the charge direction and the eigenvalues stay near their vacuum
-values (|e₁·ẑ| ≥ 0.88). The physical gradient of these jumps grows as h
-falls (30 rad per unit length at ρ½/8, 47 at ρ½/16). A texture that
-varies in one direction only has F_xy = 0 however sharp it is, so these
-lattice-scale sheets are the discrete form of discontinuous, rank-one
-textures that cost no quartic energy. At h = ρ½/8 the line also leaves
-the centre of the box.
+smooth and unmelted seeds keep S_xz = S_yz = 0, a symmetric subspace that
+gradient descent cannot leave, so their convergence does not test
+stability outside it.
 
-**So the quartic action with this potential has no tension floor
-either.** T_B = (2√2π/3)kβ³ is the tension of the smooth, radially
-symmetric local minimum, which every smooth or unmelted seed reaches. It
-is not a lower bound on the energy of lattice fields, and in the continuum
-it does not bound fields that are allowed to jump. This is R26's finding,
-reproduced for the eigenvalue potential.
+**The Bogomolny strand is a saddle (review round 1).** A regular
+perturbation of the xz and yz entries alone (they tilt the charge
+direction), f(r)(cos 2φ, −sin 2φ) with a profile vanishing at the line
+and before the boundary, lowers the energy at second order:
+T = T_B + ε²Q with Q = −0.32. The radial integral of the expanded
+density gives this value, and so do energy differences on the lattice at
+both spacings (`strand_saddle.py`). The quartic term carries the negative
+part, and the potential adds +0.01. So T_B = (2√2π/3)kβ³ is the tension of
+the planar branch (charge direction fixed along the line), which is a
+saddle of the full frozen problem.
+
+**The kicked seeds leave it.** The same random perturbation (drawn once
+and interpolated) goes below T_B at both spacings, later at the finer
+one. The lowest energies reached are 0.20 T_B (h = ρ½/8) and 0.91 T_B
+(ρ½/16), and both runs are still falling. These are upper bounds on the
+infimum of the lattice tension; they do not show that the infimum is
+zero, which is left open. The low-energy states contain turns of the
+transverse frame by 1.2–1.5 rad across a single cell, with the charge
+direction tilted by up to |e₁·ẑ| = 0.88 and the eigenvalues near their
+vacuum values. At h = ρ½/8 the line also leaves the centre of the box.
+Whether a smooth continuum family reaches below T_B by more than the
+second-order descent, and how far, is not settled here. This is the
+same qualitative finding as R26 (the smooth-core strand is a saddle),
+now for the eigenvalue potential.
 
 ## (b) The two-derivative term κ Σᵢ Tr(∂ᵢN ∂ᵢN)
 
@@ -60,9 +71,9 @@ reproduced for the eigenvalue potential.
    the centre and no sheets. At h = ρ½/16 it reaches 0.843 T_B, the same
    to 0.2%: unlike the descent without κ, this state does not depend on the
    spacing. That state lies below
-   the smooth radial strand with the same κ (about 1.15–1.19 T_B at these
-   boxes), so with κ the lowest strand found has a non-radial core. Its
-   dependence on β is not measured.
+   the planar strand with the same κ (about 1.15–1.19 T_B at these boxes);
+   it is the lowest strand found with κ, not a demonstrated minimum, and its
+   stability and its dependence on β are not measured.
 
 ![walls and kappa](results/fig_appendix_walls.png)
 
@@ -73,9 +84,10 @@ slope 16πk²b₀² for each.*
 
 ## What this does not show
 
-- No continuum limit is taken. Two spacings show descent below T_B at
-  both, slower at the finer one; neither run has stopped, so the lowest
-  lattice energy at either spacing is not known.
+- No continuum limit is taken and the infimum is not bounded from below.
+  Two spacings show descent below T_B, slower at the finer one; neither
+  run without κ has stopped, so the lowest lattice energy at either
+  spacing is not known.
 - One β (0.3) and one random perturbation. The κ-stabilised tension is
   measured at one κ (at two spacings), not as a function of β,
   so the β³ law of the report is not transferred to it.
@@ -86,6 +98,7 @@ slope 16πk²b₀² for each.*
 
 ## Reproduction
 
+`python strand_saddle.py` (the second variation, CPU, minutes) and
 `python strand_walls.py seeds|kick|continue16|kick16kappa|kappa|split`
 (GPU, hours each; `kick` and `continue16` about 2 and 4 hours on an RTX
 4070) regenerates the records; `make_appendix_walls_figure.py` draws the

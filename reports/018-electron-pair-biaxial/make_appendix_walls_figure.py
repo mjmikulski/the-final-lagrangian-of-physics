@@ -45,7 +45,7 @@ for r in kick:
     ax.plot(it, y, '-o', color=col, ms=4, lw=1.8, label=lab)
 ax.axhline(1, color=MUTED, lw=1)
 ax.text(24500, 1.04, 'Bogomolny value T_B', color=MUTED, fontsize=9, ha='right')
-ax.set(xlabel='L-BFGS iterations', ylabel='T / T_B', ylim=(0, 2.0), title='kicked seed: below T_B at both spacings; κ stops it')
+ax.set(xlabel='L-BFGS iterations', ylabel='T / T_B', ylim=(0, 2.0), title='kicked seed leaves the saddle at both spacings; κ stops it')
 ax.legend(frameon=False, fontsize=9, loc='upper right')
 ax.title.set_fontsize(11)
 

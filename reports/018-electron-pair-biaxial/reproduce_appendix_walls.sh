@@ -7,6 +7,7 @@ PY=${PYTHON:-python}
 if [ "${M5_RUN:-0}" = "1" ]; then
   for part in seeds kick continue16 kick16kappa kappa split; do $PY strand_walls.py $part; done
 fi
+[ "${M5_SKIP_SADDLE:-0}" = "1" ] || $PY strand_saddle.py      # the saddle witness (CPU, a few minutes)
 $PY make_appendix_walls_figure.py
 $PY verify_appendix_walls.py
 echo "APPENDIX WALLS-KAPPA CHECKS OK"
